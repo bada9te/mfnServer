@@ -141,26 +141,6 @@ const switchSubscribedOnUser = async(subscriberId, userId) => {
     });
 }
 
-const addOrRemoveNotificationById = async(notificationId, userId) => {
-    return await User.updateOne(
-        { _id: userId },
-        [{
-            $set: {
-                notifications: {
-                    $cond: [
-                        { $in: [notificationId, "$notifications"] },
-                        { $setDifference: ["$notifications", [notificationId]] },
-                        { $concatArrays: ["$notifications", [notificationId]] },
-                    ]
-                }
-            }
-        }]
-    )
-    .catch(err => {
-        throw new Error(err);
-    });
-}
-
 
 // confirm account creation
 const confirmAccount = async(userId) => {
@@ -204,7 +184,6 @@ module.exports = {
     getOnlyImagesAndAudios,
     switchSubscriptionOnUser,
     switchSubscribedOnUser,
-    addOrRemoveNotificationById,
     confirmAccount,
     restoreAccount,
 }

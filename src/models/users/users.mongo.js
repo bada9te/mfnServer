@@ -43,12 +43,6 @@ const usersSchema = mongoose.Schema({
             ref: 'User' 
         }]
     },
-    notifications: {
-        type: [{ 
-            type: mongoose.Schema.Types.ObjectId, 
-            ref: 'Notification' 
-        }],
-    },
     verified: {
         type: Boolean,
         required: true,

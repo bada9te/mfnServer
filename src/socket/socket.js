@@ -16,12 +16,12 @@ const initSocketIO = (SERVER) => {
                 text: data.text,
                 createdAt: new Date().toISOString(),
             }).then(async(notification) => {
-                await usersModel.addOrRemoveNotificationById(notification[0]._id, notification[0].receiver)
-                .then(() => {
+                //await usersModel.addOrRemoveNotificationById(notification[0]._id, notification[0].receiver)
+                //.then(() => {
                     notification[0].post = data.post;
                     socket.broadcast.emit(`post-${data.post}-was-liked`, notification[0]);
                     socket.broadcast.emit(`user-${data.receiver}-post-was-liked`, notification[0]);
-                });
+                //});
             });
         });
         // like was removed
@@ -48,12 +48,12 @@ const initSocketIO = (SERVER) => {
                 text: data.text,
                 createdAt: new Date().toISOString(),
             }).then(async(notification) => {
-                await usersModel.addOrRemoveNotificationById(notification[0]._id, notification[0].receiver)
-                .then(() => {
+                //await usersModel.addOrRemoveNotificationById(notification[0]._id, notification[0].receiver)
+                //.then(() => {
                     notification[0].post = data.post;
                     socket.broadcast.emit(`post-${data.post}-was-saved`, data);
                     socket.broadcast.emit(`user-${data.receiver}-post-was-saved`, notification[0]);
-                });
+                //});
             });
         });
         // post was unsaved
@@ -70,10 +70,10 @@ const initSocketIO = (SERVER) => {
                 text: data.text,
                 createdAt: new Date().toISOString(),
             }).then(async(notification) => {
-                await usersModel.addOrRemoveNotificationById(notification[0]._id, notification[0].receiver)
-                .then(() => {
+                //await usersModel.addOrRemoveNotificationById(notification[0]._id, notification[0].receiver)
+                //.then(() => {
                     socket.broadcast.emit(`subscribed-on-${data.receiver}`, notification[0]);
-                });
+                //});
             });
         });
 
@@ -85,11 +85,11 @@ const initSocketIO = (SERVER) => {
                 text: data.text,
                 createdAt: new Date().toISOString(),
             }).then(async(notification) => {
-                await usersModel.addOrRemoveNotificationById(notification[0]._id, notification[0].receiver)
-                .then(() => {
+                //await usersModel.addOrRemoveNotificationById(notification[0]._id, notification[0].receiver)
+                //.then(() => {
                     notification[0].post = data.post;
                     socket.broadcast.emit(`post-shared-to-${data.receiver}`, notification[0]);
-                });
+                //});
             });
         });
 

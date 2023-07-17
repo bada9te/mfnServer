@@ -7,10 +7,8 @@ const createNotification = async(req, res) => {
     notification.createdAt = new Date().toISOString();
     
     try {
-        await notificationsModel.createNotification(notification)
-            .then(async(data) => {
-                await usersModel.addOrRemoveNotificationById(data[0]._id, data[0].receiver);
-            });
+        await notificationsModel.createNotification(notification);
+
         return res.status(201).json({
             done: true,
         });
@@ -42,7 +40,7 @@ const deleteNotificationById = async(req, res) => {
 }
 
 // mark as read
-const markNotificationAsRead = async(req, res) => {
+const markNotificationAsReadById = async(req, res) => {
     const id = req.body.id;
     try {
         await notificationsModel.markNotificationAsRead(id);
@@ -57,12 +55,31 @@ const markNotificationAsRead = async(req, res) => {
     }
 }
 
-// get with reciever id
-const getAllNotificationsWithReceiverId = async(req, res) => {
+// get unread with reciever id
+const getAllUnreadNotifications = async(req, res) => {
     const receiverId = req.query.receiverId;
 
     try {
-        const notifications = await notificationsModel.getAllNotificationsWithReceiverId(receiverId);
+        const notifications = await notificationsModel.getAllUnreadNotifications(receiverId);
+        return res.status(200).json({
+            done: true,
+            notifications: notifications || [],
+        });
+    } catch (error) {
+        console.log(error);
+        return res.status(400).json({
+            done: false,
+            error: 'Sth went wrong!',
+        });
+    }
+}
+
+// get read with reciever id
+const getAllReadNotifications = async(req, res) => {
+    const receiverId = req.query.receiverId;
+
+    try {
+        const notifications = await notificationsModel.getAllReadNotifications(receiverId);
         return res.status(200).json({
             done: true,
             notifications: notifications || [],
@@ -79,7 +96,6 @@ const getAllNotificationsWithReceiverId = async(req, res) => {
 // get all notifications by ids
 const getAllNotificationsByIds = async(req, res) => {
     const ids = req.query.ids;
-
     try {
         const notifications = await notificationsModel.getAllNotificationsByIds(ids);
         return res.status(200).json({
@@ -99,7 +115,8 @@ const getAllNotificationsByIds = async(req, res) => {
 module.exports = {
     createNotification,
     deleteNotificationById,
-    markNotificationAsRead,
-    getAllNotificationsWithReceiverId,
+    markNotificationAsReadById,
+    getAllUnreadNotifications,
+    getAllReadNotifications,
     getAllNotificationsByIds,
 }

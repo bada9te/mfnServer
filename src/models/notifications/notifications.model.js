@@ -31,8 +31,22 @@ const markNotificationAsRead = async(id) => {
 }
 
 // get with receiver id
-const getAllNotificationsWithReceiverId = async(id) => {
-    return await Notification.find({ receiver: id })
+const getAllUnreadNotifications = async(id) => {
+    return await Notification.find({ 
+        receiver: id,
+        checked: false,
+    })
+    .catch((err) => {
+        throw new Error(err);
+    });
+}
+
+// get with receiver id
+const getAllReadNotifications = async(id) => {
+    return await Notification.find({ 
+        receiver: id,
+        checked: true,
+    })
     .catch((err) => {
         throw new Error(err);
     });
@@ -52,6 +66,7 @@ module.exports = {
     createNotification,
     deleteNotificationById,
     markNotificationAsRead,
-    getAllNotificationsWithReceiverId,
+    getAllUnreadNotifications,
+    getAllReadNotifications,
     getAllNotificationsByIds,
 }
