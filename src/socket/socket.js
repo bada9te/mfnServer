@@ -26,7 +26,7 @@ const initSocketIO = (SERVER) => {
         });
         // like was removed
         socket.on("post-remove-like", (data) => {
-            socket.broadcast.emit(`post-${data.postId}-was-unliked`, data);
+            socket.broadcast.emit(`post-${data.post}-was-unliked`, data);
         });
     
 
@@ -58,7 +58,7 @@ const initSocketIO = (SERVER) => {
         });
         // post was unsaved
         socket.on("post-remove-save", (data) => {
-            socket.broadcast.emit(`post-${data.postId}-was-unsaved`, data);
+            socket.broadcast.emit(`post-${data.post}-was-unsaved`, data);
         });
 
 
