@@ -10,17 +10,22 @@ const initSocketIO = (SERVER) => {
         
         // like was added
         socket.on("post-add-like", async(data) => {
-            await notificationsModel.createNotification({
-                receiver: data.receiver,
-                sender: data.sender,
-                text: data.text,
-                createdAt: new Date().toISOString(),
-                post: data.post,
-            }).then(async(notification) => {
-                notification[0].post = data.post;
-                socket.broadcast.emit(`post-${data.post}-was-liked`, notification[0]);
-                socket.broadcast.emit(`user-${data.receiver}-post-was-liked`, notification[0]);
-            });
+            if (data.selfAction) {
+                console.log('SELF_ACTION_ADD_LIKE');
+                socket.broadcast.emit(`post-${data.post}-was-liked`, data);
+            } else {
+                await notificationsModel.createNotification({
+                    receiver: data.receiver,
+                    sender: data.sender,
+                    text: data.text,
+                    createdAt: new Date().toISOString(),
+                    post: data.post,
+                }).then(async(notification) => {
+                    notification[0].post = data.post;
+                    socket.broadcast.emit(`post-${data.post}-was-liked`, notification[0]);
+                    socket.broadcast.emit(`user-${data.receiver}-post-was-liked`, notification[0]);
+                });
+            }
         });
         // like was removed
         socket.on("post-remove-like", (data) => {
@@ -30,16 +35,21 @@ const initSocketIO = (SERVER) => {
 
         // comment was added
         socket.on("post-add-comment", async(data) => {
-            await notificationsModel.createNotification({
-                receiver: data.receiver,
-                sender: data.sender,
-                text: data.text,
-                createdAt: new Date().toISOString(),
-                comment: data.comment,
-                post: data.post,
-            }).then(() => {
+            if (data.selfAction) {
+                console.log('SELF_ACTION_ADD_COMMENT');
                 socket.broadcast.emit(`post-${data.postId}-was-commented`, data);
-            });
+            } else {
+                await notificationsModel.createNotification({
+                    receiver: data.receiver,
+                    sender: data.sender,
+                    text: data.text,
+                    createdAt: new Date().toISOString(),
+                    comment: data.comment,
+                    post: data.post,
+                }).then(() => {
+                    socket.broadcast.emit(`post-${data.postId}-was-commented`, data);
+                });
+            }
         });
         // comment was removed
         socket.on("post-remove-comment", (data) => {
@@ -49,17 +59,22 @@ const initSocketIO = (SERVER) => {
 
         // post was saved
         socket.on("post-add-save", async(data) => {
-            await notificationsModel.createNotification({
-                receiver: data.receiver,
-                sender: data.sender,
-                text: data.text,
-                createdAt: new Date().toISOString(),
-                post: data.post,
-            }).then(async(notification) => {
-                notification[0].post = data.post;
+            if (data.selfAction) {
+                console.log('SELF_ACTION_ADD_SAVE');
                 socket.broadcast.emit(`post-${data.post}-was-saved`, data);
-                socket.broadcast.emit(`user-${data.receiver}-post-was-saved`, notification[0]);
-            });
+            } else {
+                await notificationsModel.createNotification({
+                    receiver: data.receiver,
+                    sender: data.sender,
+                    text: data.text,
+                    createdAt: new Date().toISOString(),
+                    post: data.post,
+                }).then(async(notification) => {
+                    notification[0].post = data.post;
+                    socket.broadcast.emit(`post-${data.post}-was-saved`, data);
+                    socket.broadcast.emit(`user-${data.receiver}-post-was-saved`, notification[0]);
+                });
+            }
         });
         // post was unsaved
         socket.on("post-remove-save", (data) => {
