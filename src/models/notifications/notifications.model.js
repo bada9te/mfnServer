@@ -16,10 +16,32 @@ const deleteNotificationById = async(id) => {
     });
 }
 
+// delete notification
+const deleteNotificationsByIds = async(ids) => {
+    return await Notification.deleteMany({ _id: ids })
+    .catch((err) => {
+        throw new Error(err);
+    });
+}
+
 // mark as read
 const markNotificationAsRead = async(id) => {
     return await Notification.findOneAndUpdate({ 
         _id: id,
+    }, {
+        checked: true,
+    }, {
+        upsert: true,
+    })
+    .catch((err) => {
+        throw new Error(err);
+    });
+}
+
+// mark as read
+const markNotificationsAsRead = async(ids) => {
+    return await Notification.updateMany({ 
+        _id: ids,
     }, {
         checked: true,
     }, {
@@ -65,7 +87,9 @@ const getAllNotificationsByIds = async(ids) => {
 module.exports = {
     createNotification,
     deleteNotificationById,
+    deleteNotificationsByIds,
     markNotificationAsRead,
+    markNotificationsAsRead,
     getAllUnreadNotifications,
     getAllReadNotifications,
     getAllNotificationsByIds,

@@ -24,10 +24,7 @@ const createNotification = async(req, res) => {
 const deleteNotificationById = async(req, res) => {
     const id = req.body.id;
     try {
-        await notificationsModel.deleteNotificationById(id)
-            .then(async(data) => {
-                await usersModel.addOrRemoveNotificationById(data._id, data.receiver)
-            });
+        await notificationsModel.deleteNotificationById(id);
         return res.status(201).json({
             done: true,
         });
@@ -39,11 +36,45 @@ const deleteNotificationById = async(req, res) => {
     }
 }
 
+
+// delete many
+const deleteNotificationsByIds = async(req, res) => {
+    const ids = req.body.ids;
+    try {
+        await notificationsModel.deleteNotificationsByIds(ids);
+        return res.status(201).json({
+            done: true,
+        });
+    } catch (error) {
+        return res.status(400).json({
+            done: false,
+            error: 'Sth went wrong!',
+        });
+    }
+}
+
+
 // mark as read
 const markNotificationAsReadById = async(req, res) => {
     const id = req.body.id;
     try {
         await notificationsModel.markNotificationAsRead(id);
+        return res.status(201).json({
+            done: true,
+        });
+    } catch (error) {
+        return res.status(400).json({
+            done: false,
+            error: 'Sth went wrong!',
+        });
+    }
+}
+
+// mark many as read
+const markNotificationsAsReadByIds = async(req, res) => {
+    const ids = req.body.ids;
+    try {
+        await notificationsModel.markNotificationsAsRead(ids);
         return res.status(201).json({
             done: true,
         });
@@ -115,7 +146,9 @@ const getAllNotificationsByIds = async(req, res) => {
 module.exports = {
     createNotification,
     deleteNotificationById,
+    deleteNotificationsByIds,
     markNotificationAsReadById,
+    markNotificationsAsReadByIds,
     getAllUnreadNotifications,
     getAllReadNotifications,
     getAllNotificationsByIds,
