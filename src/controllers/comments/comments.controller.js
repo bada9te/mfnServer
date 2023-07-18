@@ -55,6 +55,23 @@ const getManyByIds = async(req, res) => {
     }
 }
 
+const getOneById = async(req, res) => {
+    const id = req.query.id;
+
+    try {
+        const comment = await commentsModel.getById(id);
+        return res.status(200).json({
+            done: true,
+            comment: comment,
+        });
+    } catch (error) {
+        return res.status(400).json({
+            done: false,
+            error: 'Sth went wrong!',
+        });
+    }
+}
+
 
 const removeById = async(req, res) => {
     const id = req.body.id;
@@ -77,5 +94,6 @@ const removeById = async(req, res) => {
 module.exports = {
     addComment,
     getManyByIds,
+    getOneById,
     removeById,
 }
