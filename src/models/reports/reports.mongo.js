@@ -27,6 +27,12 @@ const reportsSchema = mongoose.Schema({
         ref: 'Post',
         autopopulate: true,
     },
+
+    reportedComment: {
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: 'Comment',
+        autopopulate: true,
+    },
     isClosed: {
         type: Boolean,
     },
