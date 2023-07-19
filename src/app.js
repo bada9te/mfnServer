@@ -9,6 +9,7 @@ const cronTasks = require('./utils/cron/cron');
 const initFrontend = require('./utils/frontend/frontend');
 const initPassportStarategies = require('./middleware/passport');
 const initMulter = require('./middleware/multer');
+const cookieParser = require('cookie-parser')
 require('dotenv').config();
 
 
@@ -29,6 +30,9 @@ app.use(cors({
   origin: config.CLIENT_BASE,
   credentials: true,
 }));
+
+// cookie 
+app.use(cookieParser());
 
 // req res logging
 //app.use(morgan('combined'));

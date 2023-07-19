@@ -14,8 +14,8 @@ const cookieExtractor = function(req) {
         obj[decodeURIComponent(cookie[0].trim())] = decodeURIComponent(cookie[1].trim());
         return obj;
     }, {})
-    //console.log(cookieObj['accessToken'])
-    return cookieObj['accessToken'];
+    //console.log(cookieObj['jwt'])
+    return cookieObj['jwt'];
 };
 
 

@@ -71,22 +71,21 @@ const loginUser = async(req, res) => {
             throw new Error("Password is not valid");
         }
 
-        // jsonwebtoken
         const payload = {
             username: user.email,
             id: user._id,
         }
 
-        const token = jwt.sign(payload, PRIVATE_KEY, { 
+        const accessToken = jwt.sign(payload, PRIVATE_KEY, { 
             expiresIn: "14d",
             algorithm: "RS256",
         });
 
-        res.cookie('accessToken', token, {
+        res.cookie('jwt', accessToken, {
             httpOnly: true,
             //sameSite: 'none',
             //secure: true,
-            maxAge: 14 * 24 * 3600,
+            maxAge: 14 * 24 * 60 * 3600,
             path: '/',
         });
 
@@ -96,7 +95,7 @@ const loginUser = async(req, res) => {
         });
         
     } catch (error) {
-        return res.status(400).json({
+        return res.status(406).json({
             done: false,
             error: error.message,
         });
@@ -106,7 +105,7 @@ const loginUser = async(req, res) => {
 // logout
 const logoutUser = async(req, res) => {
     try {
-        res.clearCookie('accessToken');
+        res.clearCookie('jwt');
         req.logout((err) => {
             if (err) throw new Error(err);
             return res.status(200).json({
@@ -120,7 +119,6 @@ const logoutUser = async(req, res) => {
         });
     }
 }
-
 
 // remove by email
 const deleteUserByEmail = async(req, res) => {
