@@ -10,8 +10,9 @@ require('dotenv').config();
 
 
 // rsa private key
-const keyPath = path.join(__dirname, '..', '..', 'utils', 'rsa', 'id_rsa_pri.pem');
-const PRIVATE_KEY = fs.readFileSync(keyPath, 'utf-8');
+const keysPath = path.join(__dirname, '..', '..', 'utils', 'rsa');
+const PRIVATE_KEY_REFRESH = fs.readFileSync(path.join(keysPath, 'id_rsa_pri.pem'), 'utf-8');
+const PRIVATE_KEY_ACCESS  = fs.readFileSync(path.join(keysPath, 'id_rsa_pri.pem'), 'utf-8');
 const generateRandomString = async() => Math.floor(Math.random() * Date.now()).toString(36);
 
 
@@ -76,28 +77,85 @@ const loginUser = async(req, res) => {
             id: user._id,
         }
 
-        const accessToken = jwt.sign(payload, PRIVATE_KEY, { 
+        const accessToken = jwt.sign(payload, PRIVATE_KEY_ACCESS, { 
+            expiresIn: "5m",
+            algorithm: "RS256",
+        });
+
+        const refreshToken = jwt.sign(payload, PRIVATE_KEY_REFRESH, { 
             expiresIn: "14d",
             algorithm: "RS256",
         });
 
-        res.cookie('jwt', accessToken, {
+        res.cookie('jwt', refreshToken, {
             httpOnly: true,
-            //sameSite: 'none',
-            //secure: true,
-            maxAge: 14 * 24 * 60 * 3600,
+            secure: true,
+            sameSite: 'Strict',  // or 'Lax', it depends
+            maxAge: 604800000 * 2,  // 14 days
             path: '/',
         });
+
+        let expiresAtDate = new Date();
+        expiresAtDate.setMinutes(expiresAtDate.getMinutes() + 10);
 
         return res.status(200).json({
             done: true,
             user: user,
+            token: {
+                expiresAt: expiresAtDate.toISOString(),
+                accessToken: `Bearer ${accessToken}`,
+            },
         });
         
     } catch (error) {
-        return res.status(406).json({
+        return res.status(401).json({
             done: false,
             error: error.message,
+        });
+    }
+}
+
+// refresh access  token
+const refreshAccessToken = (req, res) => {
+    if (req.cookies?.jwt) {
+        const refreshToken = req.cookies.jwt;
+
+        jwt.verify(refreshToken, PRIVATE_KEY_REFRESH, (err, decoded) => {
+            if (err) {
+                return res.status(401).json({
+                    done: false,
+                    error: 'Wrong refresh token',
+                });
+            } else {
+                const userId = req.body.id;
+                const userEmail = req.body.email;
+
+                const accessToken = jwt.sign({
+                    username: userEmail,
+                    id: userId,
+                }, PRIVATE_KEY_ACCESS, {
+                    expiresIn: "5m",
+                    algorithm: "RS256",
+                });
+
+                let expiresAtDate = new Date();
+                expiresAtDate.setMinutes(expiresAtDate.getMinutes() + 10);
+
+                console.log(expiresAtDate.toISOString());
+
+                return res.status(200).json({
+                    done: true,
+                    token: {
+                        expiresAt: expiresAtDate.toISOString(),
+                        accessToken: `Bearer ${accessToken}`,
+                    },
+                });
+            }
+        });
+    } else {
+        return res.status(401).json({
+            done: false,
+            error: 'No resfresh token provided',
         });
     }
 }
@@ -404,6 +462,7 @@ const prepareAccountToRestore = async(req, res) => {
 module.exports = {
     addUser,
     loginUser,
+    refreshAccessToken,
     logoutUser,
     deleteUserByEmail,
     updateUser,

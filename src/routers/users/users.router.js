@@ -12,6 +12,7 @@ usersRouter.post('/delete',             passport.authenticate('jwt', { session: 
 usersRouter.post('/update',             passport.authenticate('jwt', { session: false }), usersController.updateUser);
 usersRouter.post('/swicth-sub-on-user', passport.authenticate('jwt', { session: false }), usersController.switchSubscriptionOnUser);
 
+usersRouter.post('/refresh-access-token', usersController.refreshAccessToken);
 usersRouter.post('/logout',          usersController.logoutUser);
 usersRouter.post('/register',        usersController.addUser);
 usersRouter.post('/login',           usersController.loginUser);

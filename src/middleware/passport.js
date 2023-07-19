@@ -2,11 +2,14 @@ const fs = require('fs');
 const path = require('path');
 const usersModel = require('../models/users/users.mongo');
 const JwtStrategy = require('passport-jwt').Strategy;
+const ExtractJwt = require('passport-jwt').ExtractJwt;
 require('dotenv').config();
 
 
 // extract token from cookies
 const cookieExtractor = function(req) {
+    /*
+    console.log(req.headers)
     let pairs = req.headers.cookie.split(";");
     let splittedPairs = pairs.map(cookie => cookie.split("="));
 
@@ -15,7 +18,9 @@ const cookieExtractor = function(req) {
         return obj;
     }, {})
     //console.log(cookieObj['jwt'])
-    return cookieObj['jwt'];
+    return cookieObj['jwt'];*/
+
+    return req.headers.accessToken;
 };
 
 
@@ -25,7 +30,7 @@ const initPassportStarategies = (passport, app) => {
 
 
     const options = {
-        jwtFromRequest: cookieExtractor,
+        jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
         secretOrKey: PUBLIC_KEY,
         algorithms: ['RS256'],
     };
