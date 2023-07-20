@@ -108,6 +108,10 @@ const initSocketIO = (SERVER) => {
             });
         });
 
+        // battle add vote
+        socket.on("battle-add-vote", async(data) => {
+            socket.broadcast.emit(`battle-${data.battleId}-voted`, data);
+        });
     });
 }
 
