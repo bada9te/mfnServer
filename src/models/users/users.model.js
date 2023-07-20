@@ -29,8 +29,6 @@ const updateUser = async(id, value, what) => {
         _id: id,
     }, { 
         [what]: value,
-    }, {
-        upsert: true,
     })
     .catch((err) => {
         throw new Error(err);

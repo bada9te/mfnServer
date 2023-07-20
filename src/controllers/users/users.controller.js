@@ -78,7 +78,7 @@ const loginUser = async(req, res) => {
         }
 
         const accessToken = jwt.sign(payload, PRIVATE_KEY_ACCESS, { 
-            expiresIn: "5m",
+            expiresIn: "10m",
             algorithm: "RS256",
         });
 
@@ -134,14 +134,14 @@ const refreshAccessToken = (req, res) => {
                     username: userEmail,
                     id: userId,
                 }, PRIVATE_KEY_ACCESS, {
-                    expiresIn: "5m",
+                    expiresIn: "10m",
                     algorithm: "RS256",
                 });
 
                 let expiresAtDate = new Date();
                 expiresAtDate.setMinutes(expiresAtDate.getMinutes() + 10);
 
-                console.log(expiresAtDate.toISOString());
+                //console.log('New token will expire at:', expiresAtDate.toISOString());
 
                 return res.status(200).json({
                     done: true,
