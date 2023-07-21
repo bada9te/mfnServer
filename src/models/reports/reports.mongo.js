@@ -21,7 +21,6 @@ const reportsSchema = mongoose.Schema({
         autopopulate: true,
         required: true,
     },
-        
     reportedPost: {
         type: mongoose.Schema.Types.ObjectId, 
         ref: 'Post',

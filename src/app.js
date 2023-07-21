@@ -107,6 +107,9 @@ app.use('/api/reports', require('./routers/reports/reports.router'));
 // reports routes
 app.use('/api/moderation', require('./routers/moderation/moderation.router'));
 
+// support requests routes
+app.use('/api/support-requests', require('./routers/support-requests/reports.router'));
+
 // files
 app.use('/api/uploads/images', express.static(path.join(__dirname, '..', 'uploads', 'images')));
 app.use('/api/uploads/audios', express.static(path.join(__dirname, '..', 'uploads', 'audios')));
