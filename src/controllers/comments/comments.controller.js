@@ -18,10 +18,13 @@ const addComment = async(req, res) => {
                 await commentsModel.updateById(replyingComment._id, replies, "replies");
             } else {
                 // assign comment to post
+                await postsModel.addOrRemoveComment(comment.post, data[0]._id);
+                /*
                 const post = await postsModel.getPostById(comment.post);
                 let postComments = post.comments;
                 postComments.push(data[0]._id);
                 await postsModel.updatePost(comment.post, postComments, "comments");
+                */
             }
             comment._id = data[0]._id;
         });
@@ -80,10 +83,13 @@ const removeById = async(req, res) => {
         let removedComment = null;
         await commentsModel.removeById(id).then(async(comment) => {
             removedComment = comment;
+            await postsModel.addOrRemoveComment(comment.post, comment._id);
+            /*
             const post = await postsModel.getPostById(comment.post);
             let postComments = post.comments;
             postComments.splice(postComments.indexOf(comment._id), 1);
             await postsModel.updatePost(comment.post, postComments, "comments");
+            */
             //console.log(comment)
         });
         return res.status(200).json({

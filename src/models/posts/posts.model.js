@@ -168,6 +168,25 @@ const getManyByIds = async(ids) => {
     });
 }
 
+const addOrRemoveComment = async(postId, commentId) => {
+    return await Post.findOneAndUpdate({ _id: postId }, [{
+            $set: {
+                comments: {
+                    $cond: [
+                        { $in: [commentId, "$comments"] },
+                        { $setDifference: ["$comments", [commentId]] },
+                        { $concatArrays: ["$comments", [commentId]] },
+                    ]
+                }
+            }
+        }],
+        { new: true }
+    )
+    .catch((err) => {
+        throw new Error(err);
+    });
+}
+
 
 
 
@@ -186,5 +205,6 @@ module.exports = {
     getOnlyImagesAndAudios,
     switchInSaved,
     switchIsLiked,
+    addOrRemoveComment,
     getManyByIds,
 }

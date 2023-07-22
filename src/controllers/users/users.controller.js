@@ -27,6 +27,7 @@ const addUser = async(req, res) => {
             throw new Error("User with this email already exists");
         }
 
+        user.createdAt = new Date().toISOString();
         await usersModel.addUser(user).then(async(data) => {
             const verifyToken = await generateRandomString();
             await moderationModel.createAction({

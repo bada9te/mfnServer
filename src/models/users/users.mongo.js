@@ -11,10 +11,6 @@ const usersSchema = mongoose.Schema({
         type: String,
         default: '...',
     },
-    aboutMe: {
-        type: String,
-        default: '...',
-    },
     password: {
         type: String,
         required: true,
@@ -42,6 +38,10 @@ const usersSchema = mongoose.Schema({
             type: mongoose.Schema.Types.ObjectId, 
             ref: 'User' 
         }]
+    },
+    createdAt: {
+        type: Date,
+        required: true,
     },
     verified: {
         type: Boolean,
