@@ -21,7 +21,7 @@ const getById = async(id) => {
 
 // remove by id
 const removeById = async(id) => {
-    return await Comments.deleteOne({ _id: id })
+    return await Comments.findOneAndDelete({ _id: id })
     .catch((err) => {
         throw new Error(err);
     });

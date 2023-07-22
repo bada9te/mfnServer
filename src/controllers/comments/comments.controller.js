@@ -77,9 +77,17 @@ const removeById = async(req, res) => {
     const id = req.body.id;
 
     try {
-        await commentsModel.removeById(id);
-        return res.status(204).json({
-            commentId: id,
+        let removedComment = null;
+        await commentsModel.removeById(id).then(async(comment) => {
+            removedComment = comment;
+            const post = await postsModel.getPostById(comment.post);
+            let postComments = post.comments;
+            postComments.splice(postComments.indexOf(comment._id), 1);
+            await postsModel.updatePost(comment.post, postComments, "comments");
+            //console.log(comment)
+        });
+        return res.status(200).json({
+            comment: removedComment,
             done: true,
         });
     } catch (error) {
