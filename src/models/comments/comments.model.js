@@ -41,6 +41,14 @@ const updateById = async(id, value, what) => {
     });
 }
 
+// remove many by ids
+const removeManyByIds = async(ids) => {
+    return await Comments.deleteMany({_id: ids })
+    .catch((err) => {
+        throw new Error(err);
+    });
+}
+
 
 // get all with id in array
 const getAllWithIds = async(ids) => {
@@ -62,5 +70,6 @@ module.exports = {
     getById,
     removeById,
     updateById,
+    removeManyByIds,
     getAllWithIds,
 }
