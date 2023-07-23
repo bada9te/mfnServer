@@ -34,6 +34,16 @@ const commentsSchema = mongoose.Schema({
 // plugin 
 commentsSchema.plugin(require('mongoose-autopopulate'));
 
+// cascade remove
+commentsSchema.pre('findOneAndDelete', async function (next) {
+    const query = this.getQuery();
+    const comment = await this.model.findOne({ _id: query._id });
+    if (comment && comment?.replies?.length > 0) {
+        await this.model.deleteMany({ _id: comment.replies }).exec();
+    }
+    next();
+});
+
 // model
 const commentsModel = mongoose.model('Comment', commentsSchema);
 
