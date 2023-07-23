@@ -7,7 +7,7 @@ const initFrontend = (app) => {
     app.use('/api/uploads/audios', express.static(path.join(__dirname, '..', '..', '..', 'uploads', 'audios')));
     app.use('/api/uploads/others', express.static(path.join(__dirname, '..', '..', '..', 'uploads', 'others')));
 
-    if (process.env.CLIENT_BASE == "/") {
+    if (process.env.CLIENT_BASE.split(', ')[0] == "/") {
         // pages
         app.use(express.static(path.join(__dirname, '..', '..', '..', 'public')));
         app.get('/app/*', (req, res) => {

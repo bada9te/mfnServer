@@ -39,7 +39,7 @@ const addUser = async(req, res) => {
                 sendMail.sendVerifyEmail(
                     data[0].email, 
                     data[0].nick, 
-                    `${process.env.CLIENT_BASE}/account-verify/${data[0]._id}/${action[0]._id}`,
+                    `${process.env.CLIENT_BASE.split(', ')[0]}/account-verify/${data[0]._id}/${action[0]._id}`,
                     verifyToken
                 );
             });
@@ -440,7 +440,7 @@ const prepareAccountToRestore = async(req, res) => {
                 sendMail.sendRestoreEmail(
                     user.email,
                     user.nick,
-                    `${process.env.CLIENT_BASE}/account-restore/${user._id}/${action[0]._id}/${verifyToken}/${type}`,
+                    `${process.env.CLIENT_BASE.split(', ')[0]}/account-restore/${user._id}/${action[0]._id}/${verifyToken}/${type}`,
                 );
             })
         }
