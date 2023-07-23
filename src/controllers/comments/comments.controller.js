@@ -83,7 +83,9 @@ const removeById = async(req, res) => {
         let removedComment = null;
         await commentsModel.removeById(id).then(async(comment) => {
             removedComment = comment;
-            await commentsModel.removeManyByIds(comment.replies);
+            if (comment?.replies?.length > 0) {
+                await commentsModel.removeManyByIds(comment.replies);
+            }
             await postsModel.addOrRemoveComment(comment.post, comment._id);
             /*
             const post = await postsModel.getPostById(comment.post);

@@ -27,7 +27,7 @@ const app = express();
 
 // cors
 app.use(cors({
-  origin: config.CLIENT_BASE,
+  origin: config.CLIENT_BASE.split(', '),
   credentials: true,
 }));
 
