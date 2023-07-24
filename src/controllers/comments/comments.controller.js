@@ -19,12 +19,6 @@ const addComment = async(req, res) => {
             } else {
                 // assign comment to post
                 await postsModel.addOrRemoveComment(comment.post, data[0]._id);
-                /*
-                const post = await postsModel.getPostById(comment.post);
-                let postComments = post.comments;
-                postComments.push(data[0]._id);
-                await postsModel.updatePost(comment.post, postComments, "comments");
-                */
             }
             comment._id = data[0]._id;
         });

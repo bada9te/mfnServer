@@ -48,7 +48,7 @@ const updatePost = async(req, res) => {
 const deletePostById = async(req, res) => {
     const id = req.body.id;
     try {
-        await postsModel.deletPostById(id);
+        await postsModel.deletePostById(id);
         return res.status(200).json({
             done: true,
         });

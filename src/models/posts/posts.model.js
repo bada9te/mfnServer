@@ -26,7 +26,7 @@ const updatePost = async(id, value, what) => {
 
 // delete post
 const deletePostById = async(id) => {
-    await Post.deleteOne({ _id: id, })
+    await Post.findOneAndDelete({ _id: id, })
     .catch((err) => {
         throw new Error(err);
     });

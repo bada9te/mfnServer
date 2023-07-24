@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const commentsModel = require('../comments/comments.mongo');
 
 
 // schema
@@ -58,6 +59,16 @@ const postsSchema = mongoose.Schema({
 
 // plugin
 postsSchema.plugin(require('mongoose-autopopulate'));
+
+// cascade delete
+postsSchema.pre('findOneAndDelete', async function(next) {
+    const query = this.getQuery();
+    const post = await this.model.findOne({ _id: query._id });
+    if (post && post?.comments?.length > 0) {
+        await commentsModel.deleteMany({ _id: post.comments }).exec();
+    }
+    next();
+});
 
 // model 
 const postsModel = mongoose.model('Post', postsSchema);
