@@ -85,11 +85,11 @@ const getAllPosts = async(req, res) => {
     const skipCount = req.query.skipCount;
     try {
         const posts = await postsModel.getAllPosts(skipCount);
-        //const count = await postsModel.getDocsCount();
+        const count = await postsModel.getDocsCount({});
         return res.status(200).json({
             done: true,
             posts: posts,
-            //count: count,
+            count: count,
         });
     } catch (error) {
         console.error(error);
@@ -106,9 +106,11 @@ const getAllWithOwnerId = async(req, res) => {
     const skipCount = req.query.skipCount;
     try {
         const posts = await postsModel.getAllWithOwnerId(ownerId, skipCount);
+        const count = await postsModel.getDocsCount({ owner: ownerId });
         return res.status(200).json({
             done: true,
             posts: posts,
+            count: count,
         });
     } catch (error) {
         console.error(error);

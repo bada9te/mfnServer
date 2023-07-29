@@ -99,8 +99,8 @@ const getByTitleWithOwnerId = async(title, useOwnerId, onwerId) => {
 }
 
 // count docs
-const getDocsCount = async() => {
-    return await Post.countDocuments()
+const getDocsCount = async(filter) => {
+    return await Post.count(filter)
     .catch((err) => {
         throw new Error(err);
     })

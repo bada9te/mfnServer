@@ -109,7 +109,7 @@ const loginUser = async(req, res) => {
         });
         
     } catch (error) {
-        return res.status(401).json({
+        return res.status(400).json({
             done: false,
             error: error.message,
         });
