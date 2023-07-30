@@ -9,7 +9,6 @@ const reportsSchema = mongoose.Schema({
     },
     email: {
         type: String,
-        required: true,
     },
     message: {
         type: String,
@@ -19,7 +18,7 @@ const reportsSchema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId, 
         ref: 'User',
         autopopulate: true,
-        required: true,
+        required: false,
     },
     reportedPost: {
         type: mongoose.Schema.Types.ObjectId, 

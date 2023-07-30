@@ -8,7 +8,7 @@ const reportsRouter = express.Router();
 
 
 // endpoints
-reportsRouter.post('/create', passport.authenticate('jwt', { session: false }), reportsController.createReport);
+reportsRouter.post('/create', reportsController.createReport);
 reportsRouter.post('/close',  passport.authenticate('jwt', { session: false }), reportsController.closeReport);
 
 
