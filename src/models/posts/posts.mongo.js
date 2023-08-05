@@ -70,6 +70,18 @@ postsSchema.pre('findOneAndDelete', async function(next) {
     next();
 });
 
+postsSchema.pre('deleteMany', async function(next) {
+    const query = this.getQuery();
+    const posts = await this.model.find({ owner: query.owner });
+
+    posts.forEach(async(post) => {
+        if (post && post?.comments?.length > 0) {
+            await commentsModel.deleteMany({ _id: post.comments }).exec();
+        }
+    });
+    next();
+});
+
 // model 
 const postsModel = mongoose.model('Post', postsSchema);
 

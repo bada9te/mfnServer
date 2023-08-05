@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const postsModel = require('../posts/posts.mongo');
 
 
 // schema
@@ -52,6 +53,17 @@ const usersSchema = mongoose.Schema({
 
 // plugin
 usersSchema.plugin(require('mongoose-autopopulate'));
+
+
+// cascade delete
+usersSchema.pre('deleteOne', async function(next) {
+    const query = this.getQuery();
+    const user = await this.model.findOne({ _id: query._id });
+    if (user) {
+        await postsModel.deleteMany({ owner: user._id });
+    }
+    next();
+});
 
 
 // model

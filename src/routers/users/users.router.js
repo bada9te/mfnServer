@@ -8,7 +8,7 @@ const usersRouter = express.Router();
 
 
 // endpoints
-usersRouter.post('/delete',             passport.authenticate('jwt', { session: false }), usersController.deleteUserByEmail);
+usersRouter.post('/delete',             passport.authenticate('jwt', { session: false }), usersController.deleteUserById);
 usersRouter.post('/update',             passport.authenticate('jwt', { session: false }), usersController.updateUser);
 usersRouter.post('/swicth-sub-on-user', passport.authenticate('jwt', { session: false }), usersController.switchSubscriptionOnUser);
 

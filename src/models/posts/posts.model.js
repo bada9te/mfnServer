@@ -32,6 +32,14 @@ const deletePostById = async(id) => {
     });
 }
 
+// delete many posts
+const deletePostsByIds = async(ids) => {
+    await Post.deleteMany({ _id: ids })
+    .catch((err) => {
+        throw new Error(err);
+    });
+}
+
 // get post
 const getPostById = async(id) => {
     return await Post.findById(id, { 
@@ -195,6 +203,7 @@ module.exports = {
     addPost, 
     updatePost,
     deletePostById,
+    deletePostsByIds,
     getPostById,
     getAllPosts,
     getAllWithOwnerId,

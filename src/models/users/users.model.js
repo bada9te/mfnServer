@@ -14,9 +14,9 @@ const addUser = async(user) => {
 }
 
 // remove user by email
-const deleteUserByEmail = async(email) => {
+const deleteUserById = async(id) => {
     return await User.deleteOne({
-        email: email,
+        _id: id,
     })
     .catch((err) => {
         throw new Error(err);
@@ -172,7 +172,7 @@ const restoreAccount = async(userId, newValue, type) => {
 
 module.exports = {
     addUser,
-    deleteUserByEmail,
+    deleteUserById,
     updateUser,
     getUserByEmail,
     getUserById,

@@ -180,10 +180,13 @@ const logoutUser = async(req, res) => {
 }
 
 // remove by email
-const deleteUserByEmail = async(req, res) => {
-    const email = req.body.email;
+const deleteUserById = async(req, res) => {
+    const id = req.body.id;
     try {
-        await usersModel.deleteUserByEmail(email);
+        await usersModel.deleteUserById(id);
+        return res.status(200).json({
+            done: true,
+        })
     } catch (error) {
         console.error(error);
         return res.status(400).json({
@@ -465,7 +468,7 @@ module.exports = {
     loginUser,
     refreshAccessToken,
     logoutUser,
-    deleteUserByEmail,
+    deleteUserById,
     updateUser,
     getUserByEmail,
     getUserById,
