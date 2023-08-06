@@ -17,7 +17,7 @@ const generateRandomString = async() => Math.floor(Math.random() * Date.now()).t
 
 
 // register / add user
-const addUser = async(req, res) => {
+const addUser = async(req, res, next) => {
     const user = req.body;
     user.password = await bcrypt.hash(user.password, 10);
 
@@ -50,17 +50,14 @@ const addUser = async(req, res) => {
             user: user,
         });
     } catch (error) {
-        console.error(error);
-        return res.status(400).json({
-            done: false,
-            error: error.message,
-        });
+        error.status = 400;
+        return next(error);
     }
 }
 
 
 // login 
-const loginUser = async(req, res) => {
+const loginUser = async(req, res, next) => {
     const email = req.body.email;
     const password = req.body.password;
     try {
@@ -109,24 +106,21 @@ const loginUser = async(req, res) => {
         });
         
     } catch (error) {
-        return res.status(400).json({
-            done: false,
-            error: error.message,
-        });
+        error.status = 400;
+        return next(error);
     }
 }
 
 // refresh access  token
-const refreshAccessToken = (req, res) => {
+const refreshAccessToken = (req, res, next) => {
     if (req.cookies?.jwt) {
         const refreshToken = req.cookies.jwt;
 
         jwt.verify(refreshToken, PRIVATE_KEY_REFRESH, (err, decoded) => {
             if (err) {
-                return res.status(401).json({
-                    done: false,
-                    error: 'Wrong refresh token',
-                });
+                err.message = 'Wrong refresh token';
+                err.status = 401;
+                return next(err);
             } else {
                 const userId = req.body.id;
                 const userEmail = req.body.email;
@@ -154,10 +148,10 @@ const refreshAccessToken = (req, res) => {
             }
         });
     } else {
-        return res.status(401).json({
-            done: false,
-            error: 'No resfresh token provided',
-        });
+        let err = new Error();
+        err.message = 'No resfresh token provided';
+        err.status = 401;
+        return next(err);
     }
 }
 
@@ -180,7 +174,7 @@ const logoutUser = async(req, res) => {
 }
 
 // remove by email
-const deleteUserById = async(req, res) => {
+const deleteUserById = async(req, res, next) => {
     const id = req.body.id;
     try {
         await usersModel.deleteUserById(id);
@@ -188,17 +182,14 @@ const deleteUserById = async(req, res) => {
             done: true,
         })
     } catch (error) {
-        console.error(error);
-        return res.status(400).json({
-            done: false,
-            error: 'Sth went wrong!',
-        });
+        error.status = 400;
+        return next(error);
     }
 }
 
 
 // update user
-const updateUser = async(req, res) => {
+const updateUser = async(req, res, next) => {
     const id = req.body.id;
     let   value = req.body.value;
     const what  = req.body.what;
@@ -209,17 +200,14 @@ const updateUser = async(req, res) => {
             done: true,
         });
     } catch (error) {
-        console.error(error);
-        return res.status(400).json({
-            done: false,
-            error: 'Sth went wrong',
-        });
+        error.status = 400;
+        return next(error);
     }
 }
 
 
 // get by email
-const getUserByEmail = async(req, res) => {
+const getUserByEmail = async(req, res, next) => {
     const email = req.query.email;
     try {
         const user = await usersModel.getUserByEmail(email);
@@ -228,16 +216,13 @@ const getUserByEmail = async(req, res) => {
             user: user,
         });
     } catch (error) {
-        console.error(error);
-        return res.status(400).json({
-            done: false,
-            error: 'Sth went wrong',
-        });
+        error.status = 400;
+        return next(error);
     }
 }
 
 // get by id
-const getUserById = async(req, res) => {
+const getUserById = async(req, res, next) => {
     const id = req.query.id;
     try {
         const user = await usersModel.getUserById(id);
@@ -246,15 +231,13 @@ const getUserById = async(req, res) => {
             user: user,
         });
     } catch (error) {
-        console.error(error);
-        return res.status(400).json({
-            error: 'Sth went wrong',
-        });
+        error.status = 400;
+        return next(error);
     }
 }
 
 // get by ids array
-const getUsersByIds = async(req, res) => {
+const getUsersByIds = async(req, res, next) => {
     const ids = req.query.ids;
     try {
         const users = await usersModel.getUsersByIds(ids);
@@ -263,16 +246,14 @@ const getUsersByIds = async(req, res) => {
             users: users,
         });
     } catch (error) {
-        console.error(error);
-        return res.status(400).json({
-            error: 'Sth went wrong',
-        });
+        error.status = 400;
+        return next(error);
     }
  }
 
 
 // validate
-const validateUser = async(req, res) => {
+const validateUser = async(req, res, next) => {
     const email = req.body.email;
     const password = req.body.password;
     try {
@@ -290,15 +271,13 @@ const validateUser = async(req, res) => {
             user: user,
         });
     } catch (error) {
-        return res.status(400).json({
-            done: false,
-            error: error.message,
-        });
+        error.status = 400;
+        return next(error);
     }
 }
 
 // get all
-const getAllUsers = async(req, res) => {
+const getAllUsers = async(req, res, next) => {
     try {
         const users = await usersModel.getAllUsers();
         console.log(users)
@@ -307,17 +286,14 @@ const getAllUsers = async(req, res) => {
             users: users,
         });
     } catch (error) {
-        console.error(error);
-        return res.status(400).json({
-            done: false,
-            error: error,
-        });
+        error.status = 400;
+        return next(error);
     }
 }
 
 
 // get by nick
-const getByNickname = async(req, res) => {
+const getByNickname = async(req, res, next) => {
     const nickQuery = req.query.nickname;
 
     try {
@@ -327,16 +303,13 @@ const getByNickname = async(req, res) => {
             users: users,
         });
     } catch (error) {
-        console.log(error);
-        return res.status(400).json({
-            done: false,
-            error: error,
-        });
+        error.status = 400;
+        return next(error);
     }
 }
 
 // subscribe on or unsubscribe from user
-const switchSubscriptionOnUser = async(req, res) => {
+const switchSubscriptionOnUser = async(req, res, next) => {
     const userId = req.body.userId;
     const subscriberId = req.body.subscriberId
 
@@ -348,16 +321,13 @@ const switchSubscriptionOnUser = async(req, res) => {
             done: true,
         });
     } catch (error) {
-        console.log(error);
-        return res.status(400).json({
-            done: false,
-            error: error,
-        });
+        error.status = 400;
+        return next(error);
     }
 }
 
 // confirm account creation
-const confirmAccount = async(req, res) => {
+const confirmAccount = async(req, res, next) => {
     const userId = req.body.userId;
     const actionId = req.body.actionId;
     const verifyToken = req.body.verifyToken;
@@ -377,16 +347,13 @@ const confirmAccount = async(req, res) => {
             });
         }
     } catch (error) {
-        console.log(error);
-        return res.status(400).json({
-            done: false,
-            error: error,
-        });
+        error.status = 400;
+        return next(error);
     }
 }
 
 // restore account
-const restoreAccount = async(req, res) => {
+const restoreAccount = async(req, res, next) => {
     const userId = req.body.userId;
     const actionId = req.body.actionId;
     const verifyToken = req.body.verifyToken;
@@ -411,21 +378,17 @@ const restoreAccount = async(req, res) => {
                 done: true,
             });
         } else {
-            return res.status(400).json({
-                done: false,
-            });
+            error.status = 400;
+            return next(error);
         }
     } catch (error) {
-        console.log(error);
-        return res.status(400).json({
-            done: false,
-            error: error,
-        });
+        error.status = 400;
+        return next(error);
     }
 }
 
 //prepare account to restore
-const prepareAccountToRestore = async(req, res) => {
+const prepareAccountToRestore = async(req, res, next) => {
     const email = req.body.email;
     const type = req.body.type;
     
@@ -453,11 +416,8 @@ const prepareAccountToRestore = async(req, res) => {
             user: user,
         });
     } catch (error) {
-        console.log(error);
-        return res.status(400).json({
-            done: false,
-            error: error,
-        });
+        error.status = 400;
+        return next(error);
     }
 }
 

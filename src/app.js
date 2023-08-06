@@ -9,7 +9,8 @@ const cronTasks = require('./utils/cron/cron');
 const initFrontend = require('./utils/frontend/frontend');
 const initPassportStarategies = require('./middleware/passport');
 const initMulter = require('./middleware/multer');
-const cookieParser = require('cookie-parser')
+const cookieParser = require('cookie-parser');
+const errorHandler = require('./middleware/errorHandler');
 require('dotenv').config();
 
 
@@ -59,7 +60,6 @@ app.use(helmet({
     },
 }));
 */
-
 
 // ########################## AUTH SESSION ##########################
 // session
@@ -114,6 +114,9 @@ app.use('/api/support-requests', require('./routers/support-requests/reports.rou
 app.use('/api/uploads/images', express.static(path.join(__dirname, '..', 'uploads', 'images')));
 app.use('/api/uploads/audios', express.static(path.join(__dirname, '..', 'uploads', 'audios')));
 app.use('/api/uploads/others', express.static(path.join(__dirname, '..', 'uploads', 'others')));
+
+// error handler
+app.use(errorHandler);
 
 
 module.exports = app;
