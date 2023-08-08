@@ -11,6 +11,7 @@ const initPassportStarategies = require('./middleware/passport');
 const initMulter = require('./middleware/multer');
 const cookieParser = require('cookie-parser');
 const errorHandler = require('./middleware/errorHandler');
+const initAudioStreamer = require('./utils/audio-streamer/audioStreamer');
 require('dotenv').config();
 
 
@@ -78,6 +79,8 @@ initPassportStarategies(passport, app);
 // cron jobs
 cronTasks.initDefaultCronTasks();
 
+// audio streamer
+initAudioStreamer(app);
 
 
 // ########################## FRONTEND ##########################

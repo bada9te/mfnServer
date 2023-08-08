@@ -1,6 +1,8 @@
 const errorHandler = (err, req, res, next) => {
     const eStatus = err.status || 500;
     const eMsg = err.message || 'Sth went wrong';
+
+    console.log(eMsg);
     
     res.status(eStatus).json({
         done: false,
