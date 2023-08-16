@@ -2,7 +2,7 @@ const supportRequestModel = require('../../models/support-requests/support-reque
 
 
 // create report
-const createSupportRequest = async(req, res) => {
+const createSupportRequest = async(req, res, next) => {
     const supportRequest = req.body.supportRequest;
     try {
         await supportRequestModel.createSupportRequest(supportRequest);
@@ -10,16 +10,13 @@ const createSupportRequest = async(req, res) => {
             done: true,
         });
     } catch (error) {
-        console.log(error);
-        return res.status(400).json({
-            done: false,
-            error: 'Sth went wrong!',
-        });
+        error.status = 400;
+        return next(error);
     }
 }
 
 
-const closeSupportRequest = async(req, res) => {
+const closeSupportRequest = async(req, res, next) => {
     const supportRequestId = req.body.supportRequestId;
     try {
         await supportRequestModel.closeSupportRequest(supportRequestId);
@@ -27,11 +24,8 @@ const closeSupportRequest = async(req, res) => {
             done: true,
         });
     } catch (error) {
-        console.log(error);
-        return res.status(400).json({
-            done: false,
-            error: 'Sth went wrong!',
-        });
+        error.status = 400;
+        return next(error);
     }
 }
 

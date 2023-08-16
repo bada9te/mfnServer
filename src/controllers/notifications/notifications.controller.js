@@ -2,7 +2,7 @@ const notificationsModel = require('../../models/notifications/notifications.mod
 const usersModel = require('../../models/users/users.model');
 
 // create
-const createNotification = async(req, res) => {
+const createNotification = async(req, res, next) => {
     const notification = req.body.notification;
     notification.createdAt = new Date().toISOString();
     
@@ -13,15 +13,13 @@ const createNotification = async(req, res) => {
             done: true,
         });
     } catch (error) {
-        return res.status(400).json({
-            done: false,
-            error: 'Sth went wrong!',
-        });
+        error.status = 400;
+        return next(error);
     }
 }
 
 // delete
-const deleteNotificationById = async(req, res) => {
+const deleteNotificationById = async(req, res, next) => {
     const id = req.body.id;
     try {
         await notificationsModel.deleteNotificationById(id);
@@ -29,16 +27,14 @@ const deleteNotificationById = async(req, res) => {
             done: true,
         });
     } catch (error) {
-        return res.status(400).json({
-            done: false,
-            error: 'Sth went wrong!',
-        });
+        error.status = 400;
+        return next(error);
     }
 }
 
 
 // delete many
-const deleteNotificationsByIds = async(req, res) => {
+const deleteNotificationsByIds = async(req, res, next) => {
     const ids = req.body.ids;
     try {
         await notificationsModel.deleteNotificationsByIds(ids);
@@ -46,16 +42,14 @@ const deleteNotificationsByIds = async(req, res) => {
             done: true,
         });
     } catch (error) {
-        return res.status(400).json({
-            done: false,
-            error: 'Sth went wrong!',
-        });
+        error.status = 400;
+        return next(error);
     }
 }
 
 
 // mark as read
-const markNotificationAsReadById = async(req, res) => {
+const markNotificationAsReadById = async(req, res, next) => {
     const id = req.body.id;
     try {
         await notificationsModel.markNotificationAsRead(id);
@@ -63,15 +57,13 @@ const markNotificationAsReadById = async(req, res) => {
             done: true,
         });
     } catch (error) {
-        return res.status(400).json({
-            done: false,
-            error: 'Sth went wrong!',
-        });
+        error.status = 400;
+        return next(error);
     }
 }
 
 // mark many as read
-const markNotificationsAsReadByIds = async(req, res) => {
+const markNotificationsAsReadByIds = async(req, res, next) => {
     const ids = req.body.ids;
     try {
         await notificationsModel.markNotificationsAsRead(ids);
@@ -79,15 +71,13 @@ const markNotificationsAsReadByIds = async(req, res) => {
             done: true,
         });
     } catch (error) {
-        return res.status(400).json({
-            done: false,
-            error: 'Sth went wrong!',
-        });
+        error.status = 400;
+        return next(error);
     }
 }
 
 // get unread with reciever id
-const getAllUnreadNotifications = async(req, res) => {
+const getAllUnreadNotifications = async(req, res, next) => {
     const receiverId = req.query.receiverId;
 
     try {
@@ -97,16 +87,13 @@ const getAllUnreadNotifications = async(req, res) => {
             notifications: notifications || [],
         });
     } catch (error) {
-        console.log(error);
-        return res.status(400).json({
-            done: false,
-            error: 'Sth went wrong!',
-        });
+        error.status = 400;
+        return next(error);
     }
 }
 
 // get read with reciever id
-const getAllReadNotifications = async(req, res) => {
+const getAllReadNotifications = async(req, res, next) => {
     const receiverId = req.query.receiverId;
 
     try {
@@ -116,16 +103,13 @@ const getAllReadNotifications = async(req, res) => {
             notifications: notifications || [],
         });
     } catch (error) {
-        console.log(error);
-        return res.status(400).json({
-            done: false,
-            error: 'Sth went wrong!',
-        });
+        error.status = 400;
+        return next(error);
     }
 }
 
 // get all notifications by ids
-const getAllNotificationsByIds = async(req, res) => {
+const getAllNotificationsByIds = async(req, res, next) => {
     const ids = req.query.ids;
     try {
         const notifications = await notificationsModel.getAllNotificationsByIds(ids);
@@ -134,11 +118,8 @@ const getAllNotificationsByIds = async(req, res) => {
             notifications: notifications || [],
         });
     } catch (error) {
-        console.log(error);
-        return res.status(400).json({
-            done: false,
-            error: 'Sth went wrong!',
-        });
+        error.status = 400;
+        return next(error);
     }
 }
 

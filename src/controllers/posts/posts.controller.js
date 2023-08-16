@@ -1,9 +1,9 @@
-const notificationsModel = require('../../models/notifications/notifications.model');
+//const notificationsModel = require('../../models/notifications/notifications.model');
 const postsModel = require('../../models/posts/posts.model');
 
 
 // add post
-const addPost = async(req, res) => {
+const addPost = async(req, res, next) => {
     const post = req.body;
     post.createdAt = new Date().toISOString();
     
@@ -14,17 +14,14 @@ const addPost = async(req, res) => {
             post: post,
         });
     } catch (error) {
-        console.error(error);
-        return res.status(400).json({
-            done: false,
-            error: 'Sth went wrong!',
-        });
+        error.status = 400;
+        return next(error);
     }
 }
 
 
 // update post 
-const updatePost = async(req, res) => {
+const updatePost = async(req, res, next) => {
     const post  = req.body.post;
     let   value = req.body.value;
     const what  = req.body.what;
@@ -36,16 +33,14 @@ const updatePost = async(req, res) => {
             done: true,
         });
     } catch (error) {
-        console.error(error);
-        return res.status(400).json({
-            error: 'Sth went wrong!',
-        });
+        error.status = 400;
+        return next(error);
     }
 }
 
 
 // delete post by id
-const deletePostById = async(req, res) => {
+const deletePostById = async(req, res, next) => {
     const id = req.body.id;
     try {
         await postsModel.deletePostById(id);
@@ -53,16 +48,14 @@ const deletePostById = async(req, res) => {
             done: true,
         });
     } catch (error) {
-        console.error(error);
-        return res.status(400).json({
-            error: 'Sth went wrong!',
-        });
+        error.status = 400;
+        return next(error);
     }
 }
 
 
 // get by id
-const getPostById = async(req, res) => {
+const getPostById = async(req, res, next) => {
     const id = req.query.id;
     try {
         const post = await postsModel.getPostById(id);
@@ -72,16 +65,14 @@ const getPostById = async(req, res) => {
             post: post,
         });
     } catch (error) {
-        console.error(error);
-        return res.status(400).json({
-            error: 'Sth went wrong!',
-        });
+        error.status = 400;
+        return next(error);
     }
 }
 
 
 // get all posts
-const getAllPosts = async(req, res) => {
+const getAllPosts = async(req, res, next) => {
     const skipCount = req.query.skipCount;
     try {
         const posts = await postsModel.getAllPosts(skipCount);
@@ -92,16 +83,13 @@ const getAllPosts = async(req, res) => {
             count: count,
         });
     } catch (error) {
-        console.error(error);
-        return res.status(400).json({
-            done: false,
-            error: 'Sth went wrong!',
-        });
+        error.status = 400;
+        return next(error);
     }
 }
 
 // by owner id 
-const getAllWithOwnerId = async(req, res) => {
+const getAllWithOwnerId = async(req, res, next) => {
     const ownerId = req.query.id;
     const skipCount = req.query.skipCount;
     try {
@@ -113,16 +101,13 @@ const getAllWithOwnerId = async(req, res) => {
             count: count,
         });
     } catch (error) {
-        console.error(error);
-        return res.status(400).json({
-            done: false,
-            error: 'Sth went wrong!',
-        });
+        error.status = 400;
+        return next(error);
     }
 }
 
 // saved posts by user id
-const getSavedPostsByUserId = async(req, res) => {
+const getSavedPostsByUserId = async(req, res, next) => {
     const userId = req.query.userId;
     const skipCount = req.query.skipCount;
     try {
@@ -132,16 +117,13 @@ const getSavedPostsByUserId = async(req, res) => {
             posts: posts,
         })
     } catch (error) {
-        console.error(error);
-        return res.status(400).json({
-            done: false,
-            error: 'Sth went wrong!',
-        });
+        error.status = 400;
+        return next(error);
     }
 }
 
 // adds or removes like from a specific user
-const switchLike = async(req, res) => {
+const switchLike = async(req, res, next) => {
     const userId = req.body.userId;
     const postId = req.body.postId;
     
@@ -154,16 +136,13 @@ const switchLike = async(req, res) => {
             post: post,
         });
     } catch (error) {
-        console.error(error);
-        return res.status(400).json({
-            done: false,
-            error: 'Sth went wrong!',
-        });
+        error.status = 400;
+        return next(error);
     }
 }
 
 
-const getByTitle = async(req, res) => {
+const getByTitle = async(req, res, next) => {
     const title = req.query.title;
     const ownerId = req.query.ownerId;
     const isMine = req.query.isMine;
@@ -180,16 +159,13 @@ const getByTitle = async(req, res) => {
             posts: posts,
         });
     } catch (error) {
-        console.error(error);
-        return res.status(400).json({
-            done: false,
-            error: 'Sth went wrong!',
-        });
+        error.status = 400;
+        return next(error);
     }
 }
 
 // add post to saved
-const swicthPostInSaved = async(req, res) => {
+const swicthPostInSaved = async(req, res, next) => {
     const userId = req.body.userId;
     const postId = req.body.postId;
 
@@ -202,11 +178,8 @@ const swicthPostInSaved = async(req, res) => {
             post: post,
         });
     } catch (error) {
-        console.error(error);
-        return res.status(400).json({
-            done: false,
-            error: error,
-        });
+        error.status = 400;
+        return next(error);
     }
 }
 

@@ -3,7 +3,7 @@ const postsModel = require('../../models/posts/posts.model');
 
 
 // add / create comment
-const addComment = async(req, res) => {
+const addComment = async(req, res, next) => {
     const comment = req.body.comment;
     comment.createdAt = new Date(Date.now()).toISOString();
 
@@ -27,15 +27,12 @@ const addComment = async(req, res) => {
             comment: comment,
         });
     } catch (error) {
-        console.log(error)
-        return res.status(400).json({
-            done: false,
-            error: 'Sth went wrong!',
-        });
+        error.status = 400;
+        return next(error);
     }
 }
 
-const getManyByIds = async(req, res) => {
+const getManyByIds = async(req, res, next) => {
     const ids = req.body.ids;
 
     try {
@@ -45,14 +42,12 @@ const getManyByIds = async(req, res) => {
             comments: comments,
         });
     } catch (error) {
-        return res.status(400).json({
-            done: false,
-            error: 'Sth went wrong!',
-        });
+        error.status = 400;
+        return next(error);
     }
 }
 
-const getOneById = async(req, res) => {
+const getOneById = async(req, res, next) => {
     const id = req.query.id;
 
     try {
@@ -62,44 +57,28 @@ const getOneById = async(req, res) => {
             comment: comment,
         });
     } catch (error) {
-        return res.status(400).json({
-            done: false,
-            error: 'Sth went wrong!',
-        });
+        error.status = 400;
+        return next(error);
     }
 }
 
 
-const removeById = async(req, res) => {
+const removeById = async(req, res, next) => {
     const id = req.body.id;
 
     try {
         let removedComment = null;
         await commentsModel.removeById(id).then(async(comment) => {
             removedComment = comment;
-            /*
-            if (comment?.replies?.length > 0) {
-                await commentsModel.removeManyByIds(comment.replies);
-            }*/
             await postsModel.addOrRemoveComment(comment.post, comment._id);
-
-            /*
-            const post = await postsModel.getPostById(comment.post);
-            let postComments = post.comments;
-            postComments.splice(postComments.indexOf(comment._id), 1);
-            await postsModel.updatePost(comment.post, postComments, "comments");
-            */
-            //console.log(comment)
         });
         return res.status(200).json({
             comment: removedComment,
             done: true,
         });
     } catch (error) {
-        return res.status(400).json({
-            done: false,
-            error: 'Sth went wrong!',
-        });
+        error.status = 400;
+        return next(error);
     }
 }
 

@@ -2,7 +2,7 @@ const reportsModel = require('../../models/reports/reposrts.model');
 
 
 // create report
-const createReport = async(req, res) => {
+const createReport = async(req, res, next) => {
     const report = req.body.report;
     try {
         await reportsModel.createReport(report);
@@ -10,16 +10,13 @@ const createReport = async(req, res) => {
             done: true,
         });
     } catch (error) {
-        console.log(error);
-        return res.status(400).json({
-            done: false,
-            error: 'Sth went wrong!',
-        });
+        error.status = 400;
+        return next(error);
     }
 }
 
 
-const closeReport = async(req, res) => {
+const closeReport = async(req, res, next) => {
     const reportId = req.body.reportId;
     try {
         await reportsModel.createReport(reportId);
@@ -27,11 +24,8 @@ const closeReport = async(req, res) => {
             done: true,
         });
     } catch (error) {
-        console.log(error);
-        return res.status(400).json({
-            done: false,
-            error: 'Sth went wrong!',
-        });
+        error.status = 400;
+        return next(error);
     }
 }
 

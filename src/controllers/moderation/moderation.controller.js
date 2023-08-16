@@ -6,7 +6,7 @@ const generateRandomString = async() => Math.floor(Math.random() * Date.now()).t
 
 
 // create
-const createAction = async(req, res) => {
+const createAction = async(req, res, next) => {
     const action = req.body.action;
     const newValue = req.body.newValue;
     action.verifyToken = await generateRandomString();
@@ -24,14 +24,13 @@ const createAction = async(req, res) => {
             done: true,
         });
     } catch (error) {
-        return res.status(400).json({
-            done: false,
-        });
+        error.status = 400;
+        return next(error);
     }
 }
 
 // delete
-const deleteAction = async(req, res) => {
+const deleteAction = async(req, res, next) => {
     const userId = req.body.userId;
     const actionId = req.body.actionId;
     const verifyToken = req.body.verifyToken;
@@ -44,14 +43,13 @@ const deleteAction = async(req, res) => {
             action: action,
         });
     } catch (error) {
-        return res.status(400).json({
-            done: false,
-        });
+        error.status = 400;
+        return next(error);
     }
 }
 
 // check
-const validateAction = async(req, res) => {
+const validateAction = async(req, res, next) => {
     const userId = req.body.userId;
     const actionId = req.body.actionId;
     const verifyToken = req.body.verifyToken;
@@ -64,9 +62,8 @@ const validateAction = async(req, res) => {
             action: action,
         });
     } catch (error) {
-        return res.status(400).json({
-            done: false,
-        });
+        error.status = 400;
+        return next(error);
     }
 }
 

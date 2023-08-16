@@ -3,7 +3,7 @@ const { createTask } = require('../../utils/cron/cron');
 
 
 // add new battles
-const addNewBattleByIds = async(req, res) => {
+const addNewBattleByIds = async(req, res, next) => {
     const battle = req.body;
     const dateStart = new Date();
     const dateEnd = new Date();
@@ -24,17 +24,14 @@ const addNewBattleByIds = async(req, res) => {
             done: true,
         });
     } catch (error) {
-        console.error(error);
-        return res.status(400).json({
-            done: false,
-            error: 'Sth went wrong!',
-        });
+        error.status = 400;
+        return next(error);
     }
 }
 
 
 // delete battle
-const deleteBattleById = async(req, res) => {
+const deleteBattleById = async(req, res, next) => {
     const id = req.body.id;
     try {
         await battlesModel.deleteBattle(id);
@@ -42,11 +39,8 @@ const deleteBattleById = async(req, res) => {
             done: true,
         });
     } catch (error) {
-        console.error(error);
-        return res.status(400).json({
-            done: false,
-            error: 'Sth went wrong!',
-        });
+        error.status = 400;
+        return next(error);
     }
 }
 
@@ -55,7 +49,7 @@ const deleteBattleById = async(req, res) => {
 
 
 // get all battles
-const getAllBattlesByStatus = async(req, res) => {
+const getAllBattlesByStatus = async(req, res, next) => {
     const skipCount = req.query.skipCount;
     let status = req.query.status;
 
@@ -72,17 +66,14 @@ const getAllBattlesByStatus = async(req, res) => {
             battles: battles,
         });
     } catch (error) {
-        console.error(error);
-        return res.status(400).json({
-            done: false,
-            error: 'Sth went wrong!',
-        });
+        error.status = 400;
+        return next(error);
     }
 }
 
 
 // make vote
-const makeVote = async(req, res) => {
+const makeVote = async(req, res, next) => {
     const battleId = req.body.battleId;
     const postNScore = req.body.postNScore;
     const voteCount = req.body.voteCount;
@@ -95,11 +86,8 @@ const makeVote = async(req, res) => {
             done: true,
         });
     } catch (error) {
-        console.error(error);
-        return res.status(400).json({
-            done: false,
-            error: 'Sth went wrong!',
-        });
+        error.status = 400;
+        return next(error);
     }
 }
 
