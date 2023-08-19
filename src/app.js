@@ -36,8 +36,8 @@ app.use(cors({
 // cookie 
 app.use(cookieParser());
 
-// req res logging
-//app.use(morgan('combined'));
+// logging
+app.use(morgan('combined'));
 
 // file upload
 initMulter(app);
@@ -112,6 +112,9 @@ app.use('/api/moderation', require('./routers/moderation/moderation.router'));
 
 // support requests routes
 app.use('/api/support-requests', require('./routers/support-requests/reports.router'));
+
+// playlists
+app.use('/api/playlists', require('./routers/playlists/playlists.router'));
 
 // files
 app.use('/api/uploads/images', express.static(path.join(__dirname, '..', 'uploads', 'images')));
