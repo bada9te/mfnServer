@@ -18,7 +18,7 @@ const createPlaylist = async(req, res, next) => {
 
 
 // delete
-const deletePlaylistById = async(req, res) => {
+const deletePlaylistById = async(req, res, next) => {
     const id = req.body.id;
 
     try {
@@ -35,7 +35,7 @@ const deletePlaylistById = async(req, res) => {
 
 
 // switch track in playlist
-const switchTrackInPlaylist = async(req, res) => {
+const switchTrackInPlaylist = async(req, res, next) => {
     const playlistId = req.body.playlistId;
     const trackId = req.body.trackId;
 
@@ -53,11 +53,45 @@ const switchTrackInPlaylist = async(req, res) => {
     }
 }
 
+// get playlists by title
+const getPlaylistsByTitle = async(req, res) => {
+    const title = req.query.title;
+
+    try {
+        const playlists = await playlistsModel.getPlaylistByTitle(title);
+        return res.status(200).json({
+            done: true,
+            playlists: playlists,
+        });
+    } catch (error) {
+        error.status = 400;
+        return next(err);
+    }
+}
+
+// get by owner id
+const getPlaylistByOwnerId = async(req, res) => {
+    const ownerId = req.query.ownerId;
+
+    try {
+        const playlists = await playlistsModel.getPlaylistByOwnerId(ownerId);
+        return res.status(200).json({
+            done: true,
+            playlists: playlists,
+        });
+    } catch (error) {
+        error.status = 400;
+        return next(err);
+    }
+}
+
 
 module.exports = {
     createPlaylist,
     deletePlaylistById,
     switchTrackInPlaylist,
+    getPlaylistsByTitle,
+    getPlaylistByOwnerId,
 }
 
 

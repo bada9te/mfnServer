@@ -39,9 +39,28 @@ const swicthTrackInPlaylist = async(playlistId, trackId) => {
     });
 }
 
+// get by title
+const getPlaylistByTitle = async(title) => {
+    return await Playlist.find({ title: {$regex: '.*' + title + '.*'} })
+    .limit(10)
+    .catch(err => {
+        throw new Error(err);
+    });
+}
+
+// get by owner id
+const getPlaylistByOwnerId = async(ownerId) => {
+    return await Playlist.find({ owner: ownerId })
+    .catch(err => {
+        throw new Error(err);
+    });
+}
+
 
 module.exports = {
     createPlaylist,
     deletePlaylistById,
     swicthTrackInPlaylist,
+    getPlaylistByTitle,
+    getPlaylistByOwnerId,
 }

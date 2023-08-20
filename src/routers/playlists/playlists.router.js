@@ -12,6 +12,8 @@ playlistsRouter.post('/create',       passport.authenticate("jwt", {session: fal
 playlistsRouter.post('/delete',       passport.authenticate("jwt", {session: false}), playlistsController.deletePlaylistById);
 playlistsRouter.post('/switch-track', passport.authenticate("jwt", {session: false}), playlistsController.switchTrackInPlaylist);
 
+playlistsRouter.get ('/owner', playlistsController.getPlaylistByOwnerId);
+playlistsRouter.get ('/title', playlistsController.getPlaylistsByTitle);
 
 // export
 module.exports = playlistsRouter;
