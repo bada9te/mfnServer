@@ -29,7 +29,7 @@ const deletePlaylistById = async(req, res, next) => {
         });
     } catch (error) {
         error.status = 400;
-        return next(err);
+        return next(error);
     }
 }
 
@@ -49,12 +49,13 @@ const switchTrackInPlaylist = async(req, res, next) => {
         });
     } catch (error) {
         error.status = 400;
-        return next(err);
+        return next(error);
     }
 }
 
+
 // get playlists by title
-const getPlaylistsByTitle = async(req, res) => {
+const getPlaylistsByTitle = async(req, res, next) => {
     const title = req.query.title;
 
     try {
@@ -65,12 +66,13 @@ const getPlaylistsByTitle = async(req, res) => {
         });
     } catch (error) {
         error.status = 400;
-        return next(err);
+        return next(error);
     }
 }
 
+
 // get by owner id
-const getPlaylistByOwnerId = async(req, res) => {
+const getPlaylistByOwnerId = async(req, res, next) => {
     const ownerId = req.query.ownerId;
 
     try {
@@ -81,7 +83,7 @@ const getPlaylistByOwnerId = async(req, res) => {
         });
     } catch (error) {
         error.status = 400;
-        return next(err);
+        return next(error);
     }
 }
 
