@@ -10,15 +10,11 @@ const moderationSchema = mongoose.Schema({
         type: String,
         required: true,
     },
-    createdAt: {
-        type: Date,
-        required: true,
-    },
     verifyToken: {
         type: String,
         required: true,
     }
-});
+}, {timestamps: true});
 
 const Moderation = mongoose.model('Moderation', moderationSchema);
 

@@ -4,7 +4,6 @@ const usersModel = require('../../models/users/users.model');
 // create
 const createNotification = async(req, res, next) => {
     const notification = req.body.notification;
-    notification.createdAt = new Date().toISOString();
     
     try {
         await notificationsModel.createNotification(notification);

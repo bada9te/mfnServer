@@ -5,10 +5,8 @@ const { createTask } = require('../../utils/cron/cron');
 // add new battles
 const addNewBattleByIds = async(req, res, next) => {
     const battle = req.body;
-    const dateStart = new Date();
     const dateEnd = new Date();
     dateEnd.setDate(dateStart.getDate() + 1);
-    battle.createdAt = dateStart.toISOString();
     battle.willFinishAt = dateEnd.toISOString();
 
     try {

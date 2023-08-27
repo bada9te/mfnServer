@@ -10,7 +10,6 @@ const createAction = async(req, res, next) => {
     const action = req.body.action;
     const newValue = req.body.newValue;
     action.verifyToken = await generateRandomString();
-    action.createdAt = new Date().toISOString();
 
     try {
         await usersModel.getUserById(action.user).then(async(user) => {

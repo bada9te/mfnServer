@@ -12,10 +12,6 @@ const commentsSchema = mongoose.Schema({
         type: String,
         required: true,
     },
-    createdAt: {
-        type: Date,
-        required: true,
-    },
     isReply: {
         type: Boolean,
         default: false,
@@ -29,7 +25,7 @@ const commentsSchema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Post',
     },
-});
+}, {timestamps: true});
 
 // plugin 
 commentsSchema.plugin(require('mongoose-autopopulate'));

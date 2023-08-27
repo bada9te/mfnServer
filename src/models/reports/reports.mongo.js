@@ -34,7 +34,7 @@ const reportsSchema = mongoose.Schema({
     isClosed: {
         type: Boolean,
     },
-});
+}, {timestamps: true});
 
 // plugin
 reportsSchema.plugin(require('mongoose-autopopulate'));

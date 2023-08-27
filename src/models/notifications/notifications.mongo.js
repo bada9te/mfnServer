@@ -32,11 +32,7 @@ const notificationsSchema = new mongoose.Schema({
         type: Boolean,
         default: false,
     },
-    createdAt: {
-        type: Date,
-        required: true,
-    },
-});
+}, {timestamps: true});
 
 // autopopulate
 notificationsSchema.plugin(require('mongoose-autopopulate'));

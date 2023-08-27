@@ -5,7 +5,6 @@ const postsModel = require('../../models/posts/posts.model');
 // add post
 const addPost = async(req, res, next) => {
     const post = req.body;
-    post.createdAt = new Date().toISOString();
     
     try {
         await postsModel.addPost(post);

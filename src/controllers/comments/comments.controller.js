@@ -5,7 +5,6 @@ const postsModel = require('../../models/posts/posts.model');
 // add / create comment
 const addComment = async(req, res, next) => {
     const comment = req.body.comment;
-    comment.createdAt = new Date(Date.now()).toISOString();
 
     try {
         // add comment

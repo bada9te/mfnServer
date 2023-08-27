@@ -29,10 +29,6 @@ const battlesSchema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Post',
     },
-    createdAt: {
-        type: Date,
-        required: true,
-    },
     willFinishAt: {
         type: Date,
         required: true,
@@ -47,7 +43,7 @@ const battlesSchema = mongoose.Schema({
             ref: 'User',
         }]
     }
-});
+}, {timestamps: true});
 
 // plugin
 battlesSchema.plugin(require('mongoose-autopopulate'));

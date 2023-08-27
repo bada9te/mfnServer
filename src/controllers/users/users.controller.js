@@ -27,13 +27,11 @@ const addUser = async(req, res, next) => {
             throw new Error("User with this email already exists");
         }
 
-        user.createdAt = new Date().toISOString();
         await usersModel.addUser(user).then(async(data) => {
             const verifyToken = await generateRandomString();
             await moderationModel.createAction({
                 user: data[0]._id,
                 type: "verify",
-                createdAt: new Date().toISOString(),
                 verifyToken: verifyToken,
             }).then((action) => {
                 sendMail.sendVerifyEmail(

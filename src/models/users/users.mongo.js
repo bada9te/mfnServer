@@ -40,16 +40,12 @@ const usersSchema = mongoose.Schema({
             ref: 'User' 
         }]
     },
-    createdAt: {
-        type: Date,
-        required: true,
-    },
     verified: {
         type: Boolean,
         required: true,
         default: false,
     },
-});
+}, {timestamps: true});
 
 // plugin
 usersSchema.plugin(require('mongoose-autopopulate'));

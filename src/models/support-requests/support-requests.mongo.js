@@ -18,7 +18,7 @@ const supportRequestsSchema = mongoose.Schema({
     isClosed: {
         type: Boolean,
     },
-});
+}, { timestamps: true });
 
 // plugin
 supportRequestsSchema.plugin(require('mongoose-autopopulate'));

@@ -43,10 +43,6 @@ const postsSchema = mongoose.Schema({
             ref: 'Comment' 
         }],
     },
-    createdAt: {
-        type: Date,
-        required: true,
-    },
     downloadsAllowed: {
         type: Boolean,
         required: true,
@@ -55,7 +51,7 @@ const postsSchema = mongoose.Schema({
         type: Boolean,
         required: true,
     }
-});
+}, {timestamps: true});
 
 // plugin
 postsSchema.plugin(require('mongoose-autopopulate'));
