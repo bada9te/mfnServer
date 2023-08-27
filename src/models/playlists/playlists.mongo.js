@@ -15,6 +15,10 @@ const playlistsSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Post',
     }],
+    public: {
+        type: Boolean,
+        default: false,
+    }
 }, {timestamps: true});
 
 

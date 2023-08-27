@@ -56,6 +56,14 @@ const getPlaylistByOwnerId = async(ownerId) => {
     });
 }
 
+// get all public
+const getPublicAvailablePlaylists = async() => {
+    return await Playlist.find({ public: true })
+    .catch(err => {
+        throw new Error(err);
+    });
+}
+
 
 module.exports = {
     createPlaylist,
@@ -63,4 +71,5 @@ module.exports = {
     swicthTrackInPlaylist,
     getPlaylistByTitle,
     getPlaylistByOwnerId,
+    getPublicAvailablePlaylists
 }

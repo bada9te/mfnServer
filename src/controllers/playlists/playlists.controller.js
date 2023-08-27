@@ -87,6 +87,20 @@ const getPlaylistByOwnerId = async(req, res, next) => {
     }
 }
 
+// get by owner id
+const getPublicAvailablePlaylists = async(req, res, next) => {
+    try {
+        const playlists = await playlistsModel.getPublicAvailablePlaylists();
+        return res.status(200).json({
+            done: true,
+            playlists: playlists,
+        });
+    } catch (error) {
+        error.status = 400;
+        return next(error);
+    }
+}
+
 
 module.exports = {
     createPlaylist,
@@ -94,6 +108,7 @@ module.exports = {
     switchTrackInPlaylist,
     getPlaylistsByTitle,
     getPlaylistByOwnerId,
+    getPublicAvailablePlaylists,
 }
 
 

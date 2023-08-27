@@ -18,7 +18,6 @@ const initSocketIO = (SERVER) => {
                     receiver: data.receiver,
                     sender: data.sender,
                     text: data.text,
-                    createdAt: new Date().toISOString(),
                     post: data.post,
                 }).then(async(notification) => {
                     notification[0].post = data.post;
@@ -43,7 +42,6 @@ const initSocketIO = (SERVER) => {
                     receiver: data.receiver,
                     sender: data.sender,
                     text: data.text,
-                    createdAt: new Date().toISOString(),
                     comment: data.comment,
                     post: data.post,
                 }).then(() => {
@@ -67,7 +65,6 @@ const initSocketIO = (SERVER) => {
                     receiver: data.receiver,
                     sender: data.sender,
                     text: data.text,
-                    createdAt: new Date().toISOString(),
                     post: data.post,
                 }).then(async(notification) => {
                     notification[0].post = data.post;
@@ -88,7 +85,6 @@ const initSocketIO = (SERVER) => {
                 receiver: data.receiver,
                 sender: data.sender,
                 text: data.text,
-                createdAt: new Date().toISOString(),
             }).then(async(notification) => {
                 socket.broadcast.emit(`subscribed-on-${data.receiver}`, notification[0]);
             });
@@ -100,7 +96,6 @@ const initSocketIO = (SERVER) => {
                 receiver: data.receiver,
                 sender: data.sender,
                 text: data.text,
-                createdAt: new Date().toISOString(),
                 post: data.post,
             }).then(async(notification) => {
                 notification[0].post = data.post;

@@ -14,6 +14,7 @@ playlistsRouter.post('/switch-track', passport.authenticate("jwt", {session: fal
 
 playlistsRouter.get ('/owner', playlistsController.getPlaylistByOwnerId);
 playlistsRouter.get ('/title', playlistsController.getPlaylistsByTitle);
+playlistsRouter.get ('/public-available', playlistsController.getPublicAvailablePlaylists);
 
 // export
 module.exports = playlistsRouter;
