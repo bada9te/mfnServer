@@ -89,10 +89,13 @@ const getPlaylistByOwnerId = async(req, res, next) => {
 
 // get by owner id
 const getPublicAvailablePlaylists = async(req, res, next) => {
+    const skipCount = req.query.skipCount;
     try {
-        const playlists = await playlistsModel.getPublicAvailablePlaylists();
+        const playlists = await playlistsModel.getPublicAvailablePlaylists(skipCount);
+        const count = await playlistsModel.getDocsCount({});
         return res.status(200).json({
             done: true,
+            count: count,
             playlists: playlists,
         });
     } catch (error) {

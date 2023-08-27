@@ -42,7 +42,7 @@ const swicthTrackInPlaylist = async(playlistId, trackId) => {
 // get by title
 const getPlaylistByTitle = async(title) => {
     return await Playlist.find({ title: {$regex: '.*' + title + '.*'} })
-    .limit(10)
+    .limit(12)
     .catch(err => {
         throw new Error(err);
     });
@@ -57,11 +57,21 @@ const getPlaylistByOwnerId = async(ownerId) => {
 }
 
 // get all public
-const getPublicAvailablePlaylists = async() => {
+const getPublicAvailablePlaylists = async(skipCount) => {
     return await Playlist.find({ public: true })
+    .skip(skipCount)
+    .limit(12)
     .catch(err => {
         throw new Error(err);
     });
+}
+
+// count docs
+const getDocsCount = async(filter) => {
+    return await Post.count(filter)
+    .catch((err) => {
+        throw new Error(err);
+    })
 }
 
 
@@ -71,5 +81,6 @@ module.exports = {
     swicthTrackInPlaylist,
     getPlaylistByTitle,
     getPlaylistByOwnerId,
-    getPublicAvailablePlaylists
+    getPublicAvailablePlaylists,
+    getDocsCount,
 }
