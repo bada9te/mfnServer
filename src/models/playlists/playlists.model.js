@@ -68,7 +68,7 @@ const getPublicAvailablePlaylists = async(skipCount) => {
 
 // count docs
 const getDocsCount = async(filter) => {
-    return await Post.count(filter)
+    return await Playlist.count(filter)
     .catch((err) => {
         throw new Error(err);
     })

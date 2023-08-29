@@ -37,7 +37,7 @@ app.use(cors({
 app.use(cookieParser());
 
 // logging
-app.use(morgan('combined'));
+//app.use(morgan('combined'));
 
 // file upload
 initMulter(app);

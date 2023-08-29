@@ -182,6 +182,26 @@ const swicthPostInSaved = async(req, res, next) => {
     }
 }
 
+// get many by ids
+const getManyByIds = async(req, res, next) => {
+    const ids = req.query.ids;
+    //const skipCount = req.query.skipCount;
+
+    try {
+        const posts = await postsModel.getManyByIds(ids);
+        //const count = await postsModel.getDocsCount({ _id: {$in: ids} });
+
+        return res.status(200).json({
+            done: true,
+            //count: count,
+            posts: posts,
+        });
+    } catch (error) {
+        error.status = 400;
+        return next(error);
+    }
+}
+
 
 
 module.exports = {
@@ -195,4 +215,5 @@ module.exports = {
     switchLike,
     getByTitle,
     swicthPostInSaved,
+    getManyByIds,
 }

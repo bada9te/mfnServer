@@ -108,7 +108,7 @@ const getByTitleWithOwnerId = async(title, useOwnerId, onwerId) => {
 
 // count docs
 const getDocsCount = async(filter) => {
-    return await Post.count(filter)
+    return await Post.countDocuments(filter).exec()
     .catch((err) => {
         throw new Error(err);
     })
@@ -175,6 +175,7 @@ const getManyByIds = async(ids) => {
         throw new Error(err);
     });
 }
+
 
 const addOrRemoveComment = async(postId, commentId) => {
     return await Post.findOneAndUpdate({ _id: postId }, [{

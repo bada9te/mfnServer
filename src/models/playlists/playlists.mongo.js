@@ -6,6 +6,7 @@ const playlistsSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
         required: true,
+        autopopulate: true,
     },
     title: {
         type: String,
@@ -14,6 +15,7 @@ const playlistsSchema = new mongoose.Schema({
     tracks: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Post',
+        autopopulate: true,
     }],
     public: {
         type: Boolean,
@@ -21,6 +23,8 @@ const playlistsSchema = new mongoose.Schema({
     }
 }, {timestamps: true});
 
+// autopopulate plugin
+playlistsSchema.plugin(require('mongoose-autopopulate'));
 
 // model
 const playlistsModel = mongoose.model("Playlist", playlistsSchema);

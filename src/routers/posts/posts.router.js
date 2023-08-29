@@ -19,6 +19,7 @@ postsRouter.get('/id',       postsController.getPostById);
 postsRouter.get('/all',      postsController.getAllPosts);
 postsRouter.get('/owner',    postsController.getAllWithOwnerId);
 postsRouter.get('/by-title', postsController.getByTitle);
+postsRouter.get('/ids',      postsController.getManyByIds);
 
 
 // export
