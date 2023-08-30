@@ -25,7 +25,7 @@ const deletePlaylistById = async(req, res, next) => {
         const playlist = await playlistsModel.deletePlaylistById(id);
         return res.status(202).json({
             done: true,
-            playlist: playlist,
+            playlist,
         });
     } catch (error) {
         error.status = 400;
@@ -44,8 +44,8 @@ const switchTrackInPlaylist = async(req, res, next) => {
         let inPlaylist = playlist.tracks.indexOf(trackId) !== -1;
         return res.status(inPlaylist ? 201 : 202).json({
             done: true,
-            playlistId: playlistId,
-            trackId: trackId,
+            playlistId,
+            trackId,
         });
     } catch (error) {
         error.status = 400;
@@ -62,7 +62,7 @@ const getPlaylistsByTitle = async(req, res, next) => {
         const playlists = await playlistsModel.getPlaylistByTitle(title);
         return res.status(200).json({
             done: true,
-            playlists: playlists,
+            playlists,
         });
     } catch (error) {
         error.status = 400;
@@ -74,12 +74,15 @@ const getPlaylistsByTitle = async(req, res, next) => {
 // get by owner id
 const getPlaylistByOwnerId = async(req, res, next) => {
     const ownerId = req.query.ownerId;
+    const skipCount = req.query.skipCount;
 
     try {
-        const playlists = await playlistsModel.getPlaylistByOwnerId(ownerId);
+        const playlists = await playlistsModel.getPlaylistByOwnerId(ownerId, skipCount);
+        const count = await playlistsModel.getDocsCount({owner: ownerId});
         return res.status(200).json({
             done: true,
-            playlists: playlists,
+            count,
+            playlists,
         });
     } catch (error) {
         error.status = 400;
@@ -95,8 +98,8 @@ const getPublicAvailablePlaylists = async(req, res, next) => {
         const count = await playlistsModel.getDocsCount({});
         return res.status(200).json({
             done: true,
-            count: count,
-            playlists: playlists,
+            count,
+            playlists,
         });
     } catch (error) {
         error.status = 400;

@@ -49,8 +49,10 @@ const getPlaylistByTitle = async(title) => {
 }
 
 // get by owner id
-const getPlaylistByOwnerId = async(ownerId) => {
+const getPlaylistByOwnerId = async(ownerId, skipCount) => {
     return await Playlist.find({ owner: ownerId })
+    .skip(skipCount)
+    .limit(12)
     .catch(err => {
         throw new Error(err);
     });
