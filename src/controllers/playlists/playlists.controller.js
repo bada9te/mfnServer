@@ -1,3 +1,4 @@
+const { default: mongoose } = require("mongoose");
 const playlistsModel = require("../../models/playlists/playlists.model");
 
 
@@ -37,7 +38,7 @@ const deletePlaylistById = async(req, res, next) => {
 // switch track in playlist
 const switchTrackInPlaylist = async(req, res, next) => {
     const playlistId = req.body.playlistId;
-    const trackId = req.body.trackId;
+    const trackId = new mongoose.Types.ObjectId(req.body.trackId);
 
     try {
         const playlist = await playlistsModel.swicthTrackInPlaylist(playlistId, trackId);
