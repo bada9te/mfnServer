@@ -46,6 +46,7 @@ const switchTrackInPlaylist = async(req, res, next) => {
         return res.status(inPlaylist ? 201 : 202).json({
             done: true,
             playlistId,
+            playlist,
             trackId,
         });
     } catch (error) {
