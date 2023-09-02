@@ -111,9 +111,11 @@ const getSavedPostsByUserId = async(req, res, next) => {
     const skipCount = req.query.skipCount;
     try {
         const posts = await postsModel.getSavedPostsByUserId(userId, skipCount);
+        const count = await postsModel.getDocsCount({ savedBy: userId });
         return res.status(200).json({
             done: true,
-            posts: posts,
+            count,
+            posts,
         })
     } catch (error) {
         error.status = 400;
