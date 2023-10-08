@@ -4,6 +4,7 @@
 # dependencies
 /certificate
 /node_modules
+/src/utils/rsa/id_rsa*.pem
 /.pnp
 .pnp.js
 
