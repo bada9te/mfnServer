@@ -5,6 +5,7 @@ WORKDIR /musicfromnothing-server
 COPY package*.json .
 
 RUN npm install
+RUN node /src/utils/rsa/createKeypair.js
 
 COPY . ./
 
