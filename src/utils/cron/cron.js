@@ -83,8 +83,7 @@ const applySavedTasks = () => {
             } else {
                 console.log('[CRON] Scheduling battle setWinner task, bId:', task.id);
                 cron.scheduleJob(task.date, async() => {
-                    console.log(`[TASK] Setting winner by battle id: ${task.id}`);
-                    await battlesModel.setWinnerByBattleId(task.id);
+                    setBattlesWinnersByIds([task.id]);
                 });
             }
         }
@@ -114,8 +113,11 @@ const saveTask = (taskObject) => {
 const setBattlesWinnersByIds = async(ids) => {
     for await (const id of ids) {
         console.log(`[CRON] Executing setWinner task, bId: ${id}`);
-        await battlesModel.setWinnerByBattleId(id);
-        currentData.splice(currentData.indexOf(item => item.id === id), 1);
+        await battlesModel.setWinnerByBattleId(id)
+        .then(() => {
+            currentData.splice(currentData.indexOf(item => item.id === id), 1);
+        })
+        .catch(console.error);
     }
 }
 

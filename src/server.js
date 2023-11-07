@@ -1,7 +1,7 @@
 const app = require('./app');
 const http = require('http');
 const mongoose = require('mongoose');
-const initSocketIO = require('./socket/socket');
+const initSocketIO = require('./utils/socket/socket');
 const removeJunkFiles = require('./utils/cleaner/cleaner');
 require('dotenv').config();
 
@@ -32,7 +32,7 @@ const launchServer = async() => {
     });
 
     // connect mongo
-    await mongoose.connect(MONGO_URL);
+    await mongoose.connect(MONGO_URL).catch(console.error);
 
     // clean junk
     await removeJunkFiles();

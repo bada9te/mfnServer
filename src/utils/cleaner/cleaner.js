@@ -11,7 +11,7 @@ const audioExtensions = ['.mp3', '.wav', '.m4a', '.flac', '.pcm', '.ogg', '.oga'
 // main 
 const removeJunkFiles = async() => {
     console.log("[CLEANER] Cleaning junk files...")
-    await cleanJunk();
+    await cleanJunk().catch(console.error);
     console.log("[CLEANER] Junk files successfully removed.")
 }
 
