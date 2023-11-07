@@ -12,6 +12,7 @@ const initMulter = require('./middleware/multer');
 const cookieParser = require('cookie-parser');
 const errorHandler = require('./middleware/errorHandler');
 const initAudioStreamer = require('./utils/audio-streamer/audioStreamer');
+const launchApolloServer = require('./middleware/apollo-graphql');
 require('dotenv').config();
 
 
@@ -24,6 +25,8 @@ const config = {
     SESSION_SECRET:  process.env.SESSION_SECRET,
 };
 
+
+// ########################### BASE ###########################
 // express app
 const app = express();
 
@@ -36,33 +39,12 @@ app.use(cors({
 // cookie 
 app.use(cookieParser());
 
-// logging
-//app.use(morgan('combined'));
-
-// file upload
-initMulter(app);
-
-
 // enable json
 app.use(express.json());
 
-// helmet protection
-/*
-app.use(helmet({
-    crossOriginEmbedderPolicy: false,
-    contentSecurityPolicy: {
-        directives: {
-            ...helmet.contentSecurityPolicy.getDefaultDirectives(),
-            "img-src":         ["'self'", "data:", "blob:"],
-            "media-src":       ["'self'", "data:", "blob:"],
-            "connect-src":     ["'self'", "data:", "blob:"],
-            "script-src-elem": ["'self'", "https:", "'unsafe-inline'"],
-        },
-    },
-}));
-*/
 
-// ########################## AUTH SESSION ##########################
+
+// #################### AUTH SESSION + PASSPORT #################
 // session
 app.use(session({
     secret: config.SESSION_SECRET,
@@ -76,19 +58,33 @@ app.use(passport.initialize());
 app.use(passport.session());
 initPassportStarategies(passport, app);
 
+
+
+// ############################ CRON ############################
 // cron jobs
 cronTasks.initDefaultCronTasks();
 
+
+
+// ######################## AUDIO_STREAM ########################
 // audio streamer
 initAudioStreamer(app);
 
 
+
+// #################### MULTER - FILE_UPLOAD ####################
+// file upload
+initMulter(app);
+
+
+
 // ########################## FRONTEND ##########################
+// frontend
 initFrontend(app);
 
 
 
-// ########################## API ##########################
+// ########################## REST API ##########################
 // battles routes
 app.use('/api/battles', require('./routers/battles/battles.router'));
 
@@ -120,6 +116,12 @@ app.use('/api/playlists', require('./routers/playlists/playlists.router'));
 app.use('/api/uploads/images', express.static(path.join(__dirname, '..', 'uploads', 'images')));
 app.use('/api/uploads/audios', express.static(path.join(__dirname, '..', 'uploads', 'audios')));
 app.use('/api/uploads/others', express.static(path.join(__dirname, '..', 'uploads', 'others')));
+
+
+
+// ########################## GRAPHQL ###########################
+launchApolloServer(app);
+
 
 // error handler
 app.use(errorHandler);

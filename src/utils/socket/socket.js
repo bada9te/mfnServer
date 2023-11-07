@@ -1,6 +1,6 @@
 const { Server } = require('socket.io');
-const notificationsModel = require('../models/notifications/notifications.model');
-const usersModel = require('../models/users/users.model');
+const notificationsModel = require('../../models/notifications/notifications.model');
+const usersModel = require('../../models/users/users.model');
 
 // socket.io
 const initSocketIO = (SERVER) => {
