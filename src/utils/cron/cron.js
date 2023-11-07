@@ -113,7 +113,7 @@ const saveTask = (taskObject) => {
 // operate battle ids
 const setBattlesWinnersByIds = async(ids) => {
     for await (const id of ids) {
-        console.log(`[CRON] Executing setWinner task, bId: ${id}`);
+        console.log(`[CRON_STARTUP] Executing setWinner task, bId: ${id}`);
         await battlesModel.setWinnerByBattleId(id);
         currentData.splice(currentData.indexOf(item => item.id === id), 1);
     }
