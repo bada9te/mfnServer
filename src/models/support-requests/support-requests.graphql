@@ -1,0 +1,22 @@
+type Query {
+    supportRequests: [SupportRequest!]!
+}
+
+type SupportRequest {
+    _id: ID!
+    contactReason: String!
+    email: String!
+    message: String!
+    isClosed: Boolean!
+}
+
+type Mutation {
+    createSupportRequest(input: CreateSupportRequestInput!): SupportRequest!
+    closeSupportRequest(_id: ID!): SupportRequest!
+}
+
+input CreateSupportRequestInput {
+    contactReason: String!
+    email: String!
+    message: String!
+}

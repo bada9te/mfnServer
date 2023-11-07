@@ -99,7 +99,7 @@ const getOnlyImagesAndAudios = async() => {
     });
 }
 
-const switchSubscriptionOnUser = async(subscriberId, userId) => {
+const switchSubscriptionOnUser = async(subscriberId, userId, actionType) => {
     return await User.updateOne(
         { _id: userId }, 
         [{ 

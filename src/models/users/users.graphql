@@ -1,0 +1,64 @@
+type Query {
+    users: [User!]!
+    getUserByEmail(email: String!): User!
+    getUserById(_id: ID!): User!
+    getManyUsersByIds(ids: [ID!]!): [User!]!
+    getManyByNickname(nick: String!): [User!]!
+}
+
+type User {
+    _id: ID!
+    email: String!
+    nick: String!
+    description: String!
+    avatar: String!
+    background: String!
+    subscribers: [User!]!
+    subscribedOn: [User!]!
+}
+
+type Mutation {
+    addUser(input: AddUserInput!): User!
+    deleteUserById(_id: ID!): User!
+    updateUser(input: UpdateUserInput!): User!
+    switchSubscriptionOnUser(input: SwitchSubscriptionOnUserInput!): User!
+    confirmAccount(input: AccountConfirmInput!): User!
+    restoreAccount(input: AccountRestoreInput!): User!
+    prepareAccountToRestore(input: PrepareAccountToRestoreInput): Boolean!
+}
+
+
+input AddUserInput {
+    email: String!
+    nick: String!
+    password: String!
+}
+
+input UpdateUserInput {
+    _id: ID!
+    what: String!
+    value: String!
+}
+
+input SwitchSubscriptionOnUserInput {
+    subscriberId: ID!
+    userId: ID!
+}
+
+input AccountConfirmInput {
+    userId: ID!
+    actionId: ID!
+    verifyToken: String!
+}
+
+input AccountRestoreInput {
+    userId: ID!
+    actionId: ID!
+    verifyToken: String!
+    type: String!
+}
+
+input PrepareAccountToRestoreInput {
+    email: String!
+    type: String!
+}

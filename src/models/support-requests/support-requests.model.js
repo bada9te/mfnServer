@@ -2,8 +2,16 @@ const SupportRequest = require('./support-requests.mongo');
 
 
 // create report
-const createSupportRequest = async(post) => {
-    await SupportRequest.insertMany([post])
+const createSupportRequest = async(supReq) => {
+    return await SupportRequest.insertMany([supReq])
+    .catch((err) => {
+        throw new Error(err);
+    });
+}
+
+// get all
+const getAllSupportRequests = async() => {
+    return await SupportRequest.find()
     .catch((err) => {
         throw new Error(err);
     });
@@ -11,7 +19,7 @@ const createSupportRequest = async(post) => {
 
 // close report
 const closeSupportRequest = async(id) => {
-    await SupportRequest.findOneAndUpdate({
+    return await SupportRequest.findOneAndUpdate({
         _id: id,
     }, {
         isClosed: true,
@@ -27,5 +35,6 @@ const closeSupportRequest = async(id) => {
 
 module.exports = {
     createSupportRequest,
+    getAllSupportRequests,
     closeSupportRequest,
 }
