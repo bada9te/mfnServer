@@ -1,22 +1,22 @@
+const fs = require('fs');
 const path = require('path');
 const cors = require('cors');
-const helmet = require('helmet');
-const morgan = require('morgan');
+//const helmet = require('helmet');
+//const morgan = require('morgan');
 const express = require('express');
 const passport = require('passport');
 const session = require('express-session');
 const cronTasks = require('./utils/cron/cron');
-const initFrontend = require('./utils/frontend/frontend');
-const initPassportStarategies = require('./middleware/passport');
-const initMulter = require('./middleware/multer');
+const initPassportStarategies = require('./utils/passport/passport');
+const initMulter = require('./utils/multer/multer');
 const cookieParser = require('cookie-parser');
 const errorHandler = require('./middleware/errorHandler');
 const initAudioStreamer = require('./utils/audio-streamer/audioStreamer');
-const launchApolloServer = require('./middleware/apollo-graphql');
+const launchApolloServer = require('./utils/apollo-server/apollo-server');
 require('dotenv').config();
 
 
-
+console.log('[APP] Launching...');
 // app config
 const config = {
     COOKIE_ACCESS_1: process.env.COOKIE_ACCESS_1,
@@ -32,7 +32,7 @@ const app = express();
 
 // cors
 app.use(cors({
-  origin: config.CLIENT_BASE.split(', '),
+  origin: [config.CLIENT_BASE.split(', '), 'https://studio.apollographql.com'],
   credentials: true,
 }));
 
@@ -75,12 +75,6 @@ initAudioStreamer(app);
 // #################### MULTER - FILE_UPLOAD ####################
 // file upload
 initMulter(app);
-
-
-
-// ########################## FRONTEND ##########################
-// frontend
-initFrontend(app);
 
 
 

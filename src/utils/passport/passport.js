@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const usersModel = require('../models/users/users.mongo');
+const usersModel = require('../../models/users/users.model');
 const JwtStrategy = require('passport-jwt').Strategy;
 const ExtractJwt = require('passport-jwt').ExtractJwt;
 require('dotenv').config();
@@ -8,7 +8,7 @@ require('dotenv').config();
 
 
 const initPassportStarategies = (passport, app) => {
-    const keyPath = path.join(__dirname, '..', 'utils', 'rsa', 'id_rsa_pub.pem');
+    const keyPath = path.join(__dirname, '..', '..', 'utils', 'rsa', 'id_rsa_pub.pem');
     const PUBLIC_KEY = fs.readFileSync(keyPath, 'utf-8');
 
     const options = {

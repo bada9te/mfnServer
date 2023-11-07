@@ -49,12 +49,12 @@ const initMulter = (app) => {
     const multi_upload = multer({
         storage,
         //limits: { fileSize: 1 * 8128 * 8128 }, // 1MB
-        fileFilter: fileFilter
+        fileFilter
     }).array('uploadedFiles')
 
 
     // single upload
-    let upload = multer({ storage: storage, fileFilter: fileFilter });
+    let upload = multer({ storage, fileFilter });
 
 
     // one input file upload route
