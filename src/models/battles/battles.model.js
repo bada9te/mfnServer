@@ -23,7 +23,7 @@ const addBattleByIds = async(id1, id2, title, createdAt, willFinishAt) => {
 
 // remove battle 
 const deleteBattle = async(id) => {
-    await Battles.deleteOne({
+    await Battles.findOneAndDelete({
         _id: id,
     })
     .catch((err) => {
@@ -75,12 +75,13 @@ const getAllBattlesByStatus = async(status, skipCount) => {
 }
 
 const updateScore = async(battleId, scoreType, value, voterId) => {
-    return await Battles.updateOne(
+    return await Battles.findOneAndUpdate(
         { _id: battleId }, 
         { 
             $inc: { [scoreType]: value },
             $push: { votedBy: voterId },
-        }
+        },
+        { new: true }
     )
     .catch((err) => {
         throw new Error(err);

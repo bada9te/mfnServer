@@ -1,3 +1,4 @@
+const { addNewBattle, deleteBattle, getAllBattlesByStatusResolver, makeVoteResolver } = require('../db-reslovers/battles-db-resolver');
 const battlesModel = require('../models/battles/battles.model');
 const { createTask } = require('../utils/cron/cron');
 
@@ -10,14 +11,7 @@ const addNewBattleByIds = async(req, res, next) => {
     battle.willFinishAt = dateEnd.toISOString();
 
     try {
-        await battlesModel.addBattleByIds(battle.id1, battle.id2, battle.title, battle.createdAt, battle.willFinishAt)
-            .then(async(insertedBattle) => {
-                createTask(insertedBattle[0]._id, dateEnd, async() => {
-                    console.log(insertedBattle[0]._id, "setting battle as finished...")
-                    await battlesModel.setWinnerByBattleId(insertedBattle[0]._id);
-                }, 'finishBattle');
-                //await battlesModel.setWinnerByBattleId(insertedBattle[0]._id);
-            });
+        await addNewBattle(battle);
         return res.status(201).json({
             done: true,
         });
@@ -32,7 +26,7 @@ const addNewBattleByIds = async(req, res, next) => {
 const deleteBattleById = async(req, res, next) => {
     const id = req.body.id;
     try {
-        await battlesModel.deleteBattle(id);
+        await deleteBattle(id);
         return res.status(200).json({
             done: true,
         });
@@ -51,14 +45,8 @@ const getAllBattlesByStatus = async(req, res, next) => {
     const skipCount = req.query.skipCount;
     let status = req.query.status;
 
-    if (status === 'running') {
-        status = false;
-    } else {
-        status = true;
-    }
-
     try {
-        const battles = await battlesModel.getAllBattlesByStatus(status, skipCount);
+        const battles = await getAllBattlesByStatusResolver(skipCount, status);
         return res.status(200).json({
             done: true,
             battles: battles,
@@ -78,8 +66,7 @@ const makeVote = async(req, res, next) => {
     const voterId = req.body.voterId;
 
     try {
-        await battlesModel.updateScore(battleId, postNScore, voteCount, voterId);
-        
+        await makeVoteResolver(battleId, postNScore, voteCount, voterId);
         return res.status(200).json({
             done: true,
         });
