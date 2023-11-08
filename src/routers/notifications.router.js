@@ -1,6 +1,6 @@
 const express = require('express');
 const passport = require('passport');
-const notificationsController = require('../../controllers/notifications/notifications.controller');
+const notificationsController = require('../controllers/notifications.controller');
 
 // router
 const notificationsRouter = express.Router();

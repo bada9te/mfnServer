@@ -1,5 +1,5 @@
 //const notificationsModel = require('../../models/notifications/notifications.model');
-const postsModel = require('../../models/posts/posts.model');
+const postsModel = require('../models/posts/posts.model');
 
 
 // add post

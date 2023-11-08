@@ -1,0 +1,32 @@
+type Query {
+    getAllUnreadNotifications(receiverId: ID!): [Notification!]
+    getAllReadNotifications(receiverId: ID!): [Notification!]
+    getAllNotificationsByIds(ids: [ID!]!): [Notification!]
+}
+
+type Notification {
+    _id: ID!
+    receiver: User!
+    sender: User!
+    post: Post
+    comment: Comment
+    text: String!
+    checked: Boolean!
+    createdAt: String!
+}
+
+type Mutation {
+    createNotification(input: CreateNotificationInput!): Notification!
+    deleteNotificationById(_id: ID!): Notification!
+    deleteNotificationsByIds(ids: [ID!]!): [Notification!]
+    markNotificationAsReadById(_id: ID!): Notification!
+    markNotificationsAsReadByIds(ids: [ID!]!): [Notification!]
+}
+
+input CreateNotificationInput {
+    receiver: ID!
+    sender: ID!
+    post: ID
+    comment: ID
+    text: String!
+}

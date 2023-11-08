@@ -1,5 +1,5 @@
 const { default: mongoose } = require("mongoose");
-const playlistsModel = require("../../models/playlists/playlists.model");
+const playlistsModel = require("../models/playlists/playlists.model");
 
 
 // create 
@@ -74,7 +74,7 @@ const getPlaylistsByTitle = async(req, res, next) => {
 
 
 // get by owner id
-const getPlaylistByOwnerId = async(req, res, next) => {
+const getPlaylistsByOwnerId = async(req, res, next) => {
     const ownerId = req.query.ownerId;
     const skipCount = req.query.skipCount;
 
@@ -115,8 +115,6 @@ module.exports = {
     deletePlaylistById,
     switchTrackInPlaylist,
     getPlaylistsByTitle,
-    getPlaylistByOwnerId,
+    getPlaylistsByOwnerId,
     getPublicAvailablePlaylists,
 }
-
-

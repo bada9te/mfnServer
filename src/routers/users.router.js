@@ -1,6 +1,6 @@
 const express = require('express');
 const passport = require('passport');
-const usersController = require('../../controllers/users/users.controller');
+const usersController = require('../controllers/users.controller');
 
 
 // router

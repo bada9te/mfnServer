@@ -1,5 +1,5 @@
-const commentsModel = require('../../models/comments/comments.model');
-const postsModel = require('../../models/posts/posts.model');
+const commentsModel = require('../models/comments/comments.model');
+const postsModel = require('../models/posts/posts.model');
 
 
 // add / create comment

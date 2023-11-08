@@ -1,16 +1,16 @@
 const fs = require('fs');
 const path = require('path');
-const usersModel = require('../../models/users/users.model');
-const moderationModel = require('../../models/moderation/moderation.model');
+const usersModel = require('../models/users/users.model');
+const moderationModel = require('../models/moderation/moderation.model');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const sendMail = require('../../utils/mailer/nodemailer');
+const sendMail = require('../utils/mailer/nodemailer');
 //const mongooseObjectId = require('mongoose').Types.ObjectId;
 require('dotenv').config();
 
 
 // rsa private key
-const keysPath = path.join(__dirname, '..', '..', 'utils', 'rsa');
+const keysPath = path.join(__dirname, '..', 'utils', 'rsa');
 const PRIVATE_KEY_REFRESH = fs.readFileSync(path.join(keysPath, 'id_rsa_pri.pem'), 'utf-8');
 const PRIVATE_KEY_ACCESS  = fs.readFileSync(path.join(keysPath, 'id_rsa_pri.pem'), 'utf-8');
 const generateRandomString = async() => Math.floor(Math.random() * Date.now()).toString(36);

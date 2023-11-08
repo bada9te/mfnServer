@@ -1,0 +1,25 @@
+type ModerationAction {
+    user: User!
+    type: String!
+    verifyToken: String!
+    createdAt: String!
+}
+
+type Mutation {
+    createModerationAction(input: CreateModerationActionInput!): ModerationAction!
+    deleteAction(input: ModerateActionInput!): ModerationAction!
+    validateAction(input: ModerateActionInput!): ModerationAction!
+}
+
+
+input CreateModerationActionInput {
+    user: ID!
+    type: String!
+}
+
+input ModerateActionInput {
+    userId: ID!
+    actionId: ID!
+    verifyToken: String!
+    type: String!
+}

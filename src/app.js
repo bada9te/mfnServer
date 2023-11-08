@@ -80,31 +80,31 @@ initMulter(app);
 
 // ########################## REST API ##########################
 // battles routes
-app.use('/api/battles', require('./routers/battles/battles.router'));
+app.use('/api/battles', require('./routers/battles.router'));
 
 // posts routes
-app.use('/api/posts', require('./routers/posts/posts.router'));
+app.use('/api/posts', require('./routers/posts.router'));
 
 // users routes
-app.use('/api/users', require('./routers/users/users.router'));
+app.use('/api/users', require('./routers/users.router'));
 
 // comments routes
-app.use('/api/comments', require('./routers/comments/comments.router'));
+app.use('/api/comments', require('./routers/comments.router'));
 
 // notifications routes
-app.use('/api/notifications', require('./routers/notifications/notifications.router'));
+app.use('/api/notifications', require('./routers/notifications.router'));
 
 // reports routes
-app.use('/api/reports', require('./routers/reports/reports.router'));
+app.use('/api/reports', require('./routers/reports.router'));
 
 // reports routes
-app.use('/api/moderation', require('./routers/moderation/moderation.router'));
+app.use('/api/moderation', require('./routers/moderation.router'));
 
 // support requests routes
-app.use('/api/support-requests', require('./routers/support-requests/reports.router'));
+app.use('/api/support-requests', require('./routers/support-requests.router'));
 
 // playlists
-app.use('/api/playlists', require('./routers/playlists/playlists.router'));
+app.use('/api/playlists', require('./routers/playlists.router'));
 
 // files
 app.use('/api/uploads/images', express.static(path.join(__dirname, '..', 'uploads', 'images')));

@@ -1,6 +1,6 @@
-const moderationModel = require('../../models/moderation/moderation.model');
-const usersModel = require('../../models/users/users.model');
-const sendMail = require('../../utils/mailer/nodemailer');
+const moderationModel = require('../models/moderation/moderation.model');
+const usersModel = require('../models/users/users.model');
+const sendMail = require('../utils/mailer/nodemailer');
 
 const generateRandomString = async() => Math.floor(Math.random() * Date.now()).toString(36);
 

@@ -1,4 +1,4 @@
-const supportRequestModel = require('../../models/support-requests/support-requests.model');
+const supportRequestModel = require('../models/support-requests/support-requests.model');
 
 
 // create report

@@ -1,0 +1,41 @@
+type Query {
+    getAllBattlesByStatus(input: GetAllBattlesByStatusInput!): [Battle!]
+}
+
+type Battle {
+    _id: ID!
+    title: String!
+    post1: Post!
+    post2: Post!
+    post1Score: Int!
+    post2Score: Int!
+    winner: Post
+    createdAt: String!
+    willFinishAt: String!
+    finished: Boolean!
+    votedBy: [User!]
+}
+
+type Mutation {
+    addNewBattleByPostsIds(input: AddNewBattleByPostsIdsInput!): Battle!
+    deleteBattleById(_id: ID!): Battle!
+    makeBattleVote(input: MakeBattleVoteInput!): Battle!
+}
+
+input GetAllBattlesByStatusInput {
+    status: String!
+    skipCount: Int!
+}
+
+input AddNewBattleByPostsIdsInput {
+    title: String!
+    post1: ID!
+    post2: ID!
+}
+
+input MakeBattleVoteInput {
+    battleId: ID!
+    postNScore: String!
+    voteCount: Int!
+    voterId: ID!
+}

@@ -1,5 +1,5 @@
-const battlesModel = require('../../models/battles/battles.model');
-const { createTask } = require('../../utils/cron/cron');
+const battlesModel = require('../models/battles/battles.model');
+const { createTask } = require('../utils/cron/cron');
 
 
 // add new battles

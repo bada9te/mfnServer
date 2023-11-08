@@ -1,0 +1,36 @@
+type Query {
+    getPlaylistsByTitle(title: String!): [Playlist!]
+    getPlaylistsByOwnerId(input: GetPlaylistsByOwnerIdInput!): [Playlist!]
+    getPublicAvailablePlaylists(skipCount: Int!): [Playlist!]
+}
+
+type Playlist {
+    _id: ID!
+    owner: User!
+    title: String!
+    tracks: [Post!]
+    public: Boolean!
+    createdAt: String!
+}
+
+type Mutation {
+    createPlaylist(input: CreatePlaylistInput!): Playlist!
+    deletePlaylistById(_id: ID!): Playlist!
+    switchTrackInPlaylist(input: SwitchTrackInPlaylistInput): Playlist!
+}
+
+input GetPlaylistsByOwnerIdInput {
+    ownerId: ID!
+    skipCount: Int!
+}
+
+input CreatePlaylistInput {
+    owner: ID!
+    title: String!
+    public: Boolean!
+}
+
+input SwitchTrackInPlaylistInput {
+    playlistId: ID!
+    trackId: ID!
+}

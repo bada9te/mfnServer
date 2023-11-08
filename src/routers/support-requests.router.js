@@ -1,6 +1,6 @@
 const express = require('express');
 const passport = require('passport');
-const supportRequestsController = require('../../controllers/support-requests/support-requests.controller');
+const supportRequestsController = require('../controllers/support-requests.controller');
 
 
 // router
