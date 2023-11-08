@@ -2,26 +2,25 @@ const { getAllBattlesByStatusResolver, addNewBattleResolver, deleteBattleResolve
 
 module.exports = {
     Query: {
-        getAllBattlesByStatus: async(_, args) => {
-            const { status, skipCount } = args.input;
+        getAllBattlesByStatus: async(_, { input }) => {
+            const { status, skipCount } = input;
             return await getAllBattlesByStatusResolver(skipCount, status);
         }
     },
     Mutation: {
-        addNewBattleByPostsIds: async(_, args) => {
-            const battle = { ...args.input };
+        addNewBattleByPostsIds: async(_, { input }) => {
+            const battle = { ...input };
             const dateEnd = new Date();
             dateEnd.setDate(dateEnd.getDate() + 1);
             battle.willFinishAt = dateEnd.toISOString();
 
             return await addNewBattleResolver(battle);
         },
-        deleteBattleById: async(_, args) => {
-            const _id = args._id;
+        deleteBattleById: async(_, { _id }) => {
             return await deleteBattleResolver(_id);
         },
-        makeBattleVote: async(_, args) => {
-            const { battleId, postNScore, voteCount, voterId } = args.input;
+        makeBattleVote: async(_, { input }) => {
+            const { battleId, postNScore, voteCount, voterId } = input;
             return await makeVoteResolver(battleId, postNScore, voteCount, voterId);
         },
     }
