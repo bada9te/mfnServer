@@ -1,0 +1,26 @@
+type Query {
+    getManyCommentsByIds(ids: [ID!]!): [Comment!]
+    getOneCommentById(_id: ID!): Comment!
+}
+
+type Comment {
+    _id: ID!
+    owner: User!
+    text: String!
+    isReply: Boolean!
+    replies: [Comment!]
+    post: Post!
+    createdAt: String!
+}
+
+type Mutation {
+    addComment(input: AddCommentInput!): Comment!
+    removeById(_id: ID!): Comment!
+}
+
+input AddCommentInput {
+    owner: ID!
+    text: String!
+    isReply: Boolean!
+    post: ID!
+}

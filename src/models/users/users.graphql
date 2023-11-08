@@ -1,9 +1,12 @@
 type Query {
-    users: [User!]!
+    users: [User!]
     getUserByEmail(email: String!): User!
     getUserById(_id: ID!): User!
     getManyUsersByIds(ids: [ID!]!): [User!]!
     getManyByNickname(nick: String!): [User!]!
+
+    refreshAccessToken: String!
+    
 }
 
 type User {

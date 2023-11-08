@@ -1,0 +1,67 @@
+type Query {
+    getPostById(_id: ID!): Post!
+    getAllPosts: [Post!]
+    getAllPostsWithOwnerId(input: GetAllWithOwnerIdInput!): [Post!]
+    getSavedPostsByUserId(input: GetSavedPostsByUserIdInput!): [Post!]
+    getPostsByTitle(input: GetPostsByTitleInput!): [Post!]
+    getManyPostsByIds(ids: [ID!]!): [Post!]
+}
+
+type Post {
+    _id: ID!
+    owner: User!
+    title: String!
+    description: String!
+    audio: String!
+    image: String!
+    likedBy: [User!]
+    savedBy: [User!]
+    comments: [Comment!]
+    downloadsAllowed: Boolean!
+    commentsAllowed: Boolean!
+    createdAt: String!
+}
+
+type Mutation {
+    addPost(input: AddPostInput!): Post!
+    updatePost(input: UpdatePostInput!): Post!
+    deletePostById(_id: ID!): Post!
+    switchLike(input: SwitchLikeOrPostInSavedInput!): Post!
+    swicthPostInSaved(input: SwitchLikeOrPostInSavedInput!): Post!
+}
+
+
+input GetAllWithOwnerIdInput {
+    ownerId: ID!
+    skipCount: Int!
+}
+
+input GetSavedPostsByUserIdInput {
+    userId: ID!
+    skipCount: Int!
+}
+
+input GetPostsByTitleInput {
+    title: String!
+    ownerId: ID!
+    isMine: Boolean!
+}
+
+input AddPostInput {
+    owner: ID!
+    title: String!
+    description: String!
+    audio: String!
+    image: String!
+}
+
+input UpdatePostInput {
+    post: ID!
+    what: String!
+    value: String!
+}
+
+input SwitchLikeOrPostInSavedInput {
+    userId: ID!
+    postId: ID!
+}

@@ -1,0 +1,28 @@
+type Query {
+    getAllReports: [Report!]
+}
+
+type Report {
+    _id: ID!
+    contactReason: String!
+    email: String
+    message: String!
+    reportOwner: ID
+    reportedPost: ID
+    reportedComment: ID
+    isClosed: Boolean!
+}
+
+type Mutation {
+    createReport(input: CreateReportInput!): Report!
+    closeReport(_id: ID!): Report!
+}
+
+input CreateReportInput {
+    contactReason: String!
+    email: String
+    message: String!
+    reportOwner: ID
+    reportedPost: ID
+    reportedComment: ID
+}

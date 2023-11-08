@@ -2,8 +2,15 @@ const Report = require('./reports.mongo');
 
 
 // create report
-const createReport = async(post) => {
-    await Report.insertMany([post])
+const createReport = async(report) => {
+    return await Report.insertMany([report])
+    .catch((err) => {
+        throw new Error(err);
+    });
+}
+
+const getAllReports = async() => {
+    return await Report.find({})
     .catch((err) => {
         throw new Error(err);
     });
@@ -11,7 +18,7 @@ const createReport = async(post) => {
 
 // close report
 const closeReport = async(id) => {
-    await Report.findOneAndUpdate({
+    return await Report.findOneAndUpdate({
         _id: id,
     }, {
         isClosed: true,
@@ -27,5 +34,6 @@ const closeReport = async(id) => {
 
 module.exports = {
     createReport,
+    getAllReports,
     closeReport,
 }

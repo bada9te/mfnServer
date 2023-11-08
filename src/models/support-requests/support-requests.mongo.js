@@ -17,6 +17,7 @@ const supportRequestsSchema = mongoose.Schema({
     },
     isClosed: {
         type: Boolean,
+        default: false,
     },
 }, { timestamps: true });
 
