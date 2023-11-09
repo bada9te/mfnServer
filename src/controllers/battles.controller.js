@@ -1,4 +1,4 @@
-const { addNewBattleDB, deleteBattleDB, getAllBattlesByStatusDB, makeVoteDB } = require('../db-reslovers/battles-db-DB');
+const { addNewBattleDB, deleteBattleDB, getAllBattlesByStatusDB, makeBattleVoteDB } = require('../db-reslovers/battles-db-resolver');
 const battlesModel = require('../models/battles/battles.model');
 const { createTask } = require('../utils/cron/cron');
 
@@ -66,7 +66,7 @@ const makeVote = async(req, res, next) => {
     const voterId = req.body.voterId;
 
     try {
-        await makeVoteDB(battleId, postNScore, voteCount, voterId);
+        await makeBattleVoteDB(battleId, postNScore, voteCount, voterId);
         return res.status(200).json({
             done: true,
         });

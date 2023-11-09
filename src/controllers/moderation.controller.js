@@ -1,4 +1,4 @@
-const { createModerationActionDB, deleteModerateActionDB, validateModerateActionDB } = require('../db-reslovers/moderation-db-DB');
+const { createModerationActionDB, deleteModerateActionDB, validateModerateActionDB } = require('../db-reslovers/moderation-db-resolver');
 const sendMail = require('../utils/mailer/nodemailer');
 
 const generateRandomString = async() => Math.floor(Math.random() * Date.now()).toString(36);

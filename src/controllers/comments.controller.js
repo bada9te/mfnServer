@@ -1,4 +1,4 @@
-const { addCommentDB, getManyCommentsByIdsDB, getOneCommentByIdDB, removeCommentByIdDB } = require('../db-reslovers/comments-db-DB');
+const { addCommentDB, getManyCommentsByIdsDB, getOneCommentByIdDB, removeCommentByIdDB } = require('../db-reslovers/comments-db-resolver');
 
 
 // add / create comment
