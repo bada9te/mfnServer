@@ -1,5 +1,5 @@
 type Query {
-    users: [User!]
+    getAllUsers: [User!]
     getUserByEmail(email: String!): User!
     getUserById(_id: ID!): User!
     getManyUsersByIds(ids: [ID!]!): [User!]!

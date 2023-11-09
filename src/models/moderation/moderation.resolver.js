@@ -1,11 +1,6 @@
 const { validateModerateActionResolver, deleteModerateActionResolver, createModerationActionResolver } = require("../../db-reslovers/moderation-db-resolver");
 
 module.exports = {
-    Query: {
-        getAllModerationActions: async() => {
-            return [];
-        }
-    },
     Mutation: {
         createModerationAction: async(_, { input }) => {
             return await createModerationActionResolver(input);
