@@ -1,4 +1,4 @@
-const { getAllBattlesByStatusDB, addNewBattleDB, deleteBattleDB, makeBattleVote } = require("../../db-reslovers/battles-db-DB");
+const { getAllBattlesByStatusDB, addNewBattleDB, deleteBattleDB, makeBattleVoteDB } = require("../../db-reslovers/battles-db-DB");
 
 module.exports = {
     Query: {
@@ -21,7 +21,7 @@ module.exports = {
         },
         makeBattleVote: async(_, { input }) => {
             const { battleId, postNScore, voteCount, voterId } = input;
-            return await makeBattleVote(battleId, postNScore, voteCount, voterId);
+            return await makeBattleVoteDB(battleId, postNScore, voteCount, voterId);
         },
     }
 }
