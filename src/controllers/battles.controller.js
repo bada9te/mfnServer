@@ -1,4 +1,4 @@
-const { addNewBattle, deleteBattle, getAllBattlesByStatusResolver, makeVoteResolver } = require('../db-reslovers/battles-db-resolver');
+const { addNewBattleDB, deleteBattleDB, getAllBattlesByStatusDB, makeVoteDB } = require('../db-reslovers/battles-db-DB');
 const battlesModel = require('../models/battles/battles.model');
 const { createTask } = require('../utils/cron/cron');
 
@@ -11,7 +11,7 @@ const addNewBattleByIds = async(req, res, next) => {
     battle.willFinishAt = dateEnd.toISOString();
 
     try {
-        await addNewBattle(battle);
+        await addNewBattleDB(battle);
         return res.status(201).json({
             done: true,
         });
@@ -26,7 +26,7 @@ const addNewBattleByIds = async(req, res, next) => {
 const deleteBattleById = async(req, res, next) => {
     const id = req.body.id;
     try {
-        await deleteBattle(id);
+        await deleteBattleDB(id);
         return res.status(200).json({
             done: true,
         });
@@ -46,7 +46,7 @@ const getAllBattlesByStatus = async(req, res, next) => {
     let status = req.query.status;
 
     try {
-        const battles = await getAllBattlesByStatusResolver(skipCount, status);
+        const battles = await getAllBattlesByStatusDB(skipCount, status);
         return res.status(200).json({
             done: true,
             battles: battles,
@@ -66,7 +66,7 @@ const makeVote = async(req, res, next) => {
     const voterId = req.body.voterId;
 
     try {
-        await makeVoteResolver(battleId, postNScore, voteCount, voterId);
+        await makeVoteDB(battleId, postNScore, voteCount, voterId);
         return res.status(200).json({
             done: true,
         });

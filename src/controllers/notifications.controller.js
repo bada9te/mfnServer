@@ -1,15 +1,17 @@
+const { createNotificationResolver, deleteNotificationByIdResolver, deleteNotificationsByIdsResolver, markNotificationAsReadByIdResolver, markNotificationsAsReadByIdsResolver, getAllUnreadNotificationsResolver, getAllReadNotificationsResolver, getAllNotificationsByIdsResolver } = require('../db-reslovers/notifications-db-resolver');
 const notificationsModel = require('../models/notifications/notifications.model');
-const usersModel = require('../models/users/users.model');
+
 
 // create
 const createNotification = async(req, res, next) => {
     const notification = req.body.notification;
     
     try {
-        await notificationsModel.createNotification(notification);
+        const createdNotification = await createNotificationResolver(notification)
 
         return res.status(201).json({
             done: true,
+            notification: createdNotification,
         });
     } catch (error) {
         error.status = 400;
@@ -21,7 +23,7 @@ const createNotification = async(req, res, next) => {
 const deleteNotificationById = async(req, res, next) => {
     const id = req.body.id;
     try {
-        await notificationsModel.deleteNotificationById(id);
+        await deleteNotificationByIdResolver(id);
         return res.status(201).json({
             done: true,
         });
@@ -36,7 +38,7 @@ const deleteNotificationById = async(req, res, next) => {
 const deleteNotificationsByIds = async(req, res, next) => {
     const ids = req.body.ids;
     try {
-        await notificationsModel.deleteNotificationsByIds(ids);
+        await deleteNotificationsByIdsResolver(ids);
         return res.status(201).json({
             done: true,
         });
@@ -51,7 +53,7 @@ const deleteNotificationsByIds = async(req, res, next) => {
 const markNotificationAsReadById = async(req, res, next) => {
     const id = req.body.id;
     try {
-        await notificationsModel.markNotificationAsRead(id);
+        await markNotificationAsReadByIdResolver(id);
         return res.status(201).json({
             done: true,
         });
@@ -65,7 +67,7 @@ const markNotificationAsReadById = async(req, res, next) => {
 const markNotificationsAsReadByIds = async(req, res, next) => {
     const ids = req.body.ids;
     try {
-        await notificationsModel.markNotificationsAsRead(ids);
+        await markNotificationsAsReadByIdsResolver(ids);
         return res.status(201).json({
             done: true,
         });
@@ -80,7 +82,7 @@ const getAllUnreadNotifications = async(req, res, next) => {
     const receiverId = req.query.receiverId;
 
     try {
-        const notifications = await notificationsModel.getAllUnreadNotifications(receiverId);
+        const notifications = await getAllUnreadNotificationsResolver(receiverId);
         return res.status(200).json({
             done: true,
             notifications: notifications || [],
@@ -96,7 +98,7 @@ const getAllReadNotifications = async(req, res, next) => {
     const receiverId = req.query.receiverId;
 
     try {
-        const notifications = await notificationsModel.getAllReadNotifications(receiverId);
+        const notifications = getAllReadNotificationsResolver(receiverId);
         return res.status(200).json({
             done: true,
             notifications: notifications || [],
@@ -111,7 +113,7 @@ const getAllReadNotifications = async(req, res, next) => {
 const getAllNotificationsByIds = async(req, res, next) => {
     const ids = req.query.ids;
     try {
-        const notifications = await notificationsModel.getAllNotificationsByIds(ids);
+        const notifications = getAllNotificationsByIdsResolver(ids);
         return res.status(200).json({
             done: true,
             notifications: notifications || [],

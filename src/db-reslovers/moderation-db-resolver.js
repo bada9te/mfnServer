@@ -2,7 +2,7 @@ const usersModel = require('../models/users/users.model');
 const moderationModel = require('../models/moderation/moderation.model');
 
 
-const createModerationActionResolver = async(action) => {
+const createModerationActionDB = async(action) => {
     const user = await usersModel.getUserById(action.user);
     if (!user?._id) {
         return "Error";
@@ -18,17 +18,17 @@ const createModerationActionResolver = async(action) => {
     return createdAction;
 }
 
-const deleteModerateActionResolver = async(userId, actionId, verifyToken, type) => {
+const deleteModerateActionDB = async(userId, actionId, verifyToken, type) => {
     return await moderationModel.deleteAction(userId, actionId, verifyToken, type);
 }
 
-const validateModerateActionResolver = async(userId, actionId, verifyToken, type) => {
+const validateModerateActionDB = async(userId, actionId, verifyToken, type) => {
     return await moderationModel.validateAction(userId, actionId, verifyToken, type);
 }
 
 
 module.exports = {
-    createModerationActionResolver,
-    deleteModerateActionResolver,
-    validateModerateActionResolver,
+    createModerationActionDB,
+    deleteModerateActionDB,
+    validateModerateActionDB,
 }

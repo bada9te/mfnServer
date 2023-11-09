@@ -1,4 +1,4 @@
-const { createModerationActionResolver, deleteModerateActionResolver, validateModerateActionResolver } = require('../db-reslovers/moderation-db-resolver');
+const { createModerationActionDB, deleteModerateActionDB, validateModerateActionDB } = require('../db-reslovers/moderation-db-DB');
 const sendMail = require('../utils/mailer/nodemailer');
 
 const generateRandomString = async() => Math.floor(Math.random() * Date.now()).toString(36);
@@ -11,7 +11,7 @@ const createAction = async(req, res, next) => {
     action.verifyToken = await generateRandomString();
 
     try {
-        await createModerationActionResolver(action);
+        await createModerationActionDB(action);
         return res.status(201).json({
             done: true,
         });
@@ -29,7 +29,7 @@ const deleteAction = async(req, res, next) => {
     const type = req.body.type;
 
     try {
-        const action = await deleteModerateActionResolver(userId, actionId, verifyToken, type);
+        const action = await deleteModerateActionDB(userId, actionId, verifyToken, type);
         return res.status(200).json({
             done: true,
             action,
@@ -48,7 +48,7 @@ const validateAction = async(req, res, next) => {
     const type = req.body.type;
 
     try {
-        const action = await validateModerateActionResolver(userId, actionId, verifyToken, type);
+        const action = await validateModerateActionDB(userId, actionId, verifyToken, type);
         return res.status(200).json({
             done: true,
             action,

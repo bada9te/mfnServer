@@ -1,7 +1,7 @@
 const commentsModel = require("../models/comments/comments.model");
 
 
-const addCommentResolver = async(comment) => {
+const addCommentDB = async(comment) => {
     let createdComment;
     // add comment
     await commentsModel.addComment(comment).then(async(data) => {
@@ -21,15 +21,15 @@ const addCommentResolver = async(comment) => {
     return comment;
 }
 
-const getManyCommentsByIdsResolver = async(ids) => {
+const getManyCommentsByIdsDB = async(ids) => {
     return await commentsModel.getAllWithIds(ids);
 }
 
-const getOneCommentByIdResolver = async(id) => {
+const getOneCommentByIdDB = async(id) => {
     return await commentsModel.getById(id);
 }
 
-const removeCommentByIdResolver = async(id) => {
+const removeCommentByIdDB = async(id) => {
     let removedComment = null;
     await commentsModel.removeById(id).then(async(comment) => {
         removedComment = comment;
@@ -40,8 +40,8 @@ const removeCommentByIdResolver = async(id) => {
 
 
 module.exports = {
-    addCommentResolver,
-    getManyCommentsByIdsResolver,
-    getOneCommentByIdResolver,
-    removeCommentByIdResolver,
+    addCommentDB,
+    getManyCommentsByIdsDB,
+    getOneCommentByIdDB,
+    removeCommentByIdDB,
 }

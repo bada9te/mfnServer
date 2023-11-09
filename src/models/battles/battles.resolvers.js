@@ -1,10 +1,10 @@
-const { getAllBattlesByStatusResolver, addNewBattleResolver, deleteBattleResolver, makeVoteResolver } = require("../../db-reslovers/battles-db-resolver");
+const { getAllBattlesByStatusDB, addNewBattleDB, deleteBattleDB, makeBattleVote } = require("../../db-reslovers/battles-db-DB");
 
 module.exports = {
     Query: {
         getAllBattlesByStatus: async(_, { input }) => {
             const { status, skipCount } = input;
-            return await getAllBattlesByStatusResolver(skipCount, status);
+            return await getAllBattlesByStatusDB(skipCount, status);
         }
     },
     Mutation: {
@@ -14,14 +14,14 @@ module.exports = {
             dateEnd.setDate(dateEnd.getDate() + 1);
             battle.willFinishAt = dateEnd.toISOString();
 
-            return await addNewBattleResolver(battle);
+            return await addNewBattleDB(battle);
         },
         deleteBattleById: async(_, { _id }) => {
-            return await deleteBattleResolver(_id);
+            return await deleteBattleDB(_id);
         },
         makeBattleVote: async(_, { input }) => {
             const { battleId, postNScore, voteCount, voterId } = input;
-            return await makeVoteResolver(battleId, postNScore, voteCount, voterId);
+            return await makeBattleVote(battleId, postNScore, voteCount, voterId);
         },
     }
 }
