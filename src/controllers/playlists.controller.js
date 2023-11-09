@@ -1,5 +1,5 @@
 const { default: mongoose } = require("mongoose");
-const playlistsModel = require("../models/playlists/playlists.model");
+const { createPlaylistDB, deletePlaylistByIdDB, switchTrackInPlaylistDB, getPlaylistsByTitleDB, getPlaylistsByOwnerIdDB, getPublicAvailablePlaylistsDB } = require("../db-reslovers/playlists-db-resolver");
 
 
 // create 
@@ -7,9 +7,10 @@ const createPlaylist = async(req, res, next) => {
     const playlist = req.body.playlist;
 
     try {
-        await playlistsModel.createPlaylist(playlist);
+        const createdPlaylist = await createPlaylistDB(playlist);
         return res.status(201).json({
             done: true,
+            playlist: createdPlaylist,
         });
     } catch (error) {
         error.status = 400;
@@ -23,7 +24,7 @@ const deletePlaylistById = async(req, res, next) => {
     const id = req.body.id;
 
     try {
-        const playlist = await playlistsModel.deletePlaylistById(id);
+        const playlist = await deletePlaylistByIdDB(id);
         return res.status(202).json({
             done: true,
             playlist,
@@ -41,7 +42,7 @@ const switchTrackInPlaylist = async(req, res, next) => {
     const trackId = new mongoose.Types.ObjectId(req.body.trackId);
 
     try {
-        const playlist = await playlistsModel.swicthTrackInPlaylist(playlistId, trackId);
+        const playlist = await switchTrackInPlaylistDB(playlistId, trackId);
         let inPlaylist = playlist.tracks.indexOf(trackId) !== -1;
         return res.status(inPlaylist ? 201 : 202).json({
             done: true,
@@ -61,7 +62,7 @@ const getPlaylistsByTitle = async(req, res, next) => {
     const title = req.query.title;
 
     try {
-        const playlists = await playlistsModel.getPlaylistByTitle(title);
+        const playlists = await getPlaylistsByTitleDB(title);
         return res.status(200).json({
             done: true,
             playlists,
@@ -79,8 +80,8 @@ const getPlaylistsByOwnerId = async(req, res, next) => {
     const skipCount = req.query.skipCount;
 
     try {
-        const playlists = await playlistsModel.getPlaylistByOwnerId(ownerId, skipCount);
-        const count = await playlistsModel.getDocsCount({owner: ownerId});
+        const { playlists, count } = await getPlaylistsByOwnerIdDB(ownerId, skipCount);
+        
         return res.status(200).json({
             done: true,
             count,
@@ -96,8 +97,8 @@ const getPlaylistsByOwnerId = async(req, res, next) => {
 const getPublicAvailablePlaylists = async(req, res, next) => {
     const skipCount = req.query.skipCount;
     try {
-        const playlists = await playlistsModel.getPublicAvailablePlaylists(skipCount);
-        const count = await playlistsModel.getDocsCount({});
+        const { playlists, count } = await getPublicAvailablePlaylistsDB(skipCount);
+        
         return res.status(200).json({
             done: true,
             count,
