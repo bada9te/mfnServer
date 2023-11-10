@@ -1,65 +1,33 @@
-const { GraphQLError } = require("graphql");
 const { getAllUnreadNotificationsDB, getAllReadNotificationsDB, getAllNotificationsByIdsDB, createNotificationDB, deleteNotificationByIdDB, deleteNotificationsByIdsDB, markNotificationAsReadByIdDB, markNotificationsAsReadByIdsDB } = require("../../db-reslovers/notifications-db-resolver");
+const exec = require("../../db-reslovers/execGQL");
 
 module.exports = {
     Query: {
         getAllUnreadNotifications: async(_, { receiverId }) => {
-            try {
-                return await getAllUnreadNotificationsDB(receiverId);
-            } catch (error) {
-                throw new GraphQLError(error.msg);
-            }
+            return await exec(() => getAllUnreadNotificationsDB(receiverId));
         },
         getAllReadNotifications: async(_, { receiverId }) => {
-            try {
-                return await getAllReadNotificationsDB(receiverId);
-            } catch (error) {
-                throw new GraphQLError(error.msg);
-            }
+            return await exec(() => getAllReadNotificationsDB(receiverId));
         },
         getAllNotificationsByIds: async(_, { ids }) => {
-            try {
-                return await getAllNotificationsByIdsDB(ids);
-            } catch (error) {
-                throw new GraphQLError(error.msg);
-            }
+            return await exec(() => getAllNotificationsByIdsDB(ids));
         }
     },
     Mutation: {
         createNotification: async(_, { input }) => {
-            try {
-                return await createNotificationDB(input);
-            } catch (error) {
-                throw new GraphQLError(error.msg);
-            }
+            return await exec(() => createNotificationDB(input));
         },
         deleteNotificationById: async(_, { _id }) => {
-            try {
-                return await deleteNotificationByIdDB(_id);
-            } catch (error) {
-                throw new GraphQLError(error.msg);
-            }
+            return await exec(() =>deleteNotificationByIdDB(_id));
         },
         deleteNotificationsByIds: async(_, { ids }) => {
-            try {
-                return await deleteNotificationsByIdsDB(_id);
-            } catch (error) {
-                throw new GraphQLError(error.msg);
-            }
+            return await exec(() =>deleteNotificationsByIdsDB(_id));
         },
         markNotificationAsReadById: async(_, { _id }) => {
-            try {
-                return await markNotificationAsReadByIdDB(_id);
-            } catch (error) {
-                throw new GraphQLError(error.msg);
-            }
+            return await exec(() =>markNotificationAsReadByIdDB(_id));
         },
         markNotificationsAsReadByIds: async(_, { ids }) => {
-            try {
-                return await markNotificationsAsReadByIdsDB(ids);
-            } catch (error) {
-                throw new GraphQLError(error.msg);
-            }
+            return await exec(() =>markNotificationsAsReadByIdsDB(ids));
         }
     }
 }

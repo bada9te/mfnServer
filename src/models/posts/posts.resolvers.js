@@ -5,39 +5,45 @@ const exec = require("../../db-reslovers/execGQL");
 module.exports = {
     Query: {
         getPostById: async(_, { _id }) => {
-            return await exec(getPostByIdDB, { id: _id }); 
+            return await exec(() => getPostByIdDB(_id)); 
         },
-        getAllPosts: async() => {
-            return await exec(getAllPostsDB, {});
+        getAllPosts: async(_, { skipCount }) => {
+            return await exec(() => getAllPostsDB(skipCount));
         },
         getAllPostsWithOwnerId: async(_, { input }) => {
-            return await exec(getAllPostsWithOwnerIdDB, input);
+            const { ownerId, skipCount } = input;
+            return await exec(() => getAllPostsWithOwnerIdDB(ownerId, skipCount));
         },
         getSavedPostsByUserId: async(_, { input }) => {
-            return await exec(getSavedPostsByUserIdDB, input);
+            const { ownerId, skipCount } = input;
+            return await exec(() => getSavedPostsByUserIdDB(ownerId, skipCount));
         },
         getPostsByTitle: async(_, { input }) => {
-            return await exec(getPostByTitleDB, input);
+            const { ownerId, title } = input;
+            return await exec(() => getPostByTitleDB(title, ownerId));
         },
         getManyPostsByIds: async(_, { ids }) => {
-            return await exec(getManyPostsByIdsDB, { ids });
+            return await exec(() => getManyPostsByIdsDB(ids));
         },
     },
     Mutation: {
         addPost: async(_, { input }) => {
-            return await exec(addPostDB, input);
+            return await exec(() => addPostDB(input));
         },
         updatePost: async(_, { input }) => {
-            return await exec(updatePostDB, input);
+            const { post, value, what } = input;
+            return await exec(() => updatePostDB(post, value, what));
         },
         deletePostById: async(_, { _id }) => {
-            return await exec(deletePostByIdDB, { id: _id });
+            return await exec(() => deletePostByIdDB(_id));
         },
         switchPostLike: async(_, { input }) => {
-            return await exec(switchPostLikeDB, input);
+            const { userId, postId } = input;
+            return await exec(() => switchPostLikeDB(userId, postId));
         },
         swicthPostInSaved: async(_, { input }) => {
-            return await exec(swicthPostInSavedDB, input);
+            const { userId, postId } = input;
+            return await exec(() => swicthPostInSavedDB(userId, postId));
         }
     }
 }

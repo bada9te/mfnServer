@@ -15,7 +15,7 @@ type Comment {
 
 type Mutation {
     addComment(input: AddCommentInput!): Comment!
-    removeById(_id: ID!): Comment!
+    removeCommentById(_id: ID!): Comment!
 }
 
 input AddCommentInput {

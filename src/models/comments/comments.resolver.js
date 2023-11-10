@@ -1,37 +1,22 @@
-const { GraphQLError } = require("graphql");
 const { getManyCommentsByIdsDB, getOneCommentByIdDB, addCommentDB, removeCommentByIdDB } = require("../../db-reslovers/comments-db-resolver");
+const exec = require("../../db-reslovers/execGQL");
+
 
 module.exports = {
     Query: {
         getManyCommentsByIds: async(_, { ids }) => {
-            try {
-                return await getManyCommentsByIdsDB(ids);
-            } catch (error) {
-                throw new GraphQLError(error.msg);
-            }
+            return await exec(() => getManyCommentsByIdsDB(ids));
         },
         getOneCommentById: async(_, { _id }) => {
-            try {
-                return await getOneCommentByIdDB(_id);
-            } catch (error) {
-                throw new GraphQLError(error.msg);
-            }
+            return await exec(() => getOneCommentByIdDB(_id));
         }
     },
     Mutation: {
         addComment: async(_, { input }) => {
-            try {
-                return await addCommentDB(input);
-            } catch (error) {
-                throw new GraphQLError(error.msg);
-            }
+            return await exec(() => addCommentDB(input));
         },
-        removeById: async(_, { _id }) => {
-            try {
-                return await removeCommentByIdDB(_id);
-            } catch (error) {
-                throw new GraphQLError(error.msg);
-            }
+        removeCommentById: async(_, { _id }) => {
+            return await exec(() => removeCommentByIdDB(_id));
         }
     }
 }

@@ -1,8 +1,8 @@
 type Query {
     getPostById(_id: ID!): Post!
-    getAllPosts: [Post!]
-    getAllPostsWithOwnerId(input: GetAllWithOwnerIdInput!): [Post!]
-    getSavedPostsByUserId(input: GetSavedPostsByUserIdInput!): [Post!]
+    getAllPosts(skipCount: Int!): PostsWithCount!
+    getAllPostsWithOwnerId(input: GetAllWithOwnerIdInput!): PostsWithCount!
+    getSavedPostsByUserId(input: GetSavedPostsByUserIdInput!): PostsWithCount!
     getPostsByTitle(input: GetPostsByTitleInput!): [Post!]
     getManyPostsByIds(ids: [ID!]!): [Post!]
 }
@@ -20,6 +20,11 @@ type Post {
     downloadsAllowed: Boolean!
     commentsAllowed: Boolean!
     createdAt: String!
+}
+
+type PostsWithCount {
+    posts: [Post!]
+    count: Int!
 }
 
 type Mutation {

@@ -1,44 +1,28 @@
-const { GraphQLError } = require("graphql");
 const { getAllBattlesByStatusDB, addNewBattleDB, deleteBattleDB, makeBattleVoteDB } = require("../../db-reslovers/battles-db-resolver");
+const exec = require("../../db-reslovers/execGQL");
 
 module.exports = {
     Query: {
         getAllBattlesByStatus: async(_, { input }) => {
-            try {
-                const { status, skipCount } = input;
-                return await getAllBattlesByStatusDB(skipCount, status);
-            } catch (error) {
-                throw new GraphQLError(error.msg);
-            }
+            const { skipCount, status } = input;
+            return await exec(() => getAllBattlesByStatusDB(skipCount, status));
         }
     },
     Mutation: {
         addNewBattleByPostsIds: async(_, { input }) => {
-            try {
-                const battle = { ...input };
-                const dateEnd = new Date();
-                dateEnd.setDate(dateEnd.getDate() + 1);
-                battle.willFinishAt = dateEnd.toISOString();
+            const battle = { ...input };
+            const dateEnd = new Date();
+            dateEnd.setDate(dateEnd.getDate() + 1);
+            battle.willFinishAt = dateEnd.toISOString();
     
-                return await addNewBattleDB(battle);
-            } catch (error) {
-                throw new GraphQLError(error.msg);
-            }
+            return await exec(() => addNewBattleDB(battle))
         },
         deleteBattleById: async(_, { _id }) => {
-            try {
-                return await deleteBattleDB(_id);
-            } catch (error) {
-                throw new GraphQLError(error.msg);
-            }
+            return await exec(() => deleteBattleDB(_id));
         },
         makeBattleVote: async(_, { input }) => {
-            try {
-                const { battleId, postNScore, voteCount, voterId } = input;
-                return await makeBattleVoteDB(battleId, postNScore, voteCount, voterId);
-            } catch (error) {
-                throw new GraphQLError(error.msg);
-            }
+            const { battleId, postNScore, voteCount, voterId } = input;
+            return await exec(() => makeBattleVoteDB(battleId, postNScore, voteCount, voterId));
         },
     }
 }
