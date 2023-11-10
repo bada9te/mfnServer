@@ -1,52 +1,28 @@
 const { GraphQLError } = require("graphql");
 const { getPlaylistsByTitleDB, getPlaylistsByOwnerIdDB, getPublicAvailablePlaylistsDB, createPlaylistDB, deletePlaylistByIdDB, switchTrackInPlaylistDB } = require("../../db-reslovers/playlists-db-resolver")
+const exec = require("../../db-reslovers/execGQL");
 
 module.exports = {
     Query: {
-        getPlaylistsByTitle: async(_, { title }) => {
-            try {
-                return await getPlaylistsByTitleDB(title);
-            } catch (error) {
-                throw new GraphQLError(error.msg);
-            }
+        getPlaylistsByTitle: async(_, args) => {
+            return await exec(getPlaylistsByTitleDB, args);
         },
         getPlaylistsByOwnerId: async(_, { input }) => {
-            try {
-                const { ownerId, skipCount } = input;
-                return await getPlaylistsByOwnerIdDB(ownerId, skipCount);
-            } catch (error) {
-                throw new GraphQLError(error.msg);
-            }
+            return await exec(getPlaylistsByOwnerIdDB, input);
         },
-        getPublicAvailablePlaylists: async(_, { skipCount }) => {
-            try {
-                return await getPublicAvailablePlaylistsDB(skipCount);
-            } catch (error) {
-                throw new GraphQLError(error.msg);
-            }
+        getPublicAvailablePlaylists: async(_, args) => {
+            return await exec(getPublicAvailablePlaylistsDB, args)
         },
     },
     Mutation: {
         createPlaylist: async(_, { input }) => {
-            try {
-                return await createPlaylistDB(input);
-            } catch (error) {
-                throw new GraphQLError(error.msg);
-            }
+            return await exec(createPlaylistDB, input);
         },
         deletePlaylistById: async(_, { _id }) => {
-            try {
-                return await deletePlaylistByIdDB(_id);
-            } catch (error) {
-                throw new GraphQLError(error.msg);
-            }
+            return await exec(deletePlaylistByIdDB, { id: _id })
         },
-        switchTrackInPlaylist: async(_, { playlistId, trackId }) => {
-            try {
-                return await switchTrackInPlaylistDB(playlistId, trackId);
-            } catch (error) {
-                throw new GraphQLError(error.msg);
-            }
+        switchTrackInPlaylist: async(_, args) => {
+            return await exec(switchTrackInPlaylistDB, args);
         },
     }
 }

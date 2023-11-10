@@ -1,5 +1,5 @@
 //const notificationsModel = require('../../models/notifications/notifications.model');
-const postsModel = require('../models/posts/posts.model');
+const { addPostDB, updatePostDB, deletePostByIdDB, getPostByIdDB, getAllPostsDB, getAllPostsWithOwnerIdDB, getSavedPostsByUserIdDB, switchPostLikeDB, getPostByTitleDB, swicthPostInSavedDB, getManyPostsByIdsDB } = require('../db-reslovers/posts-db-resolver');
 
 
 // add post
@@ -7,10 +7,10 @@ const addPost = async(req, res, next) => {
     const post = req.body;
     
     try {
-        await postsModel.addPost(post);
+        const createdPost = await addPostDB(post);
         return res.status(200).json({
             done: true,
-            post: post,
+            post: createdPost,
         });
     } catch (error) {
         error.status = 400;
@@ -22,14 +22,14 @@ const addPost = async(req, res, next) => {
 // update post 
 const updatePost = async(req, res, next) => {
     const post  = req.body.post;
-    let   value = req.body.value;
+    const value = req.body.value;
     const what  = req.body.what;
 
-    
     try {
-        await postsModel.updatePost(post, value, what);
+        const updatedPost = await updatePostDB(post, value, what);
         return res.status(200).json({
             done: true,
+            post: updatedPost,
         });
     } catch (error) {
         error.status = 400;
@@ -42,9 +42,10 @@ const updatePost = async(req, res, next) => {
 const deletePostById = async(req, res, next) => {
     const id = req.body.id;
     try {
-        await postsModel.deletePostById(id);
+        const deletedPost = await deletePostByIdDB(id);
         return res.status(200).json({
             done: true,
+            post: deletedPost,
         });
     } catch (error) {
         error.status = 400;
@@ -57,11 +58,11 @@ const deletePostById = async(req, res, next) => {
 const getPostById = async(req, res, next) => {
     const id = req.query.id;
     try {
-        const post = await postsModel.getPostById(id);
+        const post = await getPostByIdDB(id);
 
         return res.status(200).json({
             done: true,
-            post: post,
+            post,
         });
     } catch (error) {
         error.status = 400;
@@ -74,8 +75,7 @@ const getPostById = async(req, res, next) => {
 const getAllPosts = async(req, res, next) => {
     const skipCount = req.query.skipCount;
     try {
-        const posts = await postsModel.getAllPosts(skipCount);
-        const count = await postsModel.getDocsCount({});
+        const { posts, count } = await getAllPostsDB(skipCount);
         return res.status(200).json({
             done: true,
             posts: posts,
@@ -92,8 +92,7 @@ const getAllWithOwnerId = async(req, res, next) => {
     const ownerId = req.query.id;
     const skipCount = req.query.skipCount;
     try {
-        const posts = await postsModel.getAllWithOwnerId(ownerId, skipCount);
-        const count = await postsModel.getDocsCount({ owner: ownerId });
+        const { posts, count } = await getAllPostsWithOwnerIdDB(ownerId, skipCount);
         return res.status(200).json({
             done: true,
             posts: posts,
@@ -110,8 +109,7 @@ const getSavedPostsByUserId = async(req, res, next) => {
     const userId = req.query.userId;
     const skipCount = req.query.skipCount;
     try {
-        const posts = await postsModel.getSavedPostsByUserId(userId, skipCount);
-        const count = await postsModel.getDocsCount({ savedBy: userId });
+        const { posts, count } = await getSavedPostsByUserIdDB(userId, skipCount);
         return res.status(200).json({
             done: true,
             count,
@@ -129,11 +127,10 @@ const switchLike = async(req, res, next) => {
     const postId = req.body.postId;
     
     try {
-        const post = await postsModel.switchIsLiked(postId, userId);
+        const post = await switchPostLikeDB(userId, postId);
             
         return res.status(201).json({
             done: true,
-            postId: postId,
             post: post,
         });
     } catch (error) {
@@ -149,12 +146,8 @@ const getByTitle = async(req, res, next) => {
     const isMine = req.query.isMine;
 
     try {
-        let posts = null;
-        if (ownerId && isMine) {
-            posts = await postsModel.getByTitleWithOwnerId(title, isMine, ownerId);
-        } else {
-            posts = await postsModel.getByTitle(title);
-        }
+        const posts = await getPostByTitleDB(title, ownerId, isMine);
+        
         return res.status(200).json({
             done: true,
             posts: posts,
@@ -171,7 +164,7 @@ const swicthPostInSaved = async(req, res, next) => {
     const postId = req.body.postId;
 
     try {
-        const post = await postsModel.switchInSaved(postId, userId);
+        const post = await swicthPostInSavedDB(userId, postId);
 
         return res.status(201).json({
             done: true,
@@ -190,7 +183,7 @@ const getManyByIds = async(req, res, next) => {
     //const skipCount = req.query.skipCount;
 
     try {
-        const posts = await postsModel.getManyByIds(ids);
+        const posts = await getManyPostsByIdsDB(ids);
         //const count = await postsModel.getDocsCount({ _id: {$in: ids} });
 
         return res.status(200).json({

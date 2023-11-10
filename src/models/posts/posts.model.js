@@ -18,6 +18,7 @@ const updatePost = async(id, value, what) => {
         [what]: value,
     }, {
         upsert: true,
+        new: true,
     })
     .catch((err) => {
         throw new Error(err);
