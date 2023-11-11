@@ -6,10 +6,10 @@ type Query {
 
 type Notification {
     _id: ID!
-    receiver: ID!
-    sender: ID!
-    post: ID
-    comment: ID
+    receiver: User!
+    sender: User!
+    post: Post
+    comment: Comment
     text: String!
     checked: Boolean!
     createdAt: String!

@@ -1,10 +1,8 @@
 const fs = require('fs');
 const path = require('path');
-const usersModel = require('../models/users/users.model');
-const moderationModel = require('../models/moderation/moderation.model');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const sendMail = require('../utils/mailer/nodemailer');
+const { addUserDB, deleteUserByIdDB, updateUserDB, getUserByEmailDB, getUserByIdDB, getUsersByIdsDB, validateUserDB, getAllUsersDB, getUsersByNicknameDB, switchSubscriptionOnUserDB, confirmAccountDB, restoreAccountDB, prepareAccountToRestoreDB } = require('../db-reslovers/users-db-resolver');
 //const mongooseObjectId = require('mongoose').Types.ObjectId;
 require('dotenv').config();
 
@@ -19,33 +17,12 @@ const generateRandomString = async() => Math.floor(Math.random() * Date.now()).t
 // register / add user
 const addUser = async(req, res, next) => {
     const user = req.body;
-    user.password = await bcrypt.hash(user.password, 10);
 
     try {
-        const checkUser = await usersModel.getUserByEmail(user.email);
-        if (checkUser) {
-            throw new Error("User with this email already exists");
-        }
-
-        await usersModel.addUser(user).then(async(data) => {
-            const verifyToken = await generateRandomString();
-            await moderationModel.createAction({
-                user: data[0]._id,
-                type: "verify",
-                verifyToken: verifyToken,
-            }).then((action) => {
-                sendMail.sendVerifyEmail(
-                    data[0].email, 
-                    data[0].nick, 
-                    `${process.env.CLIENT_BASE.split(', ')[0]}/account-verify/${data[0]._id}/${action[0]._id}`,
-                    verifyToken
-                );
-            });
-        });
-
+        const createdUser = await addUserDB(user);
         return res.status(200).json({
             done: true,
-            user: user,
+            user: createdUser,
         });
     } catch (error) {
         error.status = 400;
@@ -175,9 +152,10 @@ const logoutUser = async(req, res) => {
 const deleteUserById = async(req, res, next) => {
     const id = req.body.id;
     try {
-        await usersModel.deleteUserById(id);
+        const user = await deleteUserByIdDB(id);
         return res.status(200).json({
             done: true,
+            user,
         })
     } catch (error) {
         error.status = 400;
@@ -189,13 +167,14 @@ const deleteUserById = async(req, res, next) => {
 // update user
 const updateUser = async(req, res, next) => {
     const id = req.body.id;
-    let   value = req.body.value;
+    const value = req.body.value;
     const what  = req.body.what;
 
     try {
-        await usersModel.updateUser(id, value, what);
+        const user = await updateUserDB(id, value, what);
         return res.status(200).json({
             done: true,
+            user,
         });
     } catch (error) {
         error.status = 400;
@@ -208,7 +187,7 @@ const updateUser = async(req, res, next) => {
 const getUserByEmail = async(req, res, next) => {
     const email = req.query.email;
     try {
-        const user = await usersModel.getUserByEmail(email);
+        const user = await getUserByEmailDB();
         return res.status(200).json({
             done: true,
             user: user,
@@ -223,7 +202,7 @@ const getUserByEmail = async(req, res, next) => {
 const getUserById = async(req, res, next) => {
     const id = req.query.id;
     try {
-        const user = await usersModel.getUserById(id);
+        const user = await getUserByIdDB(id);
         return res.status(200).json({
             done: true,
             user: user,
@@ -238,10 +217,10 @@ const getUserById = async(req, res, next) => {
 const getUsersByIds = async(req, res, next) => {
     const ids = req.query.ids;
     try {
-        const users = await usersModel.getUsersByIds(ids);
+        const users = await getUsersByIdsDB(ids);
         return res.status(200).json({
             done: true,
-            users: users,
+            users,
         });
     } catch (error) {
         error.status = 400;
@@ -255,18 +234,11 @@ const validateUser = async(req, res, next) => {
     const email = req.body.email;
     const password = req.body.password;
     try {
-        const user = await usersModel.getUserByEmail(email);
-        if (!user) {
-            throw new Error("User not found");
-        }
-    
-        if (!await bcrypt.compare(password, user.password)) {
-            throw new Error("Password is not valid");
-        }
+        const user = await validateUserDB(email, password);
 
         return res.status(200).json({
             done: true,
-            user: user,
+            user,
         });
     } catch (error) {
         error.status = 400;
@@ -277,8 +249,8 @@ const validateUser = async(req, res, next) => {
 // get all
 const getAllUsers = async(req, res, next) => {
     try {
-        const users = await usersModel.getAllUsers();
-        console.log(users)
+        const users = await getAllUsersDB();
+        
         return res.status(200).json({
             done: true,
             users: users,
@@ -290,15 +262,15 @@ const getAllUsers = async(req, res, next) => {
 }
 
 
-// get by nick
+// get by nick //////////////////
 const getByNickname = async(req, res, next) => {
-    const nickQuery = req.query.nickname;
+    const nickname = req.query.nickname;
 
     try {
-        const users = await usersModel.getByNickname(nickQuery);
+        const users = await getUsersByNicknameDB(nickname);
         return res.status(200).json({
             done: true,
-            users: users,
+            users,
         });
     } catch (error) {
         error.status = 400;
@@ -312,11 +284,12 @@ const switchSubscriptionOnUser = async(req, res, next) => {
     const subscriberId = req.body.subscriberId
 
     try {
-        await usersModel.switchSubscriptionOnUser(subscriberId, userId);
-        await usersModel.switchSubscribedOnUser(subscriberId, userId);
+        const { user1, user2 } = await switchSubscriptionOnUserDB(userId, subscriberId);
 
         return res.status(200).json({
             done: true,
+            user1,
+            user2,
         });
     } catch (error) {
         error.status = 400;
@@ -331,13 +304,13 @@ const confirmAccount = async(req, res, next) => {
     const verifyToken = req.body.verifyToken;
 
     try {
-        const action = await moderationModel.validateAction(userId, actionId, verifyToken, 'verify');
-        if (action) {
-            const user = await usersModel.confirmAccount(userId);
-            await moderationModel.deleteAction(userId, actionId, verifyToken, 'verify');
+        const { action, user } = await confirmAccountDB(userId, actionId, verifyToken);
+
+        if (action && user) {
             return res.status(200).json({
                 done: true,
-                user: user,
+                action,
+                user,
             });
         } else {
             return res.status(400).json({
@@ -358,22 +331,16 @@ const restoreAccount = async(req, res, next) => {
     const type = req.body.type;
     
     try {
-        const action = await moderationModel.validateAction(userId, actionId, verifyToken, type);
-        if (action) {
-            let newValue = req.body.newValue;
-            if (type === "password") {
-                newValue = await bcrypt.hash(newValue, 10);
-            }
-            await usersModel.restoreAccount(userId, newValue, type).then(async(user) => {
-                await moderationModel.deleteAction(userId, actionId, verifyToken, type);
-                sendMail.sendInfoEmail(
-                    user.email,
-                    user.nick,
-                    `Your account ${type} was successfully updated.`  
-                );
-            });
+        const { action, user } = await restoreAccountDB(
+            userId,
+            actionId,
+            verifyToken,
+            type
+        );
+        if (action && user) {
             return res.status(200).json({
                 done: true,
+                user,
             });
         } else {
             error.status = 400;
@@ -391,28 +358,16 @@ const prepareAccountToRestore = async(req, res, next) => {
     const type = req.body.type;
     
     try {
-        const user = await usersModel.getUserByEmail(email);
-
-        if (user) {
-            const verifyToken = await generateRandomString();
-            await moderationModel.createAction({
-                user: user._id,
-                type: type,
-                createdAt: new Date().toISOString(),
-                verifyToken: verifyToken,
-            }).then((action) => {
-                sendMail.sendRestoreEmail(
-                    user.email,
-                    user.nick,
-                    `${process.env.CLIENT_BASE.split(', ')[0]}/account-restore/${user._id}/${action[0]._id}/${verifyToken}/${type}`,
-                );
-            })
+        const { user, action } = prepareAccountToRestoreDB(email, type);
+        if (action && user) {
+            return res.status(200).json({
+                done: true,
+                user,
+            });
+        } else {
+            error.status = 400;
+            return next(error);
         }
-        
-        return res.status(200).json({
-            done: true,
-            user: user,
-        });
     } catch (error) {
         error.status = 400;
         return next(error);

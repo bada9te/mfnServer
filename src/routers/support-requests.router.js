@@ -10,6 +10,7 @@ const supportRequestsRouter = express.Router();
 // endpoints
 supportRequestsRouter.post('/create', supportRequestsController.createSupportRequest);
 supportRequestsRouter.post('/close', supportRequestsController.closeSupportRequest);
+supportRequestsRouter.get('/all',    passport.authenticate('jwt', { session: false }), supportRequestsController.getAllSupportRequests);
 
 
 // export

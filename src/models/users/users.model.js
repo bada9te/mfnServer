@@ -15,7 +15,7 @@ const addUser = async(user) => {
 
 // remove user by email
 const deleteUserById = async(id) => {
-    return await User.deleteOne({
+    return await User.findOneAndDelete({
         _id: id,
     })
     .catch((err) => {
@@ -29,6 +29,8 @@ const updateUser = async(id, value, what) => {
         _id: id,
     }, { 
         [what]: value,
+    }, {
+        new: true,
     })
     .catch((err) => {
         throw new Error(err);
@@ -100,7 +102,7 @@ const getOnlyImagesAndAudios = async() => {
 }
 
 const switchSubscriptionOnUser = async(subscriberId, userId, actionType) => {
-    return await User.updateOne(
+    return await User.findOneAndUpdate(
         { _id: userId }, 
         [{ 
             $set: {
@@ -112,7 +114,8 @@ const switchSubscriptionOnUser = async(subscriberId, userId, actionType) => {
                     ]
                 }
             }
-        }]
+        }],
+        { new: true }
     )
     .catch(err => {
         throw new Error(err);
@@ -132,7 +135,8 @@ const switchSubscribedOnUser = async(subscriberId, userId) => {
                     ]
                 }
             }
-        }]
+        }],
+        { new: true }
     )
     .catch(err => {
         throw new Error(err);

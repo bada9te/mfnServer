@@ -7,9 +7,9 @@ type Report {
     contactReason: String!
     email: String
     message: String!
-    reportOwner: ID
-    reportedPost: ID
-    reportedComment: ID
+    reportOwner: User
+    reportedPost: Post
+    reportedComment: Comment
     isClosed: Boolean!
 }
 

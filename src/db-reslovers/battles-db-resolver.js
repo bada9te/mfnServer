@@ -24,8 +24,10 @@ const getAllBattlesByStatusDB = async(skipCount, status) => {
     } else {
         status = true;
     }
-
-    return await battlesModel.getAllBattlesByStatus(status, skipCount);
+    return {
+        battles: await battlesModel.getAllBattlesByStatus(status, skipCount),
+        count: await battlesModel.getDocsCount({ finished: status }),
+    }
 }
 
 const makeBattleVoteDB = async(battleId, postNScore, voteCount, voterId) => {

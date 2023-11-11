@@ -25,6 +25,7 @@ const closeSupportRequest = async(id) => {
         isClosed: true,
     }, {
         upsert: true,
+        new: true,
     })
     .catch((err) => {
         throw new Error(err);

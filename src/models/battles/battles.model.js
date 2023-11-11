@@ -88,6 +88,14 @@ const updateScore = async(battleId, scoreType, value, voterId) => {
     })
 }
 
+// count docs
+const getDocsCount = async(filter) => {
+    return await Battles.countDocuments(filter).exec()
+    .catch((err) => {
+        throw new Error(err);
+    })
+}
+
 
 
 module.exports = {
@@ -96,4 +104,5 @@ module.exports = {
     setWinnerByBattleId,
     getAllBattlesByStatus,
     updateScore,
+    getDocsCount,
 }
