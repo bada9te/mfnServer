@@ -1,18 +1,19 @@
 const fs = require("fs");
 const path = require("path");
+require('dotenv').config();
 
 
 const initAudioStreamer = (app) => {
     app.get('/api/uploads/audios/:file', (req, res) => {
+        if (process.env.CLIENT_BASE.split(', ').indexOf(req.get('Origin'))) {
+            return res.status(403).end();
+        }
+        
         const audioFileName = req.params.file;
 
         const audioPath = path.join(__dirname, '..', '..', '..', 'uploads', 'audios', audioFileName);
-        console.log(audioPath)
-
         const audioStat = fs.statSync(audioPath);
-
         const audioSize = audioStat.size;
-
         const audioRange = req.headers.range;
 
         if (audioRange) {

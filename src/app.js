@@ -42,8 +42,15 @@ const config = {
 const app = express();
 
 // cors
+const whitelist = [...config.CLIENT_BASE.split(', '), 'https://studio.apollographql.com'];
 app.use(cors({
-  origin: [config.CLIENT_BASE.split(', '), 'https://studio.apollographql.com'],
+  origin: function (origin, callback) {
+    if (whitelist.indexOf(origin) !== -1 || !origin) {
+      callback(null, true)
+    } else {
+      callback(new Error('Not allowed by CORS'))
+    }
+  },
   credentials: true,
 }));
 
@@ -57,12 +64,14 @@ app.use(express.json());
 
 // #################### AUTH SESSION + PASSPORT #################
 // session
+
 app.use(session({
     secret: config.SESSION_SECRET,
     resave: false,
     saveUninitialized: true,
     cookie: { maxAge: 24 * 60 * 60 * 1000 }
 }));
+
 
 // passport init
 app.use(passport.initialize());

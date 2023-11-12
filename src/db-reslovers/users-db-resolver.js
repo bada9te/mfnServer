@@ -48,7 +48,7 @@ const getUserByEmailDB = async(email) => {
     return await usersModel.getUserByEmail(email);
 }
 
-const getUserByIdDB = async() => {
+const getUserByIdDB = async(id) => {
     return await usersModel.getUserById(id)
 }
 

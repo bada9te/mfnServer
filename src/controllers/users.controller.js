@@ -201,6 +201,7 @@ const getUserByEmail = async(req, res, next) => {
 // get by id
 const getUserById = async(req, res, next) => {
     const id = req.query.id;
+    console.log(id)
     try {
         const user = await getUserByIdDB(id);
         return res.status(200).json({
