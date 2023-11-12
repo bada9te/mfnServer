@@ -3,7 +3,7 @@ const notificationsModel = require('../../models/notifications/notifications.mod
 const usersModel = require('../../models/users/users.model');
 
 // socket.io
-const initSocketIO = (SERVER) => {
+const initSocketIO = async(SERVER) => {
     const io = new Server(SERVER, { /* options */ });
     io.on("connection", (socket) => {
         console.log(`[SOCKET] User is connected, socketID: ${socket.id}`);

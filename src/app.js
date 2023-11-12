@@ -13,10 +13,21 @@ const cookieParser = require('cookie-parser');
 const errorHandler = require('./middleware/errorHandler');
 const initAudioStreamer = require('./utils/audio-streamer/audioStreamer');
 const launchApolloServer = require('./utils/apollo-server/apollo-server');
+const envCheck = require('./utils/env-check/env-check');
 require('dotenv').config();
 
 
 console.log('[APP] Launching...');
+
+// check env
+envCheck([
+  "CLIENT_BASE",
+  "SESSION_SECRET",
+  "COOKIE_ACCESS_1",
+  "COOKIE_ACCESS_2",
+  "MONGO_URL"
+]);
+
 // app config
 const config = {
     COOKIE_ACCESS_1: process.env.COOKIE_ACCESS_1,

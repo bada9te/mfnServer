@@ -19,6 +19,7 @@ const SERVER = http.createServer(app);
 // socket.io
 initSocketIO(SERVER);
 
+
 // prepare and launch server
 const launchServer = async() => {
     // create a bunch of folders
