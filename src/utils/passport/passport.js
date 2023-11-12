@@ -18,7 +18,7 @@ const initPassportStarategies = (passport, app) => {
     };
 
     const jwtStrategy = new JwtStrategy(options, async(payload, done) => {
-        await usersModel.findById(payload.id)
+        await usersModel.getUserById(payload.id)
         .then((user) => {
             if (user) {
                 return done(null, user);

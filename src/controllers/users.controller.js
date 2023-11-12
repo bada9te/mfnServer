@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const usersModel = require("../models/users/users.model");
 const { addUserDB, deleteUserByIdDB, updateUserDB, getUserByEmailDB, getUserByIdDB, getUsersByIdsDB, validateUserDB, getAllUsersDB, getUsersByNicknameDB, switchSubscriptionOnUserDB, confirmAccountDB, restoreAccountDB, prepareAccountToRestoreDB } = require('../db-reslovers/users-db-resolver');
 //const mongooseObjectId = require('mongoose').Types.ObjectId;
 require('dotenv').config();
@@ -11,7 +12,6 @@ require('dotenv').config();
 const keysPath = path.join(__dirname, '..', 'utils', 'rsa');
 const PRIVATE_KEY_REFRESH = fs.readFileSync(path.join(keysPath, 'id_rsa_pri.pem'), 'utf-8');
 const PRIVATE_KEY_ACCESS  = fs.readFileSync(path.join(keysPath, 'id_rsa_pri.pem'), 'utf-8');
-const generateRandomString = async() => Math.floor(Math.random() * Date.now()).toString(36);
 
 
 // register / add user

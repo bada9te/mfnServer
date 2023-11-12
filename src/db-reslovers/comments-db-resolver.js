@@ -1,4 +1,5 @@
 const commentsModel = require("../models/comments/comments.model");
+const postsModel = require("../models/posts/posts.model");
 
 
 const addCommentDB = async(comment) => {
@@ -18,7 +19,7 @@ const addCommentDB = async(comment) => {
         comment._id = data[0]._id;
         createdComment = comment;
     });
-    return comment;
+    return createdComment;
 }
 
 const getManyCommentsByIdsDB = async(ids) => {

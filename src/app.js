@@ -25,7 +25,8 @@ envCheck([
   "SESSION_SECRET",
   "COOKIE_ACCESS_1",
   "COOKIE_ACCESS_2",
-  "MONGO_URL"
+  "MONGO_URL",
+  "NODE_ENV"
 ]);
 
 // app config
@@ -43,6 +44,7 @@ const app = express();
 
 // cors
 const whitelist = [...config.CLIENT_BASE.split(', '), 'https://studio.apollographql.com'];
+console.log(whitelist)
 app.use(cors({
   origin: function (origin, callback) {
     if (whitelist.indexOf(origin) !== -1 || !origin) {
