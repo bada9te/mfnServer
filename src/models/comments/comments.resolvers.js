@@ -4,18 +4,18 @@ const exec = require("../../db-reslovers/execGQL");
 
 module.exports = {
     Query: {
-        getManyCommentsByIds: async(_, { ids }) => {
+        commentsByIds: async(_, { ids }) => {
             return await exec(() => getManyCommentsByIdsDB(ids));
         },
-        getOneCommentById: async(_, { _id }) => {
+        comment: async(_, { _id }) => {
             return await exec(() => getOneCommentByIdDB(_id));
         }
     },
     Mutation: {
-        addComment: async(_, { input }) => {
+        commentCreate: async(_, { input }) => {
             return await exec(() => addCommentDB(input));
         },
-        removeCommentById: async(_, { _id }) => {
+        commentDeleteById: async(_, { _id }) => {
             return await exec(() => removeCommentByIdDB(_id));
         }
     }

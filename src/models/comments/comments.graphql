@@ -1,6 +1,6 @@
 type Query {
-    getManyCommentsByIds(ids: [ID!]!): [Comment!]
-    getOneCommentById(_id: ID!): Comment!
+    comment(_id: ID!): Comment!
+    commentsByIds(ids: [ID!]!): [Comment!]
 }
 
 type Comment {
@@ -14,8 +14,8 @@ type Comment {
 }
 
 type Mutation {
-    addComment(input: AddCommentInput!): Comment!
-    removeCommentById(_id: ID!): Comment!
+    commentCreate(input: AddCommentInput!): Comment!
+    commentDeleteById(_id: ID!): Comment!
 }
 
 input AddCommentInput {

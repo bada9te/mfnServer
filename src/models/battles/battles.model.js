@@ -65,10 +65,10 @@ const setWinnerByBattleId = async(battleId) => {
 }
 
 // get all battles
-const getAllBattlesByStatus = async(status, skipCount) => {
+const getAllBattlesByStatus = async(status, range) => {
     return await Battles.find({ finished: status }, { '__v': 0 })
-    .skip(skipCount)
-    .limit(12)
+    .skip(range.offset)
+    .limit(range.limit)
     .catch((err) => {
         throw new Error(err);
     });

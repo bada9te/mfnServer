@@ -6,9 +6,9 @@ type ModerationAction {
 }
 
 type Mutation {
-    createModerationAction(input: CreateModerationActionInput!): ModerationAction!
-    deleteAction(input: ModerateActionInput!): ModerationAction!
-    validateAction(input: ModerateActionInput!): ModerationAction!
+    moderationActionCreate(input: CreateModerationActionInput!): ModerationAction!
+    moderationActionDelete(input: ModerateActionInput!): ModerationAction!
+    moderationActionValidate(input: ModerateActionInput!): ModerationAction!
 }
 
 

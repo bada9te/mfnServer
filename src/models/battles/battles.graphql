@@ -1,5 +1,5 @@
 type Query {
-    getAllBattlesByStatus(input: GetAllBattlesByStatusInput!): BattlesWithCount!
+    battlesByStatus(status: String!, range: Range!): BattlesWithCount!
 }
 
 type Battle {
@@ -16,20 +16,20 @@ type Battle {
     votedBy: [User!]
 }
 
+input Range {
+    offset: Int!
+    limit: Int!
+}
+
 type BattlesWithCount {
     battles: [Battle!]
     count: Int!
 }
 
 type Mutation {
-    addNewBattleByPostsIds(input: AddNewBattleByPostsIdsInput!): Battle!
-    deleteBattleById(_id: ID!): Battle!
-    makeBattleVote(input: MakeBattleVoteInput!): Battle!
-}
-
-input GetAllBattlesByStatusInput {
-    status: String!
-    skipCount: Int!
+    battleCreate(input: AddNewBattleByPostsIdsInput!): Battle!
+    battleDeleteById(_id: ID!): Battle!
+    battleMakeVote(input: MakeBattleVoteInput!): Battle!
 }
 
 input AddNewBattleByPostsIdsInput {

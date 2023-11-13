@@ -18,14 +18,14 @@ const deleteBattleDB = async(id) => {
     return await battlesModel.deleteBattle(id);
 }
 
-const getAllBattlesByStatusDB = async(skipCount, status) => {
+const getAllBattlesByStatusDB = async(range, status) => {
     if (status === 'running') {
         status = false;
     } else {
         status = true;
     }
     return {
-        battles: await battlesModel.getAllBattlesByStatus(status, skipCount),
+        battles: await battlesModel.getAllBattlesByStatus(status, range),
         count: await battlesModel.getDocsCount({ finished: status }),
     }
 }

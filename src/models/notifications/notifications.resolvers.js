@@ -18,16 +18,16 @@ module.exports = {
             return await exec(() => createNotificationDB(input));
         },
         notificationDeleteById: async(_, { _id }) => {
-            return await exec(() =>deleteNotificationByIdDB(_id));
+            return await exec(() => deleteNotificationByIdDB(_id));
         },
         notificationsDeleteByIds: async(_, { ids }) => {
-            return await exec(() =>deleteNotificationsByIdsDB(_id));
+            return await exec(() => deleteNotificationsByIdsDB(_id));
         },
         notificationMarkAsReadById: async(_, { _id }) => {
-            return await exec(() =>markNotificationAsReadByIdDB(_id));
+            return await exec(() => markNotificationAsReadByIdDB(_id));
         },
         notificationsMarkAsReadByIds: async(_, { ids }) => {
-            return await exec(() =>markNotificationsAsReadByIdsDB(ids));
+            return await exec(() => markNotificationsAsReadByIdsDB(ids));
         }
     }
 }

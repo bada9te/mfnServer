@@ -3,13 +3,12 @@ const exec = require("../../db-reslovers/execGQL");
 
 module.exports = {
     Query: {
-        getAllBattlesByStatus: async(_, { input }) => {
-            const { skipCount, status } = input;
-            return await exec(() => getAllBattlesByStatusDB(skipCount, status));
+        battlesByStatus: async(_, { status, range }) => {
+            return await exec(() => getAllBattlesByStatusDB(range, status));
         }
     },
     Mutation: {
-        addNewBattleByPostsIds: async(_, { input }) => {
+        battleCreate: async(_, { input }) => {
             const battle = { ...input };
             const dateEnd = new Date();
             dateEnd.setDate(dateEnd.getDate() + 1);
@@ -17,10 +16,10 @@ module.exports = {
     
             return await exec(() => addNewBattleDB(battle))
         },
-        deleteBattleById: async(_, { _id }) => {
+        battleDeleteById: async(_, { _id }) => {
             return await exec(() => deleteBattleDB(_id));
         },
-        makeBattleVote: async(_, { input }) => {
+        battleMakeVote: async(_, { input }) => {
             const { battleId, postNScore, voteCount, voterId } = input;
             return await exec(() => makeBattleVoteDB(battleId, postNScore, voteCount, voterId));
         },
