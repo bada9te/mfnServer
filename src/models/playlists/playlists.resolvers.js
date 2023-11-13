@@ -4,25 +4,24 @@ const exec = require("../../db-reslovers/execGQL");
 
 module.exports = {
     Query: {
-        getPlaylistsByTitle: async(_, { title }) => {
+        playlistsByTitle: async(_, { title }) => {
             return await exec(() => getPlaylistsByTitleDB(title));
         },
-        getPlaylistsByOwnerId: async(_, { input }) => {
-            const { ownerId, skipCount } = input;
-            return await exec(() => getPlaylistsByOwnerIdDB(ownerId, skipCount));
+        playlistsByOwnerId: async(_, { owner, range }) => {
+            return await exec(() => getPlaylistsByOwnerIdDB(owner, range));
         },
-        getPublicAvailablePlaylists: async(_, { skipCount }) => {
-            return await exec(() => getPublicAvailablePlaylistsDB(skipCount))
+        playlistsPublicAvailable: async(_, { range }) => {
+            return await exec(() => getPublicAvailablePlaylistsDB(range))
         },
     },
     Mutation: {
-        createPlaylist: async(_, { input }) => {
+        playlistCreate: async(_, { input }) => {
             return await exec(() => createPlaylistDB(input));
         },
-        deletePlaylistById: async(_, { _id }) => {
+        playlistDeleteById: async(_, { _id }) => {
             return await exec(() => deletePlaylistByIdDB(_id));
         },
-        switchTrackInPlaylist: async(_, { input }) => {
+        playlistSwicthTrack: async(_, { input }) => {
             const { playlistId, trackId } = input;
             return await exec(() => switchTrackInPlaylistDB(playlistId, trackId));
         },

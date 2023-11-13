@@ -49,20 +49,20 @@ const getPlaylistByTitle = async(title) => {
 }
 
 // get by owner id
-const getPlaylistByOwnerId = async(ownerId, skipCount) => {
+const getPlaylistByOwnerId = async(ownerId, range) => {
     return await Playlist.find({ owner: ownerId })
-    .skip(skipCount)
-    .limit(12)
+    .skip(range.offset)
+    .limit(range.limit)
     .catch(err => {
         throw new Error(err);
     });
 }
 
 // get all public
-const getPublicAvailablePlaylists = async(skipCount) => {
+const getPublicAvailablePlaylists = async(range) => {
     return await Playlist.find({ public: true })
-    .skip(skipCount)
-    .limit(12)
+    .skip(range.offset)
+    .limit(range.limit)
     .catch(err => {
         throw new Error(err);
     });

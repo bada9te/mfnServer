@@ -1,7 +1,7 @@
 type Query {
-    getAllUnreadNotifications(receiverId: ID!): [Notification!]
-    getAllReadNotifications(receiverId: ID!): [Notification!]
-    getAllNotificationsByIds(ids: [ID!]!): [Notification!]
+    notificationsUnread(receiverId: ID!): [Notification!]
+    notificationsRead(receiverId: ID!): [Notification!]
+    notificationsByIds(ids: [ID!]!): [Notification!]
 }
 
 type Notification {
@@ -16,11 +16,11 @@ type Notification {
 }
 
 type Mutation {
-    createNotification(input: CreateNotificationInput!): Notification!
-    deleteNotificationById(_id: ID!): Notification!
-    deleteNotificationsByIds(ids: [ID!]!): [Notification!]
-    markNotificationAsReadById(_id: ID!): Notification!
-    markNotificationsAsReadByIds(ids: [ID!]!): [Notification!]
+    notificationCreate(input: CreateNotificationInput!): Notification!
+    notificationDeleteById(_id: ID!): Notification!
+    notificationsDeleteByIds(ids: [ID!]!): [Notification!]
+    notificationMarkAsReadById(_id: ID!): Notification!
+    notificationsMarkAsReadByIds(ids: [ID!]!): [Notification!]
 }
 
 input CreateNotificationInput {

@@ -22,16 +22,16 @@ const getPlaylistsByTitleDB = async(title) => {
     return await playlistsModel.getPlaylistByTitle(title);
 }
 
-const getPlaylistsByOwnerIdDB = async(ownerId, skipCount) => {
+const getPlaylistsByOwnerIdDB = async(ownerId, range) => {
     return {
-        playlists: await playlistsModel.getPlaylistByOwnerId(ownerId, skipCount),
+        playlists: await playlistsModel.getPlaylistByOwnerId(ownerId, range),
         count: await playlistsModel.getDocsCount({owner: ownerId})
     }
 }
 
-const getPublicAvailablePlaylistsDB = async(skipCount) => {
+const getPublicAvailablePlaylistsDB = async(range) => {
     return {
-        playlists: await playlistsModel.getPublicAvailablePlaylists(skipCount),
+        playlists: await playlistsModel.getPublicAvailablePlaylists(range),
         count: await playlistsModel.getDocsCount({})
     }
 }
