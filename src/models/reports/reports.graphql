@@ -1,5 +1,6 @@
 type Query {
-    getAllReports: [Report!]
+    report(_id: ID!): Report
+    reports: [Report!]
 }
 
 type Report {
@@ -14,8 +15,8 @@ type Report {
 }
 
 type Mutation {
-    createReport(input: CreateReportInput!): Report!
-    closeReport(_id: ID!): Report!
+    reportCreate(input: CreateReportInput!): Report!
+    reportClose(_id: ID!): Report!
 }
 
 input CreateReportInput {

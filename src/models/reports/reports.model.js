@@ -32,9 +32,20 @@ const closeReport = async(id) => {
 }
 
 
+// close report
+const getReportById = async(id) => {
+    return await Report.findOne({
+        _id: id,
+    })
+    .catch((err) => {
+        throw new Error(err);
+    });
+}
+
 
 module.exports = {
     createReport,
     getAllReports,
     closeReport,
+    getReportById,
 }

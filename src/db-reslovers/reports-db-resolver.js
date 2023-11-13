@@ -16,8 +16,13 @@ const getAllReportsDB = async() => {
     return await reportsModel.getAllReports();
 }
 
+const getReportByIdDB = async(id) => {
+    return await reportsModel.getReportById(id);
+}
+
 module.exports = {
     createReportDB,
     closeReportDB,
     getAllReportsDB,
+    getReportByIdDB,
 }

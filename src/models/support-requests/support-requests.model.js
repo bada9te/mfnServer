@@ -32,10 +32,21 @@ const closeSupportRequest = async(id) => {
     });
 }
 
+// get all
+const getSupportRequestById = async() => {
+    return await SupportRequest.findOne({
+        _id: id
+    })
+    .catch((err) => {
+        throw new Error(err);
+    });
+}
+
 
 
 module.exports = {
     createSupportRequest,
     getAllSupportRequests,
     closeSupportRequest,
+    getSupportRequestById,
 }

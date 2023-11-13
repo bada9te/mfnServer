@@ -1,4 +1,5 @@
 type Query {
+    supportRequest(_id: ID!): SupportRequest
     supportRequests: [SupportRequest!]!
 }
 
@@ -11,8 +12,8 @@ type SupportRequest {
 }
 
 type Mutation {
-    createSupportRequest(input: CreateSupportRequestInput!): SupportRequest!
-    closeSupportRequest(_id: ID!): SupportRequest!
+    supportRequestCreate(input: CreateSupportRequestInput!): SupportRequest!
+    supportRequestClose(_id: ID!): SupportRequest!
 }
 
 input CreateSupportRequestInput {
