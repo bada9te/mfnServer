@@ -52,34 +52,34 @@ const getPostById = async(id) => {
 }
 
 // get all posts
-const getAllPosts = async(skipCount) => {
+const getAllPosts = async(range) => {
     return await Post.find({}, { 
         '__v': 0, 
     })
-    .skip(skipCount)
-    .limit(12)
+    .skip(range.offset)
+    .limit(range.limit)
     .catch((err) => {
         throw new Error(err);
     });
 }
 
-const getAllWithOwnerId = async(id, skipCount) => {
+const getAllWithOwnerId = async(id, range) => {
     return await Post.find({owner: id}, {
         '__v': 0,
     })
-    .skip(skipCount)
-    .limit(12)
+    .skip(range.offset)
+    .limit(range.limit)
     .catch((err) => {
         throw new Error(err);
     });
 }
 
-const getSavedPostsByUserId = async(userId, skipCount) => {
+const getSavedPostsByUserId = async(userId, range) => {
     return await Post.find({ savedBy: userId }, {
         '__v': 0,
     })
-    .skip(skipCount)
-    .limit(12)
+    .skip(range.offset)
+    .limit(range.limit)
     .catch((err) => {
         throw new Error(err);
     });
@@ -95,10 +95,10 @@ const getByTitle = async(title) => {
 }
 
 // by title and owner id
-const getByTitleWithOwnerId = async(title, useOwnerId, onwerId) => {
+const getByTitleWithUserId = async(title, useOwnerId, userId) => {
     return await Post.find({
         title: { $regex: '.*' + title + '.*' },
-        owner: useOwnerId === 'true' ? onwerId : { "$ne": onwerId }
+        owner: useOwnerId === 'true' ? userId : { "$ne": userId }
     }, {
         '__v': 0,
     })
@@ -211,7 +211,7 @@ module.exports = {
     getAllWithOwnerId,
     getSavedPostsByUserId,
     getByTitle,
-    getByTitleWithOwnerId,
+    getByTitleWithUserId,
     getDocsCount,
     getOnlyImagesAndAudios,
     switchInSaved,

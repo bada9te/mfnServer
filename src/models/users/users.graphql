@@ -1,9 +1,9 @@
 type Query {
-    getAllUsers: [User!]
-    getUserByEmail(email: String!): User!
-    getUserById(_id: ID!): User!
-    getManyUsersByIds(ids: [ID!]!): [User!]!
-    getManyUsersByNickname(nick: String!): [User!]!
+    user(_id: ID!): User!
+    users: [User!]
+    userByEmail(email: String!): User!
+    usersByIds(ids: [ID!]!): [User!]!
+    usersByNickname(nick: String!): [User!]!
 }
 
 type User {
@@ -28,13 +28,13 @@ type UserWithAction {
 }
 
 type Mutation {
-    addUser(input: AddUserInput!): User!
-    deleteUserById(_id: ID!): User!
-    updateUser(input: UpdateUserInput!): User!
-    switchSubscriptionOnUser(input: SwitchSubscriptionOnUserInput!): TwoUsers!
-    confirmAccount(input: AccountConfirmInput!): UserWithAction!
-    restoreAccount(input: AccountRestoreInput!): UserWithAction!
-    prepareAccountToRestore(input: PrepareAccountToRestoreInput): UserWithAction!
+    userCreate(input: AddUserInput!): User!
+    userDeleteById(_id: ID!): User!
+    userUpdate(input: UpdateUserInput!): User!
+    userSwitchSubscription(input: SwitchSubscriptionOnUserInput!): TwoUsers!
+    userConfirmAccount(input: AccountConfirmInput!): UserWithAction!
+    userRestoreAccount(input: AccountRestoreInput!): UserWithAction!
+    userPrepareAccountToRestore(input: PrepareAccountToRestoreInput): UserWithAction!
 }
 
 

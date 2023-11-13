@@ -21,23 +21,23 @@ const getPostByIdDB = async(id) => {
     return await postsModel.getPostById(id); 
 }
 
-const getAllPostsDB = async(skipCount) => {
+const getAllPostsDB = async(range) => {
     return {
-        posts: await postsModel.getAllPosts(skipCount),
+        posts: await postsModel.getAllPosts(range),
         count: await postsModel.getDocsCount({}),
     }
 }
 
-const getAllPostsWithOwnerIdDB = async(ownerId, skipCount) => {
+const getAllPostsWithOwnerIdDB = async(ownerId, range) => {
     return {
-        posts: await postsModel.getAllWithOwnerId(ownerId, skipCount),
+        posts: await postsModel.getAllWithOwnerId(ownerId, range),
         count: await postsModel.getDocsCount({ owner: ownerId }),
     }
 }
 
-const getSavedPostsByUserIdDB = async(ownerId, skipCount) => {
+const getSavedPostsByUserIdDB = async(userId, range) => {
     return {
-        posts: await postsModel.getSavedPostsByUserId(ownerId, skipCount),
+        posts: await postsModel.getSavedPostsByUserId(userId, range),
         count: await postsModel.getDocsCount({ savedBy: userId }),
     }
 }
@@ -46,10 +46,10 @@ const switchPostLikeDB = async(userId, postId) => {
     return await postsModel.switchIsLiked(postId, userId);
 }
 
-const getPostByTitleDB = async(title, ownerId, isMine) => {
+const getPostByTitleDB = async(title, userId, userIsOwner) => {
     let posts = null;
-    if (ownerId && isMine) {
-        posts = await postsModel.getByTitleWithOwnerId(title, isMine, ownerId);
+    if (ownerId && userIsOwner) {
+        posts = await postsModel.getByTitleWithUserId(title, userIsOwner, userId);
     } else {
         posts = await postsModel.getByTitle(title);
     }

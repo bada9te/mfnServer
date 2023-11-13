@@ -4,44 +4,42 @@ const exec = require("../../db-reslovers/execGQL");
 
 module.exports = {
     Query: {
-        getPostById: async(_, { _id }) => {
+        post: async(_, { _id }) => {
             return await exec(() => getPostByIdDB(_id)); 
         },
-        getAllPosts: async(_, { skipCount }) => {
-            return await exec(() => getAllPostsDB(skipCount));
+        posts: async(_, { range }) => {
+            return await exec(() => getAllPostsDB(range));
         },
-        getAllPostsWithOwnerId: async(_, { input }) => {
-            const { ownerId, skipCount } = input;
-            return await exec(() => getAllPostsWithOwnerIdDB(ownerId, skipCount));
+        postsByOwner: async(_, { owner, range }) => {
+            return await exec(() => getAllPostsWithOwnerIdDB(owner, range));
         },
-        getSavedPostsByUserId: async(_, { input }) => {
-            const { ownerId, skipCount } = input;
-            return await exec(() => getSavedPostsByUserIdDB(ownerId, skipCount));
+        postsSavedByUser: async(_, { user, range }) => {
+            return await exec(() => getSavedPostsByUserIdDB(user, range));
         },
-        getPostsByTitle: async(_, { input }) => {
-            const { ownerId, title } = input;
-            return await exec(() => getPostByTitleDB(title, ownerId));
+        postsByTitle: async(_, { input }) => {
+            const { userId, title, userIsOwner } = input;
+            return await exec(() => getPostByTitleDB(title, userId, userIsOwner));
         },
-        getManyPostsByIds: async(_, { ids }) => {
+        postsByIds: async(_, { ids }) => {
             return await exec(() => getManyPostsByIdsDB(ids));
         },
     },
     Mutation: {
-        addPost: async(_, { input }) => {
+        postCreate: async(_, { input }) => {
             return await exec(() => addPostDB(input));
         },
-        updatePost: async(_, { input }) => {
+        postUpdate: async(_, { input }) => {
             const { post, value, what } = input;
             return await exec(() => updatePostDB(post, value, what));
         },
-        deletePostById: async(_, { _id }) => {
+        postDeleteById: async(_, { _id }) => {
             return await exec(() => deletePostByIdDB(_id));
         },
-        switchPostLike: async(_, { input }) => {
+        postSwitchLike: async(_, { input }) => {
             const { userId, postId } = input;
             return await exec(() => switchPostLikeDB(userId, postId));
         },
-        swicthPostInSaved: async(_, { input }) => {
+        postSwicthInSaved: async(_, { input }) => {
             const { userId, postId } = input;
             return await exec(() => swicthPostInSavedDB(userId, postId));
         }
