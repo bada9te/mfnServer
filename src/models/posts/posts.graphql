@@ -1,8 +1,8 @@
 type Query {
     post(_id: ID!): Post!
-    posts(range: Range!): PostsWithCount!
-    postsByOwner(owner: ID!, range: Range!): PostsWithCount!
-    postsSavedByUser(user: ID!, range: Range!): PostsWithCount!
+    posts(offset: Int!, limit: Int!): PostsWithCount!
+    postsByOwner(owner: ID!, offset: Int!, limit: Int!): PostsWithCount!
+    postsSavedByUser(user: ID!, offset: Int!, limit: Int!): PostsWithCount!
     postsByTitle(input: PostsByTitleInput!): [Post!]
     postsByIds(ids: [ID!]!): [Post!]
 }
@@ -16,11 +16,6 @@ input PostsByTitleInput {
 type PostsWithCount {
     posts: [Post!]
     count: Int!
-}
-
-input Range {
-    offset: Int!
-    limit: Int!
 }
 
 type Post {

@@ -7,14 +7,14 @@ module.exports = {
         post: async(_, { _id }) => {
             return await exec(() => getPostByIdDB(_id)); 
         },
-        posts: async(_, { range }) => {
-            return await exec(() => getAllPostsDB(range));
+        posts: async(_, { offset, limit }) => {
+            return await exec(() => getAllPostsDB({ offset, limit }));
         },
-        postsByOwner: async(_, { owner, range }) => {
-            return await exec(() => getAllPostsWithOwnerIdDB(owner, range));
+        postsByOwner: async(_, { owner, offset, limit }) => {
+            return await exec(() => getAllPostsWithOwnerIdDB(owner, { offset, limit }));
         },
-        postsSavedByUser: async(_, { user, range }) => {
-            return await exec(() => getSavedPostsByUserIdDB(user, range));
+        postsSavedByUser: async(_, { user, offset, limit }) => {
+            return await exec(() => getSavedPostsByUserIdDB(user, { offset, limit }));
         },
         postsByTitle: async(_, { input }) => {
             const { userId, title, userIsOwner } = input;
