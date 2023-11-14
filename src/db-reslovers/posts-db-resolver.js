@@ -47,8 +47,8 @@ const switchPostLikeDB = async(userId, postId) => {
 }
 
 const getPostByTitleDB = async(title, userId, userIsOwner) => {
-    let posts = null;
-    if (ownerId && userIsOwner) {
+    let posts;
+    if (userId && userIsOwner) {
         posts = await postsModel.getByTitleWithUserId(title, userIsOwner, userId);
     } else {
         posts = await postsModel.getByTitle(title);

@@ -9,8 +9,8 @@ type Query {
 
 input PostsByTitleInput {
     title: String!
-    userId: ID!
-    userIsOwner: Boolean!
+    userId: ID
+    userIsOwner: Boolean
 }
 
 type PostsWithCount {
