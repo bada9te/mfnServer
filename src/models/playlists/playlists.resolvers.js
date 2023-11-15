@@ -7,11 +7,11 @@ module.exports = {
         playlistsByTitle: async(_, { title }) => {
             return await exec(() => getPlaylistsByTitleDB(title));
         },
-        playlistsByOwnerId: async(_, { owner, range }) => {
-            return await exec(() => getPlaylistsByOwnerIdDB(owner, range));
+        playlistsByOwnerId: async(_, { owner, offset, limit }) => {
+            return await exec(() => getPlaylistsByOwnerIdDB(owner, { offset, limit }));
         },
-        playlistsPublicAvailable: async(_, { range }) => {
-            return await exec(() => getPublicAvailablePlaylistsDB(range))
+        playlistsPublicAvailable: async(_, { offset, limit }) => {
+            return await exec(() => getPublicAvailablePlaylistsDB({ offset, limit }))
         },
     },
     Mutation: {

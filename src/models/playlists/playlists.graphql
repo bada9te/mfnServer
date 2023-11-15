@@ -1,7 +1,7 @@
 type Query {
     playlistsByTitle(title: String!): [Playlist!]
-    playlistsByOwnerId(owner: ID!, range: Range!): PlaylistsWithCount!
-    playlistsPublicAvailable(range: Range!): PlaylistsWithCount!
+    playlistsByOwnerId(owner: ID!, offset: Int!, limit: Int!): PlaylistsWithCount!
+    playlistsPublicAvailable(offset: Int!, limit: Int!): PlaylistsWithCount!
 }
 
 type Playlist {
