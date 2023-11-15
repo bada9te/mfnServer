@@ -22,5 +22,6 @@ input AddCommentInput {
     owner: ID!
     text: String!
     isReply: Boolean!
+    isReplyTo: ID
     post: ID!
 }
