@@ -123,7 +123,7 @@ const switchSubscriptionOnUser = async(subscriberId, userId, actionType) => {
 }
 
 const switchSubscribedOnUser = async(subscriberId, userId) => {
-    return await User.updateOne(
+    return await User.findOneAndUpdate(
         { _id: subscriberId }, 
         [{ 
             $set: {

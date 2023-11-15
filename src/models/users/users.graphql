@@ -13,8 +13,8 @@ type User {
     description: String!
     avatar: String!
     background: String!
-    subscribers: [User!]!
-    subscribedOn: [User!]!
+    subscribers: [User!]
+    subscribedOn: [User!]
 }
 
 type TwoUsers {
