@@ -1,6 +1,5 @@
 type Query {
-    notificationsUnread(receiverId: ID!): [Notification!]
-    notificationsRead(receiverId: ID!): [Notification!]
+    notifications(receiverId: ID!, checked: Boolean!): [Notification!]
     notificationsByIds(ids: [ID!]!): [Notification!]
 }
 

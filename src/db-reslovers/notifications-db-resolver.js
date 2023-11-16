@@ -25,12 +25,12 @@ const markNotificationsAsReadByIdsDB = async(ids) => {
     return await notificationsModel.markNotificationsAsRead(ids);
 }
 
-const getAllUnreadNotificationsDB = async(receiverId) => {
-    return await notificationsModel.getAllUnreadNotifications(receiverId);
-}
-
-const getAllReadNotificationsDB = async(receiverId) => {
-    return await notificationsModel.getAllReadNotifications(receiverId);
+const getAllNotificationsDB = async(receiverId, checked) => {
+    if (checked) {
+        return await notificationsModel.getAllReadNotifications(receiverId);
+    } else {
+        return await notificationsModel.getAllUnreadNotifications(receiverId);
+    }
 }
 
 const getAllNotificationsByIdsDB = async(ids) => {
@@ -43,7 +43,6 @@ module.exports = {
     deleteNotificationsByIdsDB,
     markNotificationAsReadByIdDB,
     markNotificationsAsReadByIdsDB,
-    getAllUnreadNotificationsDB,
-    getAllReadNotificationsDB,
+    getAllNotificationsDB,
     getAllNotificationsByIdsDB,
 }

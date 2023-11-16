@@ -1,13 +1,10 @@
-const { getAllUnreadNotificationsDB, getAllReadNotificationsDB, getAllNotificationsByIdsDB, createNotificationDB, deleteNotificationByIdDB, deleteNotificationsByIdsDB, markNotificationAsReadByIdDB, markNotificationsAsReadByIdsDB } = require("../../db-reslovers/notifications-db-resolver");
+const { getAllNotificationsByIdsDB, createNotificationDB, deleteNotificationByIdDB, deleteNotificationsByIdsDB, markNotificationAsReadByIdDB, markNotificationsAsReadByIdsDB, getAllNotificationsDB } = require("../../db-reslovers/notifications-db-resolver");
 const exec = require("../../db-reslovers/execGQL");
 
 module.exports = {
     Query: {
-        notificationsUnread: async(_, { receiverId }) => {
-            return await exec(() => getAllUnreadNotificationsDB(receiverId));
-        },
-        notificationsRead: async(_, { receiverId }) => {
-            return await exec(() => getAllReadNotificationsDB(receiverId));
+        notifications: async(_, { receiverId, checked }) => {
+            return await exec(() => getAllNotificationsDB(receiverId, checked));
         },
         notificationsByIds: async(_, { ids }) => {
             return await exec(() => getAllNotificationsByIdsDB(ids));
