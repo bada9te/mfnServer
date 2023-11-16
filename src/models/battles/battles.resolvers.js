@@ -3,8 +3,8 @@ const exec = require("../../db-reslovers/execGQL");
 
 module.exports = {
     Query: {
-        battlesByStatus: async(_, { status, range }) => {
-            return await exec(() => getAllBattlesByStatusDB(range, status));
+        battlesByStatus: async(_, { status, offset, limit }) => {
+            return await exec(() => getAllBattlesByStatusDB({offset, limit}, status));
         }
     },
     Mutation: {
