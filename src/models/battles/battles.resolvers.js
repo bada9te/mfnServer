@@ -13,7 +13,7 @@ module.exports = {
             const dateEnd = new Date();
             dateEnd.setDate(dateEnd.getDate() + 1);
             battle.willFinishAt = dateEnd.toISOString();
-    
+
             return await exec(() => addNewBattleDB(battle))
         },
         battleDeleteById: async(_, { _id }) => {

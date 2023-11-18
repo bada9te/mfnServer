@@ -1,12 +1,13 @@
 const battlesModel = require("../models/battles/battles.model");
+const { createTask } = require("../utils/cron/cron");
 
 
 const addNewBattleDB = async(battle) => {
     let createdBattle;
-    await battlesModel.addBattleByIds(battle.id1, battle.id2, battle.title, battle.createdAt, battle.willFinishAt)
+    await battlesModel.addBattleByIds(battle.post1, battle.post2, battle.title, battle.createdAt, battle.willFinishAt)
             .then(async(insertedBattle) => {
                 createdBattle = insertedBattle[0];
-                createTask(createdBattle._id, dateEnd, async() => {
+                createTask(createdBattle._id, new Date(createdBattle.willFinishAt), async() => {
                     console.log(createdBattle._id, "setting battle as finished...")
                     await battlesModel.setWinnerByBattleId(createdBattle._id);
                 }, 'finishBattle');

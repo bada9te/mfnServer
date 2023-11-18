@@ -98,7 +98,7 @@ const getByTitle = async(title) => {
 const getByTitleWithUserId = async(title, useOwnerId, userId) => {
     return await Post.find({
         title: { $regex: '.*' + title + '.*' },
-        owner: useOwnerId === 'true' ? userId : { "$ne": userId }
+        owner: useOwnerId === true ? userId : { "$ne": userId }
     }, {
         '__v': 0,
     })
