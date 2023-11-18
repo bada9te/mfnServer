@@ -48,6 +48,8 @@ input AddPostInput {
     description: String!
     audio: String!
     image: String!
+    commentsAllowed: Boolean!
+    downloadsAllowed: Boolean!
 }
 
 input UpdatePostInput {

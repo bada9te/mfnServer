@@ -4,7 +4,7 @@ const Post = require('./posts.mongo');
 
 // add post
 const addPost = async(post) => {
-    await Post.insertMany([post])
+    return await Post.insertMany([post])
     .catch((err) => {
         throw new Error(err);
     });
@@ -12,7 +12,7 @@ const addPost = async(post) => {
 
 // update post
 const updatePost = async(id, value, what) => {
-    await Post.findOneAndUpdate({
+    return await Post.findOneAndUpdate({
         _id: id,
     }, {
         [what]: value,
@@ -27,7 +27,7 @@ const updatePost = async(id, value, what) => {
 
 // delete post
 const deletePostById = async(id) => {
-    await Post.findOneAndDelete({ _id: id, })
+    return await Post.findOneAndDelete({ _id: id, })
     .catch((err) => {
         throw new Error(err);
     });
@@ -35,7 +35,7 @@ const deletePostById = async(id) => {
 
 // delete many posts
 const deletePostsByIds = async(ids) => {
-    await Post.deleteMany({ _id: ids })
+    return await Post.deleteMany({ _id: ids })
     .catch((err) => {
         throw new Error(err);
     });
