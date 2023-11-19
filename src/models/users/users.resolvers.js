@@ -46,5 +46,11 @@ module.exports = {
             const { email, type } = input;
             return await exec(() => prepareAccountToRestoreDB(email, type));
         },
+
+        login: async(_, { email, password }, context) => {
+            const { user } = await context.authenticate('graphql-local', { email, password });
+            await context.login(user);
+            return user;
+        },
     }
 }

@@ -35,6 +35,8 @@ type Mutation {
     userConfirmAccount(input: AccountConfirmInput!): UserWithAction!
     userRestoreAccount(input: AccountRestoreInput!): UserWithAction!
     userPrepareAccountToRestore(input: PrepareAccountToRestoreInput): UserWithAction!
+
+    login(email: String!, password: String!): User
 }
 
 

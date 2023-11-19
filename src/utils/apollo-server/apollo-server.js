@@ -2,7 +2,7 @@ const path = require('path');
 const { ApolloServer, gql } = require('apollo-server-express');
 const { ApolloServerPluginLandingPageLocalDefault, ApolloServerPluginLandingPageProductionDefault } = require("apollo-server-core");
 const { loadFilesSync } = require('@graphql-tools/load-files');
-//const { makeExecutableSchema } = require('@graphql-tools/schema');
+const { buildContext } = require('graphql-passport');
 
 
 const launchApollo = async(app) => {
@@ -23,6 +23,7 @@ const launchApollo = async(app) => {
           })
         : ApolloServerPluginLandingPageLocalDefault({ footer: false }),
     ],
+    context: async({ req, res }) => buildContext({ req, res }),
   });
   
   await APServer.start()
