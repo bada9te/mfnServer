@@ -31,122 +31,7 @@ const addUser = async(req, res, next) => {
 }
 
 
-// login 
-const loginUser = async(req, res, next) => {
-    const email = req.body.email;
-    const password = req.body.password;
-    try {
-        const user = await usersModel.getUserByEmail(email);
-        if (!user) {
-            throw new Error("User not found");
-        }
 
-        if (!await bcrypt.compare(password, user.password)) {
-            throw new Error("Password is not valid");
-        }
-
-        const payload = {
-            username: user.email,
-            id: user._id,
-        }
-
-        const accessToken = jwt.sign(payload, PRIVATE_KEY_ACCESS, { 
-            expiresIn: "10m",
-            algorithm: "RS256",
-        });
-
-        const refreshToken = jwt.sign(payload, PRIVATE_KEY_REFRESH, { 
-            expiresIn: "14d",
-            algorithm: "RS256",
-        });
-
-        res.cookie('jwt', refreshToken, {
-            httpOnly: true,
-            secure: true,
-            sameSite: 'Strict',  // or 'Lax', it depends
-            maxAge: 604800000 * 2,  // 14 days
-            path: '/',
-        });
-
-        let expiresAtDate = new Date();
-        expiresAtDate.setMinutes(expiresAtDate.getMinutes() + 10);
-
-        return res.status(200).json({
-            done: true,
-            user: user,
-            token: {
-                expiresAt: expiresAtDate.toISOString(),
-                accessToken: `Bearer ${accessToken}`,
-            },
-        });
-        
-    } catch (error) {
-        error.status = 400;
-        return next(error);
-    }
-}
-
-// refresh access  token
-const refreshAccessToken = (req, res, next) => {
-    if (req.cookies?.jwt) {
-        const refreshToken = req.cookies.jwt;
-
-        jwt.verify(refreshToken, PRIVATE_KEY_REFRESH, (err, decoded) => {
-            if (err) {
-                err.message = 'Wrong refresh token';
-                err.status = 401;
-                return next(err);
-            } else {
-                const userId = req.body.id;
-                const userEmail = req.body.email;
-
-                const accessToken = jwt.sign({
-                    username: userEmail,
-                    id: userId,
-                }, PRIVATE_KEY_ACCESS, {
-                    expiresIn: "10m",
-                    algorithm: "RS256",
-                });
-
-                let expiresAtDate = new Date();
-                expiresAtDate.setMinutes(expiresAtDate.getMinutes() + 10);
-
-                //console.log('New token will expire at:', expiresAtDate.toISOString());
-
-                return res.status(200).json({
-                    done: true,
-                    token: {
-                        expiresAt: expiresAtDate.toISOString(),
-                        accessToken: `Bearer ${accessToken}`,
-                    },
-                });
-            }
-        });
-    } else {
-        let err = new Error();
-        err.message = 'No resfresh token provided';
-        err.status = 401;
-        return next(err);
-    }
-}
-
-// logout
-const logoutUser = async(req, res) => {
-    try {
-        res.clearCookie('jwt');
-        req.logout((err) => {
-            if (err) throw new Error(err);
-            return res.status(200).json({
-                done: true,
-            });
-        });
-    } catch (error) {
-        console.log(error)
-        return res.status(400).json({
-            done: true,
-        });
-    }
-}
 
 // remove by email
 const deleteUserById = async(req, res, next) => {
@@ -379,9 +264,6 @@ const prepareAccountToRestore = async(req, res, next) => {
 
 module.exports = {
     addUser,
-    loginUser,
-    refreshAccessToken,
-    logoutUser,
     deleteUserById,
     updateUser,
     getUserByEmail,

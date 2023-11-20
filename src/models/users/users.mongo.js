@@ -1,9 +1,32 @@
 const mongoose = require('mongoose');
 const postsModel = require('../posts/posts.mongo');
+const bcrypt = require('bcrypt-nodejs');
 
 
 // schema
 const usersSchema = mongoose.Schema({
+    local: {
+        email: String,
+        password: String,
+    },
+    facebook: {
+        id: String,
+        token: String,
+        email: String,
+        name: String
+    },
+    twitter: {
+        id: String,
+        token: String,
+        displayName: String,
+        username: String
+    },
+    google: {
+        id: String,
+        token: String,
+        email: String,
+        name: String
+    },
     nick: {
         type: String,
         required: true,
@@ -12,18 +35,10 @@ const usersSchema = mongoose.Schema({
         type: String,
         default: '...',
     },
-    password: {
-        type: String,
-        required: true,
-    },
-    email: {
-        type: String,
-        required: true,
-    },
     avatar: { 
         type: String, 
         default: '',
-    }, 
+    },
     background: { 
         type: String, 
         default: '',
@@ -60,6 +75,16 @@ usersSchema.pre('deleteOne', async function(next) {
     }
     next();
 });
+
+// generating a hash
+usersSchema.methods.generateHash = function(password) {
+    return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
+};
+
+// checking if password is valid
+usersSchema.methods.validPassword = function(password) {
+    return bcrypt.compareSync(password, this.local.password);
+};
 
 
 // model

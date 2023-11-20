@@ -39,7 +39,7 @@ const updateUser = async(id, value, what) => {
 
 // get user by email
 const getUserByEmail = async(email) => {
-    return await User.findOne({ email: email }, { '__v': 0 })
+    return await User.findOne({ 'local.email': email }, { '__v': 0 })
     .catch((err) => {
         throw new Error(err);
     });
