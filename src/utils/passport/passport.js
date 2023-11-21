@@ -1,21 +1,13 @@
-const fs = require('fs');
-const path = require('path');
-const usersModel = require('../../models/users/users.model');
 const User = require('../../models/users/users.mongo');
-
 const LocalStrategy    = require('passport-local').Strategy;
 const FacebookStrategy = require('passport-facebook').Strategy;
 const TwitterStrategy  = require('passport-twitter').Strategy;
 const GoogleStrategy   = require('passport-google-oauth').OAuth2Strategy;
-const GraphQLLocalStrategy = require('graphql-passport').GraphQLLocalStrategy;
-require('dotenv').config();
-
+//const GraphQLLocalStrategy = require('graphql-passport').GraphQLLocalStrategy;
+const configAuth = require('../../config').passport;
 
 
 const initPassportStarategies = (passport) => {
-    const keyPath = path.join(__dirname, '..', '..', 'utils', 'rsa', 'id_rsa_pub.pem');
-    const PUBLIC_KEY = fs.readFileSync(keyPath, 'utf-8');
-
     // used to serialize the user for the session
     passport.serializeUser(function(user, done) {
         done(null, user.id);
@@ -73,7 +65,7 @@ const initPassportStarategies = (passport) => {
             if (req.user) {
                 let user = req.user;
                 user.local.email = email;
-                user.local.password = password;
+                user.local.password = user.generateHash(password);
 
                 user.save()
                     .then(updatedUser => {
@@ -117,7 +109,7 @@ const initPassportStarategies = (passport) => {
                     // if there is a user id already but no token (user was linked at one point and then removed)
                     if (!user.facebook.token) {
                         user.facebook.token = token;
-                        user.facebook.name = profile.name.givenName + ' ' + profile.name.familyName;
+                        user.facebook.name  = profile.name.givenName + ' ' + profile.name.familyName;
                         user.facebook.email = profile.emails[0].value;
 
                         user.save()
@@ -133,9 +125,9 @@ const initPassportStarategies = (passport) => {
                     // if there is no user, create 
                     let newUser = new User();
 
-                    newUser.facebook.id = profile.id;
+                    newUser.facebook.id    = profile.id;
                     newUser.facebook.token = token;
-                    newUser.facebook.name = profile.name.givenName + ' ' + profile.name.familyName;
+                    newUser.facebook.name  = profile.name.givenName + ' ' + profile.name.familyName;
                     newUser.facebook.email = profile.emails[0].value;
 
                     newUser.save()
@@ -149,9 +141,9 @@ const initPassportStarategies = (passport) => {
                 // user already exists and is logged in, we have to link accounts
                 let user = req.user; // pull the user out of the session
 
-                user.facebook.id = profile.id;
+                user.facebook.id    = profile.id;
                 user.facebook.token = token;
-                user.facebook.name = profile.name.givenName + ' ' + profile.name.familyName;
+                user.facebook.name  = profile.name.givenName + ' ' + profile.name.familyName;
                 user.facebook.email = profile.emails[0].value;
 
                 user.save()
@@ -184,8 +176,8 @@ const initPassportStarategies = (passport) => {
                 if (user) {
                     // if there is a user id already but no token (user was linked at one point and then removed)
                     if (!user.twitter.token) {
-                        user.twitter.token = token;
-                        user.twitter.username = profile.username;
+                        user.twitter.token       = token;
+                        user.twitter.username    = profile.username;
                         user.twitter.displayName = profile.displayName;
 
                         user.save
@@ -201,9 +193,9 @@ const initPassportStarategies = (passport) => {
                     // if there is no user, create 
                     let newUser = new User();
 
-                    newUser.twitter.id = profile.id;
-                    newUser.twitter.token = token;
-                    newUser.twitter.username = profile.username;
+                    newUser.twitter.id          = profile.id;
+                    newUser.twitter.token       = token;
+                    newUser.twitter.username    = profile.username;
                     newUser.twitter.displayName = profile.displayName;
 
                     newUser.save()
@@ -217,9 +209,9 @@ const initPassportStarategies = (passport) => {
                 // user already exists and is logged in, we have to link accounts
                 let user = req.user; // pull the user out of the session
 
-                user.twitter.id = profile.id;
-                user.twitter.token = token;
-                user.twitter.username = profile.username;
+                user.twitter.id          = profile.id;
+                user.twitter.token       = token;
+                user.twitter.username    = profile.username;
                 user.twitter.displayName = profile.displayName;
 
                 user.save()
@@ -283,9 +275,9 @@ const initPassportStarategies = (passport) => {
                 // user already exists and is logged in, we have to link accounts
                 let user = req.user; // pull the user out of the session
 
-                user.google.id  = profile.id;
+                user.google.id    = profile.id;
                 user.google.token = token;
-                user.google.name = profile.displayName;
+                user.google.name  = profile.displayName;
                 user.google.email = profile.emails[0].value; // pull the first email
 
                 user.save()

@@ -20,9 +20,6 @@ module.exports = {
         },
     },
     Mutation: {
-        userCreate: async(_, { input }) => {
-            return await exec(() => addUserDB(input));
-        },
         userDeleteById: async(_, { _id }) => {
             return await exec(() => deleteUserByIdDB(_id));
         },

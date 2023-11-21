@@ -1,11 +1,11 @@
 const fs = require("fs");
 const path = require("path");
-require('dotenv').config();
+const config = require('../../config');
 
 
 const initAudioStreamer = (app) => {
     app.get('/api/uploads/audios/:file', (req, res) => {
-        if (process.env.CLIENT_BASE.split(', ').indexOf(req.get('Origin'))) {
+        if (config.base.clientBase.split(', ').indexOf(req.get('Origin'))) {
             return res.status(403).end();
         }
         

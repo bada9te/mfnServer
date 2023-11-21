@@ -13,28 +13,19 @@ const cookieParser = require('cookie-parser');
 const errorHandler = require('./middleware/errorHandler');
 const initAudioStreamer = require('./utils/audio-streamer/audioStreamer');
 const launchApolloServer = require('./utils/apollo-server/apollo-server');
-const envCheck = require('./utils/env-check/env-check');
-require('dotenv').config();
+const config = require('./config');
 
 
 console.log('[APP] Launching...');
 
-// check env
-envCheck([
-  "CLIENT_BASE",
-  "SESSION_SECRET",
-  "COOKIE_ACCESS_1",
-  "COOKIE_ACCESS_2",
-  "MONGO_URL",
-  "NODE_ENV"
-]);
+
 
 // app config
-const config = {
-    COOKIE_ACCESS_1: process.env.COOKIE_ACCESS_1,
-    COOKIE_ACCESS_2: process.env.COOKIE_ACCESS_2,
-    CLIENT_BASE:     process.env.CLIENT_BASE,
-    SESSION_SECRET:  process.env.SESSION_SECRET,
+const appConfig = {
+  //COOKIE_ACCESS_1: config.base.cookieAccess1,
+  //COOKIE_ACCESS_2: config.base.cookieAccess2,
+  CLIENT_BASE:     config.base.clientBase,
+  SESSION_SECRET:  config.base.sessionSecret,
 };
 
 
@@ -43,8 +34,8 @@ const config = {
 const app = express();
 
 // cors
-const whitelist = [...config.CLIENT_BASE.split(', '), 'https://studio.apollographql.com'];
-console.log(whitelist)
+const whitelist = [...appConfig.CLIENT_BASE.split(', '), 'https://studio.apollographql.com'];
+console.log(`[CORS] Origins in whitelist: `, whitelist)
 app.use(cors({
   origin: function (origin, callback) {
     if (whitelist.indexOf(origin) !== -1 || !origin) {
@@ -68,7 +59,7 @@ app.use(express.json());
 // session
 
 app.use(session({
-    secret: config.SESSION_SECRET,
+    secret: appConfig.SESSION_SECRET,
     resave: false,
     saveUninitialized: true,
     cookie: { maxAge: 24 * 60 * 60 * 1000 }

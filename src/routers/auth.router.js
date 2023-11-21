@@ -53,8 +53,8 @@ authRouter.get('/logout', function(req, res) {
 // google ---------------------------------
     authRouter.get('/auth/google', passport.authenticate('google', { scope : ['profile', 'email'] }));
     authRouter.get('/auth/google/callback', passport.authenticate('google', {
-        successRedirect : '/profile',
-        failureRedirect : '/'
+        successRedirect : '/',
+        failureRedirect : '/login'
     }));
 
 
@@ -89,7 +89,7 @@ authRouter.get('/logout', function(req, res) {
 
 // local -----------------------------------
     authRouter.get('/unlink/local', function(req, res) {
-        var user            = req.user;
+        let user            = req.user;
         user.local.email    = undefined;
         user.local.password = undefined;
         user.save(function(err) {
@@ -99,7 +99,7 @@ authRouter.get('/logout', function(req, res) {
 
 // facebook -------------------------------
     authRouter.get('/unlink/facebook', function(req, res) {
-        var user            = req.user;
+        let user            = req.user;
         user.facebook.token = undefined;
         user.save(function(err) {
             res.redirect('/');
@@ -108,7 +108,7 @@ authRouter.get('/logout', function(req, res) {
 
 // twitter --------------------------------
     authRouter.get('/unlink/twitter', function(req, res) {
-        var user           = req.user;
+        let user           = req.user;
         user.twitter.token = undefined;
         user.save(function(err) {
             res.redirect('/profile');
@@ -117,7 +117,7 @@ authRouter.get('/logout', function(req, res) {
 
 // google ---------------------------------
     authRouter.get('/unlink/google', function(req, res) {
-        var user          = req.user;
+        let user          = req.user;
         user.google.token = undefined;
         user.save(function(err) {
             res.redirect('/profile');

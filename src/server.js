@@ -5,12 +5,12 @@ const http = require('http');
 const mongoose = require('mongoose');
 const initSocketIO = require('./utils/socket/socket');
 const removeJunkFiles = require('./utils/cleaner/cleaner');
-require('dotenv').config();
+const config = require('./config');
 
 
 // server config
-const PORT = process.env.PORT || 8000;
-const MONGO_URL = process.env.MONGO_URL;
+const PORT = config.base.port || 8000;
+const MONGO_URL = config.mongo.url;
 
 
 // http server
