@@ -7,7 +7,7 @@ const GoogleStrategy   = require('passport-google-oauth').OAuth2Strategy;
 const configAuth = require('../../config').passport;
 
 
-const initPassportStarategies = (passport) => {
+module.exports = (passport) => {
     // used to serialize the user for the session
     passport.serializeUser(function(user, done) {
         done(null, user.id);
@@ -295,6 +295,3 @@ const initPassportStarategies = (passport) => {
     
     console.log("[PASSPORT] Startegies initialized.");
 }
-
-
-module.exports = initPassportStarategies;

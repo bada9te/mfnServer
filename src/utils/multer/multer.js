@@ -6,7 +6,7 @@ const imageExtensions = ['.jpg', '.jpeg', '.png'];
 const audioExtensions = ['.wav', '.mp3'];
 
 
-const initMulter = (app) => {
+module.exports = (app) => {
     // storage
     const storage = multer.diskStorage({
         destination: (req, file, callBack) => {
@@ -103,6 +103,3 @@ const initMulter = (app) => {
         })
     });
 }
-
-
-module.exports = initMulter;
