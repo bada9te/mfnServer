@@ -9,14 +9,12 @@ const configAuth = require('../../config').passport;
 module.exports = (passport) => {
     // used to serialize the user for the session
     passport.serializeUser(function(user, done) {
-        done(null, user.id);
+        done(null, user);
     });
 
     // used to deserialize the user
-    passport.deserializeUser(function(id, done) {
-        User.findById(id, function(err, user) {
-            done(err, user);
-        });
+    passport.deserializeUser(function(user, done) {
+        done(null, user);
     });
 
 
@@ -106,7 +104,7 @@ module.exports = (passport) => {
 
                 if (user) {
                     // if there is a user id already but no token (user was linked at one point and then removed)
-                    if (!user.facebook.token) {
+                    if (!user.facebook?.token) {
                         user.facebook.token = token;
                         user.facebook.name  = profile.name.givenName + ' ' + profile.name.familyName;
                         user.facebook.email = profile.emails[0].value;
@@ -174,7 +172,7 @@ module.exports = (passport) => {
 
                 if (user) {
                     // if there is a user id already but no token (user was linked at one point and then removed)
-                    if (!user.twitter.token) {
+                    if (!user.twitter?.token) {
                         user.twitter.token       = token;
                         user.twitter.username    = profile.username;
                         user.twitter.displayName = profile.displayName;
@@ -232,48 +230,48 @@ module.exports = (passport) => {
         clientID        : configAuth.googleAuth.clientID,
         clientSecret    : configAuth.googleAuth.clientSecret,
         callbackURL     : configAuth.googleAuth.callbackURL,
-        passReqToCallback : true // allows us to pass in the req from our route (lets us check if a user is logged in or not)
-    }, async(req, token, refreshToken, profile, done) => {
-        try {
+        passReqToCallback : true, // allows us to pass in the req from our route (lets us check if a user is logged in or not)
+    }, (req, token, refreshToken, profile, done) => {
+        process.nextTick(function() {
             if (!req.user) {
-                const user = User.findOne({ 'google.id' : profile.id });
+                User.findOne({ 'google.id' : profile.id }).then(user => {
+                    if (user) {
+                        // if there is a user id already but no token (user was linked at one point and then removed)
+                        if (!user.google.token) {
+                            user.google.token = token;
+                            user.google.name  = profile.displayName;
+                            user.google.email = profile.emails[0].value; // pull the first email
 
-                if (user) {
-                    // if there is a user id already but no token (user was linked at one point and then removed)
-                    if (!user.google.token) {
-                        user.google.token = token;
-                        user.google.name  = profile.displayName;
-                        user.google.email = profile.emails[0].value; // pull the first email
+                            user.save()
+                                .then(updatedUser => {
+                                    return done(null, updatedUser);
+                                }).catch(err => {
+                                    throw err;
+                                });
+                        }
 
-                        user.save()
-                            .then(updatedUser => {
-                                return done(null, updatedUser);
+                        return done(null, user);
+                    } else {
+                        var newUser          = new User();
+                        newUser.nick     = profile.displayName
+                        newUser.google.id    = profile.id;
+                        newUser.google.token = token;
+                        newUser.google.name  = profile.displayName;
+                        newUser.google.email = profile.emails[0].value; // pull the first email
+
+                        newUser.save()
+                            .then(createdUser => {
+                                return done(null, createdUser);
                             }).catch(err => {
                                 throw err;
                             });
                     }
-
-                    return done(null, user); // user found, return that user
-                } else {
-                    // if there is no user, create 
-                    let newUser = new User();
-
-                    newUser.google.id    = profile.id;
-                    newUser.google.token = token;
-                    newUser.google.name  = profile.displayName;
-                    newUser.google.email = profile.emails[0].value; // pull the first email
-
-                    newUser.save()
-                        .then(createdUser => {
-                            return done(null, createdUser);
-                        }).catch(err => {
-                            throw err;
-                        });
-                }
+                }).catch(err => {
+                    return done(err);
+                });
             } else {
                 // user already exists and is logged in, we have to link accounts
-                let user = req.user; // pull the user out of the session
-
+                var user          = req.user; // pull the user out of the session
                 user.google.id    = profile.id;
                 user.google.token = token;
                 user.google.name  = profile.displayName;
@@ -283,13 +281,15 @@ module.exports = (passport) => {
                     .then(updatedUser => {
                         return done(null, updatedUser);
                     }).catch(err => {
-                        throw err;
+                        return done(err);
                     });
             }
-        } catch (error) {
-            return done(error);
-        }
+        });
     }));
+                
+
+            
+
 
     
     console.log("[PASSPORT] Startegies initialized.");

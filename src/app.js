@@ -50,8 +50,9 @@ console.log('[APP] Launching...');
   // session
   app.use(session({
       secret: SESSION_SECRET,
-      resave: false,
-      saveUninitialized: true,
+      rolling: true,
+      resave: true, 
+      saveUninitialized: false,
       cookie: { maxAge: 24 * 60 * 60 * 1000 }
   }));
 
@@ -80,7 +81,7 @@ console.log('[APP] Launching...');
 
 // ########################## REST API ##########################
   // auth routes
-  app.use('/api/', require('./routers/auth.router'));
+  app.use(require('./routers/auth.router'));
 
   // battles routes
   app.use('/api/battles', require('./routers/battles.router'));
@@ -122,7 +123,7 @@ console.log('[APP] Launching...');
 
 
 // error handler
-  app.use(errorHandler);
+  //app.use(errorHandler);
 
 
 module.exports = app;

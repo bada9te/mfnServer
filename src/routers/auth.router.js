@@ -3,6 +3,7 @@
 
 const express = require('express');
 const passport = require('passport');
+const config = require('../config');
 
 
 const authRouter = express.Router();
@@ -11,6 +12,13 @@ const authRouter = express.Router();
 authRouter.get('/logout', function(req, res) {
     req.logout();
     res.redirect('/');
+});
+
+authRouter.get("/auth/current-user", (req,res) => {
+    return res.status(200).json({
+        done: req.user ? true : false,
+        user: req.user,
+    });
 });
 
 
@@ -50,10 +58,9 @@ authRouter.get('/logout', function(req, res) {
     }));
 
 
-// google ---------------------------------
-    authRouter.get('/auth/google', passport.authenticate('google', { scope : ['profile', 'email'] }));
+    authRouter.get('/auth/google', passport.authenticate('google', { scope: [ 'email', 'profile' ] }));
     authRouter.get('/auth/google/callback', passport.authenticate('google', {
-        successRedirect : '/',
+        successRedirect : config.base.clientBase,
         failureRedirect : '/login'
     }));
 
