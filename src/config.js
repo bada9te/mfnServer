@@ -1,4 +1,5 @@
-require('dotenv').config();
+require('dotenv-expand').expand(require('dotenv').config())
+
 
 module.exports = {
     base: {

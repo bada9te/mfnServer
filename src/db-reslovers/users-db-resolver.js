@@ -1,7 +1,8 @@
 const usersModel = require('../models/users/users.model');
 const moderationModel = require('../models/moderation/moderation.model');
-const bcrypt = require('bcrypt');
 const sendMail = require('../utils/mailer/nodemailer');
+const bcrypt = require('bcrypt-nodejs');
+
 
 
 const generateRandomString = async() => Math.floor(Math.random() * Date.now()).toString(36);
@@ -12,8 +13,8 @@ const addUserDB = async(user) => {
     if (checkUser) {
         throw new Error("User with this email already exists");
     }
-
-    user.password = await bcrypt.hash(user.password, 10);
+    
+    user.password = bcrypt.hashSync(user.password, bcrypt.genSaltSync(8), null);
 
     let createdUser;
     await usersModel.addUser(user).then(async(data) => {

@@ -125,5 +125,5 @@ authRouter.get('/logout', function(req, res) {
     });
 
 
-
+module.exports = authRouter;
 
