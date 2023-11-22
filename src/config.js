@@ -1,32 +1,32 @@
+require('dotenv').config();
+
 module.exports = {
     base: {
-        port: 8000,
-        clientBase: 'http://localhost:3000',
-        cookieAccess1: 'ca1',
-        cookieAccess2: 'ca2',
-        sessionSecret: 'ss3',
-        envType: 'development'
+        port:          process.env.PORT,
+        clientBase:    process.env.CLIENT_BASE,
+        cookieAccess1: process.env.COOKIE_ACCESS_1,
+        cookieAccess2: process.env.COOKIE_ACCESS_2,
+        sessionSecret: process.env.SESSION_SECRET,
+        envType:       process.env.ENV_TYPE,
     },
     mongo: {
-        url: 'mongodb://127.0.0.1:27017'
+        url: process.env.MONGO_URL,
     },
     passport: {
-        facebookAuth : {
-            clientID	 : 'your-secret-clientID-here', // your App ID
-            clientSecret : 'your-client-secret-here', // your App Secret
-            callbackURL  : 'http://localhost:8080/auth/facebook/callback'
+        facebookAuth: {
+            clientID:     process.env.AUTH_FACEBOOK_CLIENT_ID,
+            clientSecret: process.env.AUTH_FACEBOOK_CLIENT_SECRET,
+            callbackURL:  process.env.AUTH_FACEBOOK_CALLBACK_URL,
         },
-    
-        twitterAuth : {
-            consumerKey    : 'your-consumer-key-here',
-            consumerSecret : 'your-client-secret-here',
-            callbackURL	   : 'http://localhost:8080/auth/twitter/callback'
+        twitterAuth: {
+            consumerKey:    process.env.AUTH_TWITTER_CONSUMER_KEY,
+            consumerSecret: process.env.AUTH_TWITTER_CONSUMER_SECRET,
+            callbackURL:    process.env.AUTH_TWITTER_CALLBACK_URL,
         },
-    
-        googleAuth : {
-            clientID     : 'your-secret-clientID-here',
-            clientSecret : 'your-client-secret-here',
-            callbackURL  : 'http://localhost:8080/auth/google/callback'
+        googleAuth: {
+            clientID:     process.env.AUTH_GOOGLE_CLIENT_ID,
+            clientSecret: process.env.AUTH_GOOGLE_CLIENT_SECRET,
+            callbackURL:  process.env.AUTH_GOOGLE_CALLBACK_URL,
         }
     },
 };

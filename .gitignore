@@ -5,7 +5,6 @@
 /certificate
 /node_modules
 /src/utils/rsa/id_rsa*.pem
-/src/config.js
 /.pnp
 .pnp.js
 

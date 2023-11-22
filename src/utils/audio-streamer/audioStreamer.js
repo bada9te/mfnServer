@@ -3,9 +3,12 @@ const path = require("path");
 const config = require('../../config');
 
 
-const initAudioStreamer = (app) => {
+const CLIENT_BASE = config.base.clientBase;
+
+
+module.exports = (app) => {
     app.get('/api/uploads/audios/:file', (req, res) => {
-        if (config.base.clientBase.split(', ').indexOf(req.get('Origin'))) {
+        if (CLIENT_BASE.split(', ').indexOf(req.get('Origin'))) {
             return res.status(403).end();
         }
         
@@ -50,6 +53,3 @@ const initAudioStreamer = (app) => {
         }
     });
 }
-
-
-module.exports = initAudioStreamer;

@@ -1,13 +1,12 @@
 const path = require('path');
 const cors = require('cors');
-//const helmet = require('helmet');
-//const morgan = require('morgan');
 const express = require('express');
 const passport = require('passport');
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
 const errorHandler = require('./middleware/errorHandler');
 const config = require('./config');
+
 
 
 console.log('[APP] Launching...');
@@ -17,18 +16,14 @@ console.log('[APP] Launching...');
 
 // ########################### BASE ###########################
   // app config
-  const appConfig = {
-    //COOKIE_ACCESS_1: config.base.cookieAccess1,
-    //COOKIE_ACCESS_2: config.base.cookieAccess2,
-    CLIENT_BASE:     config.base.clientBase,
-    SESSION_SECRET:  config.base.sessionSecret,
-  };
-  
+  const CLIENT_BASE    = config.base.clientBase;
+  const SESSION_SECRET = config.base.sessionSecret
+
   // express app
   const app = express();
 
   // cors
-  const whitelist = [...appConfig.CLIENT_BASE.split(', '), 'https://studio.apollographql.com'];
+  const whitelist = [...CLIENT_BASE.split(', '), 'https://studio.apollographql.com'];
   console.log(`[CORS] Origins in whitelist: `, whitelist)
   app.use(cors({
     origin: function (origin, callback) {
@@ -51,7 +46,7 @@ console.log('[APP] Launching...');
 // ######################## AUTH SESSION ########################
   // session
   app.use(session({
-      secret: appConfig.SESSION_SECRET,
+      secret: SESSION_SECRET,
       resave: false,
       saveUninitialized: true,
       cookie: { maxAge: 24 * 60 * 60 * 1000 }
