@@ -23,11 +23,10 @@ const deleteAction = async(userId, actionId, verifyToken, actionType) => {
 }
 
 // check
-const validateAction = async(userId, actionId, verifyToken, actionType) => {
+const validateAction = async(userId, actionId, actionType) => {
     return await Moderation.findOne({
         _id: actionId,
         user: userId,
-        verifyToken: verifyToken,
         type: actionType,
     })
     .catch(err => {

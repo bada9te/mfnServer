@@ -15,6 +15,7 @@ authRouter.get('/logout', function(req, res) {
 });
 
 authRouter.get("/auth/current-user", (req,res) => {
+    console.log(req.user)
     return res.status(200).json({
         done: req.user ? true : false,
         user: req.user,
@@ -30,14 +31,12 @@ authRouter.get("/auth/current-user", (req,res) => {
 // local --------------------------------
     // login
     authRouter.post('/login', passport.authenticate('local-login', {
-        successRedirect : '/', 
-        failureRedirect : '/login',
+        successRedirect : config.base.clientBase, // CORS ERR
         failureFlash : true // allow flash messages
     }));
     // register
     authRouter.post('/register', passport.authenticate('local-signup', {
-        successRedirect : '/', 
-        failureRedirect : '/register',
+        successRedirect : config.base.clientBase, // CORS ERR
         failureFlash : true // allow flash messages
     }));
     

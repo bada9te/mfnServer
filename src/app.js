@@ -23,7 +23,7 @@ console.log('[APP] Launching...');
   const app = express();
 
   // cors
-  const whitelist = [...CLIENT_BASE.split(', '), 'https://studio.apollographql.com'];
+  const whitelist = [CLIENT_BASE, 'https://studio.apollographql.com'];
   console.log(`[CORS] Origins in whitelist: `, whitelist)
   app.use(cors({
     origin: function (origin, callback) {

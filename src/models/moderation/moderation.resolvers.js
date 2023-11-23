@@ -2,6 +2,12 @@ const { validateModerateActionDB, deleteModerateActionDB, createModerationAction
 const exec = require("../../db-reslovers/execGQL");
 
 module.exports = {
+    Query: {
+        moderationActionValidate: async(_, { input }) => {
+            const { userId, actionId, type } = input;
+            return await exec(() => validateModerateActionDB(userId, actionId, type));
+        }
+    },
     Mutation: {
         moderationActionCreate: async(_, { input }) => {
             return await exec(() => createModerationActionDB(input));
@@ -10,9 +16,5 @@ module.exports = {
             const { userId, actionId, verifyToken, type } = input;
             return await exec(() => deleteModerateActionDB(userId, actionId, verifyToken, type));
         },
-        moderationActionValidate: async(_, { input }) => {
-            const { userId, actionId, verifyToken, type } = input;
-            return await exec(() => validateModerateActionDB(userId, actionId, verifyToken, type));
-        }
     }
 }

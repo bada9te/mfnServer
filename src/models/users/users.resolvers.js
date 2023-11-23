@@ -1,53 +1,96 @@
-const exec = require("../../db-reslovers/execGQL");
-const { getAllUsersDB, getUserByEmailDB, getUserByIdDB, getUsersByIdsDB, getUsersByNicknameDB, addUserDB, deleteUserByIdDB, switchSubscriptionOnUserDB, updateUserDB, confirmAccountDB, restoreAccountDB, prepareAccountToRestoreDB } = require("../../db-reslovers/users-db-resolver");
+const usersModel = require('../../models/users/users.model');
+const moderationModel = require('../../models/moderation/moderation.model');
+const sendMail = require('../../utils/mailer/nodemailer');
+const bcrypt = require('bcrypt-nodejs');
+
 
 module.exports = {
     Query: {
         users: async() => {
-            return await exec(getAllUsersDB);
+            return await usersModel.getAllUsers();;
         },
         userByEmail: async(_, { email }) => {
-            return await exec(() => getUserByEmailDB(email));
+            return await usersModel.getUserByEmail(email);
         }, 
         user: async(_, { _id }) => {
-            return await exec(() => getUserByIdDB(_id));
+            return await usersModel.getUserById(_id);
         },
         usersByIds: async(_, { ids }) => {
-            return await exec(() => getUsersByIdsDB(ids));
+            return await usersModel.getUsersByIds(ids);
         },
         usersByNickname: async(_, { nick }) => {
-            return await exec(() => getUsersByNicknameDB(nick));
+            return await usersModel.getByNickname(nick);
         },
     },
     Mutation: {
         userDeleteById: async(_, { _id }) => {
-            return await exec(() => deleteUserByIdDB(_id));
+            return await usersModel.deleteUserById(_id);
         },
         userUpdate: async(_, { input }) => {
             const { _id, what, value } = input;
-            return await exec(() => updateUserDB(_id, value, what));
+            return await usersModel.updateUser(_id, value, what);
         },
         userSwitchSubscription: async(_, { input }) => {
             const { userId, subscriberId } = input;
-            return await exec(() => switchSubscriptionOnUserDB(userId, subscriberId));
+            return {
+                user1: await usersModel.switchSubscriptionOnUser(subscriberId, userId),
+                user2: await usersModel.switchSubscribedOnUser(subscriberId, userId)
+            };
         },
         userConfirmAccount: async(_, { input }) => {
             const { userId, actionId, verifyToken } = input;
-            return await exec(() => confirmAccountDB(userId, actionId, verifyToken));
+            const action = await moderationModel.validateAction(userId, actionId, verifyToken, 'verify');
+            const user = await usersModel.confirmAccount(userId);
+            if (action && user) {
+                await moderationModel.deleteAction(userId, actionId, verifyToken, 'verify');
+            }
+            return { action, user };
         },
         userRestoreAccount: async(_, { input }) => {
             const { userId, actionId, verifyToken, type } = input;
-            return await exec(() => restoreAccountDB(userId, actionId, verifyToken, type));
+            const action = await moderationModel.validateAction(userId, actionId, verifyToken, type);
+            let affectedUser;
+            if (action) {
+                // TODO: FIX req.body.newValue
+                let newValue = req.body.newValue;
+                if (type === "password") {
+                    newValue = bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
+                }
+                await usersModel.restoreAccount(userId, newValue, type).then(async(user) => {
+                    affectedUser = user;
+                    await moderationModel.deleteAction(userId, actionId, verifyToken, type);
+                    sendMail.sendInfoEmail(
+                        user.email,
+                        user.nick,
+                        `Your account ${type} was successfully updated.`  
+                    );
+                });
+            }
+
+            return { action, user: affectedUser };
         },
         userPrepareAccountToRestore: async(_, { input }) => {
             const { email, type } = input;
-            return await exec(() => prepareAccountToRestoreDB(email, type));
-        },
+            const user = await usersModel.getUserByEmail(email);
+            let createdAction;
+            if (user) {
+                const verifyToken = await generateRandomString();
+                await moderationModel.createAction({
+                    user: user._id,
+                    type: type,
+                    createdAt: new Date().toISOString(),
+                    verifyToken: verifyToken,
+                }).then((action) => {
+                    createdAction = action[0];
+                    sendMail.sendRestoreEmail(
+                        user.email,
+                        user.nick,
+                        `${process.env.CLIENT_BASE}/account-restore/${user._id}/${action[0]._id}/${verifyToken}/${type}`,
+                    );
+                });
+            }
 
-        login: async(_, { email, password }, context) => {
-            const { user } = await context.authenticate('graphql-local', { email, password });
-            await context.login(user);
-            return user;
+            return { action: createdAction, user };
         },
     }
 }

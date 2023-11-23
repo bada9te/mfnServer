@@ -9,11 +9,8 @@ const createModerationActionDB = async(action) => {
     }
 
     let createdAction;
-    await moderationModel.createAction(action).then((actionData) => {
-        createdAction = actionData;
-        if (action.type === "emailChange") {
-            //sendMail.sendChangeEmail(user.email, user.nick, newValue, );
-        }
+    await moderationModel.createAction(action).then(data => {
+        createdAction = data[0];
     });
     return createdAction;
 }

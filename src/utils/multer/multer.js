@@ -58,7 +58,7 @@ module.exports = (app) => {
 
 
     // one input file upload route
-    app.post('/api/upload-single', upload.single('file'), (req, res, next) => {
+    app.post('/upload-single', upload.single('file'), (req, res, next) => {
         const file = req.file;
 
         if (!file) {
@@ -77,7 +77,7 @@ module.exports = (app) => {
 
     
     // multi-inputs file upload
-    app.post('/api/upload-multiple', (req, res) => {
+    app.post('/upload-multiple', (req, res) => {
         multi_upload(req, res, function (err) {
             if (err instanceof multer.MulterError) {
                 // A Multer error occurred when uploading.
