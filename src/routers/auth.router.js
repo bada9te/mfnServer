@@ -53,7 +53,7 @@ authRouter.get("/auth/current-user", (req,res) => {
 // twitter --------------------------------
     authRouter.get('/auth/twitter', passport.authenticate('twitter', { scope : 'email' }));
     authRouter.get('/auth/twitter/callback', passport.authenticate('twitter', {
-        successRedirect : '/',
+        successRedirect : config.base.clientBase,
         failureRedirect : '/login'
     }));
 

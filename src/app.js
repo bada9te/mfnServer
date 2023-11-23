@@ -63,6 +63,9 @@ console.log('[APP] Launching...');
   app.use(passport.session());
   require('./utils/passport/passport')(passport);
 
+  // auth routes
+  app.use(require('./routers/auth.router'));
+
 
 // ############################ CRON ############################
   // cron jobs
@@ -79,43 +82,11 @@ console.log('[APP] Launching...');
   require('./utils/multer/multer')(app);
 
 
-// ########################## REST API ##########################
-  // auth routes
-  app.use(require('./routers/auth.router'));
-
-  // battles routes
-  app.use('/api/battles', require('./routers/battles.router'));
-
-  // posts routes
-  app.use('/api/posts', require('./routers/posts.router'));
-
-  // users routes
-  app.use('/api/users', require('./routers/users.router'));
-
-  // comments routes
-  app.use('/api/comments', require('./routers/comments.router'));
-
-  // notifications routes
-  app.use('/api/notifications', require('./routers/notifications.router'));
-
-  // reports routes
-  app.use('/api/reports', require('./routers/reports.router'));
-
-  // reports routes
-  app.use('/api/moderation', require('./routers/moderation.router'));
-
-  // support requests routes
-  app.use('/api/support-requests', require('./routers/support-requests.router'));
-
-  // playlists
-  app.use('/api/playlists', require('./routers/playlists.router'));
-
-
 // ########################### FILES ############################
 // files
-  app.use('/api/uploads/images', express.static(path.join(__dirname, '..', 'uploads', 'images')));
-  app.use('/api/uploads/audios', express.static(path.join(__dirname, '..', 'uploads', 'audios')));
-  app.use('/api/uploads/others', express.static(path.join(__dirname, '..', 'uploads', 'others')));
+  app.use('/uploads/images', express.static(path.join(__dirname, '..', 'uploads', 'images')));
+  app.use('/uploads/audios', express.static(path.join(__dirname, '..', 'uploads', 'audios')));
+  app.use('/uploads/others', express.static(path.join(__dirname, '..', 'uploads', 'others')));
 
 
 // ########################## GRAPHQL ###########################

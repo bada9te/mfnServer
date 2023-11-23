@@ -166,42 +166,45 @@ module.exports = (passport) => {
         callbackURL     : configAuth.twitterAuth.callbackURL,
         passReqToCallback: true // allows us to pass in the req from our route (lets us check if a user is logged in or not)
     }, async(req, token, tokenSecret, profile, done) => {
-        try {
+        process.nextTick(function() {
             if (!req.user) {
-                const user = User.findOne({ 'twitter.id' : profile.id });
-
-                if (user) {
-                    // if there is a user id already but no token (user was linked at one point and then removed)
-                    if (!user.twitter?.token) {
-                        user.twitter.token       = token;
-                        user.twitter.username    = profile.username;
-                        user.twitter.displayName = profile.displayName;
-
-                        user.save
-                            .then(updatedUser => {
-                                return done(null, updatedUser);
+                User.findOne({ 'twitter.id' : profile.id }).then(user => {
+                    if (user) {
+                        // if there is a user id already but no token (user was linked at one point and then removed)
+                        if (!user.twitter?.token) {
+                            user.twitter.token       = token;
+                            user.twitter.username    = profile.username;
+                            user.twitter.displayName = profile.displayName;
+    
+                            user.save
+                                .then(updatedUser => {
+                                    return done(null, updatedUser);
+                                }).catch(err => {
+                                    throw err;
+                                });
+                        }
+    
+                        return done(null, user); // user found, return that user
+                    } else {
+                        // if there is no user, create 
+                        let newUser = new User();
+                        newUser.nick                = profile.displayName
+                        newUser.twitter.id          = profile.id;
+                        newUser.twitter.token       = token;
+                        newUser.twitter.username    = profile.username;
+                        newUser.twitter.displayName = profile.displayName;
+    
+                        newUser.save()
+                            .then(createdUser => {
+                                return done(null, createdUser);
                             }).catch(err => {
                                 throw err;
                             });
                     }
+                }).catch(err => {
+                    return done(err);
+                });
 
-                    return done(null, user); // user found, return that user
-                } else {
-                    // if there is no user, create 
-                    let newUser = new User();
-
-                    newUser.twitter.id          = profile.id;
-                    newUser.twitter.token       = token;
-                    newUser.twitter.username    = profile.username;
-                    newUser.twitter.displayName = profile.displayName;
-
-                    newUser.save()
-                        .then(createdUser => {
-                            return done(null, createdUser);
-                        }).catch(err => {
-                            throw err;
-                        });
-                }
             } else {
                 // user already exists and is logged in, we have to link accounts
                 let user = req.user; // pull the user out of the session
@@ -218,9 +221,7 @@ module.exports = (passport) => {
                         throw err;
                     });
             }
-        } catch (error) {
-            return done(error);
-        }
+        });
     }));
     
     // =========================================================================
