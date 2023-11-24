@@ -1,9 +1,9 @@
-const User = require('../../models/users/users.mongo');
+const User             = require('../models/users/users.mongo');
 const LocalStrategy    = require('passport-local').Strategy;
 const FacebookStrategy = require('passport-facebook').Strategy;
 const TwitterStrategy  = require('passport-twitter').Strategy;
 const GoogleStrategy   = require('passport-google-oauth').OAuth2Strategy;
-const configAuth = require('../../config').passport;
+const configAuth = require('../config').passport;
 
 
 module.exports = (passport) => {

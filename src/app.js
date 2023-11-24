@@ -45,11 +45,11 @@ console.log('[APP] Launching...');
 // ######################## AUTH SESSION ########################
   // session
   app.use(session({
-      secret: SESSION_SECRET,
-      rolling: true,
-      resave: true, 
-      saveUninitialized: false,
-      cookie: { maxAge: 24 * 60 * 60 * 1000 }
+    secret: SESSION_SECRET,
+    rolling: true,
+    resave: true, 
+    saveUninitialized: false,
+    cookie: { maxAge: 24 * 60 * 60 * 1000 }
   }));
 
 
@@ -57,7 +57,7 @@ console.log('[APP] Launching...');
   // passport init
   app.use(passport.initialize());
   app.use(passport.session());
-  require('./utils/passport/passport')(passport);
+  require('./middleware/passport')(passport);
 
   // auth routes
   app.use(require('./routers/auth.router'));
@@ -70,12 +70,12 @@ console.log('[APP] Launching...');
   
 // ######################## AUDIO_STREAM ########################
   // audio streamer
-  require('./utils/audio-streamer/audioStreamer')(app);
+  app.use(require('./routers/audio-stream.router'));
 
 
 // #################### MULTER - FILE_UPLOAD ####################
   // file upload
-  require('./utils/multer/multer')(app);
+  app.use(require('./routers/file-upload.router'));
 
 
 // ########################### FILES ############################
