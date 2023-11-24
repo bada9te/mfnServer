@@ -1,30 +1,37 @@
-const { getAllNotificationsByIdsDB, createNotificationDB, deleteNotificationByIdDB, deleteNotificationsByIdsDB, markNotificationAsReadByIdDB, markNotificationsAsReadByIdsDB, getAllNotificationsDB } = require("../../db-reslovers/notifications-db-resolver");
-const exec = require("../../db-reslovers/execGQL");
+const notificationsModel = require('../../models/notifications/notifications.model');
 
 module.exports = {
     Query: {
         notifications: async(_, { receiverId, checked }) => {
-            return await exec(() => getAllNotificationsDB(receiverId, checked));
+            if (checked) {
+                return await notificationsModel.getAllReadNotifications(receiverId);
+            } else {
+                return await notificationsModel.getAllUnreadNotifications(receiverId);
+            }
         },
         notificationsByIds: async(_, { ids }) => {
-            return await exec(() => getAllNotificationsByIdsDB(ids));
+            return await notificationsModel.getAllNotificationsByIds(ids);
         }
     },
     Mutation: {
         notificationCreate: async(_, { input }) => {
-            return await exec(() => createNotificationDB(input));
+            let createdNotification;
+            await notificationsModel.createNotification(input).then(data => {
+                createdNotification = data[0];
+            });
+            return createdNotification;
         },
         notificationDeleteById: async(_, { _id }) => {
-            return await exec(() => deleteNotificationByIdDB(_id));
+            return await notificationsModel.deleteNotificationById(_id);
         },
         notificationsDeleteByIds: async(_, { ids }) => {
-            return await exec(() => deleteNotificationsByIdsDB(_id));
+            return await notificationsModel.deleteNotificationsByIds(ids);
         },
         notificationMarkAsReadById: async(_, { _id }) => {
-            return await exec(() => markNotificationAsReadByIdDB(_id));
+            return await notificationsModel.markNotificationAsRead(_id);
         },
         notificationsMarkAsReadByIds: async(_, { ids }) => {
-            return await exec(() => markNotificationsAsReadByIdsDB(ids));
+            return await notificationsModel.markNotificationsAsRead(ids);
         }
     }
 }

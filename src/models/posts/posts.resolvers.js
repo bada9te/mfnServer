@@ -1,47 +1,67 @@
-const { getPostByIdDB, getAllPostsDB, getAllPostsWithOwnerIdDB, getSavedPostsByUserIdDB, getPostByTitleDB, getManyPostsByIdsDB, addPostDB, updatePostDB, deletePostByIdDB, switchPostLikeDB, swicthPostInSavedDB } = require("../../db-reslovers/posts-db-resolver");
-const exec = require("../../db-reslovers/execGQL");
+const postsModel = require('../../models/posts/posts.model');
 
 
 module.exports = {
     Query: {
         post: async(_, { _id }) => {
-            return await exec(() => getPostByIdDB(_id)); 
+            return await postsModel.getPostById(_id); 
         },
         posts: async(_, { offset, limit }) => {
-            return await exec(() => getAllPostsDB({ offset, limit }));
+            return {
+                posts: await postsModel.getAllPosts({ offset, limit }),
+                count: await postsModel.getDocsCount({}),
+            }
         },
         postsByOwner: async(_, { owner, offset, limit }) => {
-            return await exec(() => getAllPostsWithOwnerIdDB(owner, { offset, limit }));
+            return {
+                posts: await postsModel.getAllWithOwnerId(owner,{ offset, limit }),
+                count: await postsModel.getDocsCount({ owner }),
+            }
         },
         postsSavedByUser: async(_, { user, offset, limit }) => {
-            return await exec(() => getSavedPostsByUserIdDB(user, { offset, limit }));
+            return {
+                posts: await postsModel.getSavedPostsByUserId(user, { offset, limit }),
+                count: await postsModel.getDocsCount({ savedBy: user }),
+            }
         },
         postsByTitle: async(_, { input }) => {
             const { userId, title, userIsOwner } = input;
-            return await exec(() => getPostByTitleDB(title, userId, userIsOwner));
+
+            let posts;
+            if (userId) {
+                posts = await postsModel.getByTitleWithUserId(title, userIsOwner, userId);
+            } else {
+                posts = await postsModel.getByTitle(title);
+            }
+            return posts;
         },
         postsByIds: async(_, { ids }) => {
-            return await exec(() => getManyPostsByIdsDB(ids));
+            return await postsModel.getManyByIds(ids);
         },
     },
     Mutation: {
         postCreate: async(_, { input }) => {
-            return await exec(() => addPostDB(input));
+            let createdPost;
+            await postsModel.addPost(input)
+                .then(data => {
+                    createdPost = data[0];
+                });
+            return createdPost;
         },
         postUpdate: async(_, { input }) => {
             const { post, value, what } = input;
-            return await exec(() => updatePostDB(post, value, what));
+            return await postsModel.updatePost(post, value, what);
         },
         postDeleteById: async(_, { _id }) => {
-            return await exec(() => deletePostByIdDB(_id));
+            return await postsModel.deletePostById(_id);
         },
         postSwitchLike: async(_, { input }) => {
             const { userId, postId } = input;
-            return await exec(() => switchPostLikeDB(userId, postId));
+            return await postsModel.switchIsLiked(postId, userId);
         },
         postSwicthInSaved: async(_, { input }) => {
             const { userId, postId } = input;
-            return await exec(() => swicthPostInSavedDB(userId, postId));
+            return await postsModel.switchInSaved(postId, userId);
         }
     }
 }

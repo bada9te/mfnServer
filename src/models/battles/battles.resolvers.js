@@ -1,10 +1,18 @@
-const { getAllBattlesByStatusDB, addNewBattleDB, deleteBattleDB, makeBattleVoteDB } = require("../../db-reslovers/battles-db-resolver");
-const exec = require("../../db-reslovers/execGQL");
+const battlesModel = require("../../models/battles/battles.model");
+const { createTask } = require("../../utils/cron/cron");
 
 module.exports = {
     Query: {
         battlesByStatus: async(_, { status, offset, limit }) => {
-            return await exec(() => getAllBattlesByStatusDB({offset, limit}, status));
+            if (status === 'running') {
+                status = false;
+            } else {
+                status = true;
+            }
+            return {
+                battles: await battlesModel.getAllBattlesByStatus(status, { offset, limit }),
+                count: await battlesModel.getDocsCount({ finished: status }),
+            }
         }
     },
     Mutation: {
@@ -14,14 +22,23 @@ module.exports = {
             dateEnd.setDate(dateEnd.getDate() + 1);
             battle.willFinishAt = dateEnd.toISOString();
 
-            return await exec(() => addNewBattleDB(battle))
+            let createdBattle;
+            await battlesModel.addBattleByIds(battle.post1, battle.post2, battle.title, battle.createdAt, battle.willFinishAt)
+                    .then(async(insertedBattle) => {
+                        createdBattle = insertedBattle[0];
+                        createTask(createdBattle._id, new Date(createdBattle.willFinishAt), async() => {
+                            console.log(createdBattle._id, "setting battle as finished...")
+                            await battlesModel.setWinnerByBattleId(createdBattle._id);
+                        }, 'finishBattle');
+                    });
+            return createdBattle;
         },
         battleDeleteById: async(_, { _id }) => {
-            return await exec(() => deleteBattleDB(_id));
+            return await battlesModel.deleteBattle(_id);
         },
         battleMakeVote: async(_, { input }) => {
             const { battleId, postNScore, voteCount, voterId } = input;
-            return await exec(() => makeBattleVoteDB(battleId, postNScore, voteCount, voterId));
+            return await battlesModel.updateScore(battleId, postNScore, voteCount, voterId);
         },
     }
 }

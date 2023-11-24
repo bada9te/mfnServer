@@ -1,22 +1,25 @@
-const exec = require("../../db-reslovers/execGQL");
-const { getAllSupportRequestsDB, createSupportRequestDB, closeSupportRequestDB } = require("../../db-reslovers/support-requests-resolver");
-const { getSupportRequestById } = require("./support-requests.model");
+const supportRequestModel = require("./support-requests.model");
 
 module.exports = {
     Query: {
         supportRequests: async() => {
-            return await exec(getAllSupportRequestsDB);
+            return await supportRequestModel.getAllSupportRequests()
         },
         supportRequest: async(_, { _id }) => {
-            return await exec(() => getSupportRequestById(_id));
+            return await supportRequestModel.getSupportRequestById(_id);
         }
     },
     Mutation: {
         supportRequestCreate: async(_, { input }) => {
-            return await exec(() => createSupportRequestDB(input))
+            let createdSupportReq;
+            await supportRequestModel.createSupportRequest(supportRequest)
+                .then(data => {
+                    createdSupportReq = data[0];
+                })
+            return createdSupportReq;
         },
         supportRequestClose: async(_, { _id }) => {
-            return await exec(() => closeSupportRequestDB(_id));
+            return await supportRequestModel.closeSupportRequest(_id);
         },
     }
 }

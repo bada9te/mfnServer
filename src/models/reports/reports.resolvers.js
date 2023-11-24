@@ -1,21 +1,24 @@
-const exec = require("../../db-reslovers/execGQL");
-const { createReportDB, closeReportDB, getAllReportsDB, getReportByIdDB } = require("../../db-reslovers/reports-db-resolver");
+const reportsModel = require('../../models/reports/reports.model');
 
 module.exports = {
     Query: {
         reports: async() => {
-            return await exec(getAllReportsDB);
+            return await reportsModel.getAllReports();
         },
         report: async(_, { _id }) => {
-            return await exec(() => getReportByIdDB(_id));
+            return await reportsModel.getReportById(_id);
         }
     },
     Mutation: {
         reportCreate: async(_, { input }) => {
-            return await exec(() => createReportDB(input));
+            let createdReport;
+            await reportsModel.createReport(input).then(data => {
+                createReportDB = data[0];
+            });
+            return createdReport;
         },
         reportClose: async(_, { _id }) => {
-            return await exec(() => closeReportDB(_id));
+            return await reportsModel.closeReport(_id);
         }
     }
 }

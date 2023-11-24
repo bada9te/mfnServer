@@ -1,22 +1,43 @@
-const { getManyCommentsByIdsDB, getOneCommentByIdDB, addCommentDB, removeCommentByIdDB } = require("../../db-reslovers/comments-db-resolver");
-const exec = require("../../db-reslovers/execGQL");
+const commentsModel = require("../../models/comments/comments.model");
+const postsModel = require("../../models/posts/posts.model");
 
 
 module.exports = {
     Query: {
         commentsByIds: async(_, { ids }) => {
-            return await exec(() => getManyCommentsByIdsDB(ids));
+            return await commentsModel.getAllWithIds(ids);
         },
         comment: async(_, { _id }) => {
-            return await exec(() => getOneCommentByIdDB(_id));
+            return await commentsModel.getById(_id);
         }
     },
     Mutation: {
-        commentCreate: async(_, { input }) => {
-            return await exec(() => addCommentDB(input));
+        commentCreate: async(_, { input: comment }) => {
+            let createdComment;
+            // add comment
+            await commentsModel.addComment(comment).then(async(data) => {
+                // if it is a reply to sb's comment
+                if (comment.isReply) {
+                    const replyingComment = await commentsModel.getById(comment.isReplyTo);
+                    let replies = replyingComment?.replies || [];
+                    replies.push(data[0]._id);
+                    await commentsModel.updateById(replyingComment._id, replies, "replies");
+                } else {
+                    // assign comment to post
+                    await postsModel.addOrRemoveComment(comment.post, data[0]._id);
+                }
+                comment._id = data[0]._id;
+                createdComment = comment;
+            });
+            return createdComment;
         },
         commentDeleteById: async(_, { _id }) => {
-            return await exec(() => removeCommentByIdDB(_id));
+            let removedComment = null;
+            await commentsModel.removeById(_id).then(async(comment) => {
+                removedComment = comment;
+                await postsModel.addOrRemoveComment(comment.post, comment._id);
+            });
+            return removedComment;
         }
     }
 }

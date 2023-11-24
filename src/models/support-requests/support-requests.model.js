@@ -33,7 +33,7 @@ const closeSupportRequest = async(id) => {
 }
 
 // get all
-const getSupportRequestById = async() => {
+const getSupportRequestById = async(id) => {
     return await SupportRequest.findOne({
         _id: id
     })
