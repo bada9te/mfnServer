@@ -30,15 +30,33 @@ authRouter.get("/auth/current-user", (req,res) => {
 
 // local --------------------------------
     // login
-    authRouter.post('/login', passport.authenticate('local-login', {
-        successRedirect : config.base.clientBase, // CORS ERR
-        failureFlash : true // allow flash messages
-    }));
+    authRouter.post('/login', (req, res, next) => {
+        passport.authenticate('local-login', function(err, user, info) {
+            if (err) { return next(err); }
+            if (!user) { 
+                res.status(401);
+                res.end(info.message);
+                return;
+            }
+            req.logIn(user, function(err) {
+                if (err) { return next(err); }
+                return res.status(200).json(user);
+            });
+        })(req, res, next);
+    });
     // register
-    authRouter.post('/register', passport.authenticate('local-signup', {
-        successRedirect : config.base.clientBase, // CORS ERR
-        failureFlash : true // allow flash messages
-    }));
+    authRouter.post('/register', (req, res, next) => {
+        passport.authenticate('local-signup', function(err, user, info) {
+            if (err) { return next(err); }
+            if (!user) { 
+                res.status(401);
+                res.end(info.message);
+                return;
+            }
+            
+            return res.status(201).json(user);
+        })(req, res, next);
+    });
     
 
 // facebook -------------------------------

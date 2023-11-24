@@ -6,7 +6,6 @@ const session      = require('express-session');
 const cookieParser = require('cookie-parser');
 const errorHandler = require('./middleware/errorHandler');
 const config       = require('./config');
-const flash        = require('connect-flash');
 
 
 console.log('[APP] Launching...');
@@ -41,9 +40,6 @@ console.log('[APP] Launching...');
 
   // enable json
   app.use(express.json());
-
-  // use connect-flash for flash messages stored in session
-  app.use(flash());
 
 
 // ######################## AUTH SESSION ########################

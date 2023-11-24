@@ -30,11 +30,11 @@ module.exports = (passport) => {
             const user = await User.findOne({ 'local.email' :  email })
             
             if (!user) {
-                return done(null, false, req.flash('loginMessage', 'No user found.'));
+                return done(null, false, { message: 'No user found.' });
             }
 
             if (!user.validPassword(password)) {
-                return done(null, false, req.flash('loginMessage', 'Wrong password.'));
+                return done(null, false, { message: 'Wrong password.' });
             }
             
             return done(null, user);
@@ -56,7 +56,7 @@ module.exports = (passport) => {
             const existingUser = await User.findOne({ 'local.email': email });
 
             if (existingUser) {
-                return done(null, false, req.flash('signupMessage', 'User with this email already exists.'));
+                return done(null, false, { message: 'User with this email already exists.' });
             }
             
             if (req.user) {

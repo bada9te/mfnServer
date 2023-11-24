@@ -8,15 +8,12 @@ const removeJunkFiles = require('../cleaner/cleaner');
 
 // planned tasks file path and init vars / handlers
 const plannedTasksFilePath = path.join(__dirname, 'plannedTasks.json');
-let currentData = null;
-
+let currentData = JSON.parse(fs.readFileSync(plannedTasksFilePath, 'utf8').toString());;
 // program will not close instantly
 process.stdin.resume();
 
 function exitHandler(options, exitCode) {
-    console.log("[CRON] Saving cron tasks...");
     saveFile();
-    console.log("[CRON] Saved");
     if (exitCode || exitCode === 0) console.log(exitCode);
     if (options.exit) process.exit();
 }
@@ -48,15 +45,11 @@ const initDefaultCronTasks = () => {
     console.log("[CRON] Tasks initialized.")
 }
 
-
-
 // create task
 const createTask = (id, date, cb, taskType) => {
     cron.scheduleJob(date, cb)
-    saveTask({id, date, taskType});
+    currentData.push({id, date, taskType});
 }
-
-
 
 // cancel task
 const cancelTask = (id) => {
@@ -64,16 +57,11 @@ const cancelTask = (id) => {
     currentData.splice(currentData.indexOf(item => item.id === id), 1);
 }
 
-
-
 // read planned tasks after restart
 const applySavedTasks = () => {
-    if (currentData === null) {
-        readFile();
-    }
     // battle ids array
     let battleIdsToRemove = [];
-    
+    // [{"id":"65604f5df640a05008f08fe4","date":"2023-11-25T07:23:09.901Z","taskType":"finishBattle"}]
     // do important staff
     currentData.forEach(task => {
         // battle
@@ -97,18 +85,6 @@ const applySavedTasks = () => {
 
 
 
-// save planned task
-const saveTask = (taskObject) => {
-    if (currentData === null) {
-        readFile();
-    }
-
-    currentData.push(taskObject);
-    console.log(currentData)
-}
-
-
-
 // operate battle ids
 const setBattlesWinnersByIds = async(ids) => {
     for await (const id of ids) {
@@ -125,10 +101,7 @@ const setBattlesWinnersByIds = async(ids) => {
 
 // WRITE FILE
 const saveFile = () => {
-    if (currentData === null) {
-        return;
-    }
-
+    console.log('[CRON] Saving tasks...')
     try {
         fs.writeFileSync(plannedTasksFilePath, JSON.stringify(currentData));
     } catch (err) {
@@ -136,16 +109,6 @@ const saveFile = () => {
     }
 }
 
-
-
-// READ FILE
-const readFile = () => {
-    let data = fs.readFileSync(plannedTasksFilePath, 'utf8').toString();
-    if (!data || data === '') {
-        data = "[]";
-    }
-    currentData = JSON.parse(data);
-}
 
 
 
