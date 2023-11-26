@@ -14,14 +14,19 @@ authRouter.get('/logout', function(req, res) {
     res.redirect('/');
 });
 
-authRouter.get("/auth/current-user", (req,res) => {
-    console.log(req.user)
+authRouter.get("/current-user", (req, res) => {
     return res.status(200).json({
         done: req.user ? true : false,
         user: req.user,
     });
 });
 
+authRouter.post("/update-session-user", (req, res) => {
+    req.logIn(req.body.user, function(err) {
+        if (err) { return next(err); }
+        return res.status(200).json(user);
+    });
+});
 
 // =============================================================================
 // AUTHENTICATE (FIRST LOGIN) ==================================================

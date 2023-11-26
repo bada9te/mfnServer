@@ -26,9 +26,11 @@ module.exports = {
         userDeleteById: async(_, { _id }) => {
             return await usersModel.deleteUserById(_id);
         },
-        userUpdate: async(_, { input }) => {
+        userUpdate: async(_, { input }, context) => {
             const { _id, what, value } = input;
-            return await usersModel.updateUser(_id, value, what);
+            console.log(context)
+            const user = await usersModel.updateUser(_id, value, what);
+            return user;
         },
         userSwitchSubscription: async(_, { input }) => {
             const { userId, subscriberId } = input;
@@ -47,12 +49,11 @@ module.exports = {
             return { action, user };
         },
         userRestoreAccount: async(_, { input }) => {
-            const { userId, actionId, verifyToken, type } = input;
+            const { userId, actionId, verifyToken, type, newValue } = input;
             const action = await moderationModel.validateAction(userId, actionId, verifyToken, type);
             let affectedUser;
             if (action) {
                 // TODO: FIX req.body.newValue
-                let newValue = req.body.newValue;
                 if (type === "password") {
                     newValue = bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
                 }

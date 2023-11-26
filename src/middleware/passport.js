@@ -286,11 +286,7 @@ module.exports = (passport) => {
                     });
             }
         });
-    }));
-                
-
-            
-
+    }));      
 
     
     console.log("[PASSPORT] Startegies initialized.");

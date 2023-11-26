@@ -67,6 +67,7 @@ input AccountRestoreInput {
     actionId: ID!
     verifyToken: String!
     type: String!
+    newValue: String!
 }
 
 input PrepareAccountToRestoreInput {
