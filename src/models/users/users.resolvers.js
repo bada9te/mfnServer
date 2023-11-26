@@ -28,8 +28,8 @@ module.exports = {
         },
         userUpdate: async(_, { input }, context) => {
             const { _id, what, value } = input;
-            console.log(context)
             const user = await usersModel.updateUser(_id, value, what);
+            await context.updateSessionUser(user);
             return user;
         },
         userSwitchSubscription: async(_, { input }) => {
@@ -53,7 +53,6 @@ module.exports = {
             const action = await moderationModel.validateAction(userId, actionId, verifyToken, type);
             let affectedUser;
             if (action) {
-                // TODO: FIX req.body.newValue
                 if (type === "password") {
                     newValue = bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
                 }

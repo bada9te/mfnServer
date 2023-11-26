@@ -1,8 +1,10 @@
+const fs = require('fs');
+const path = require('path');
 const express = require('express');
+const config = require('../config');
 
-
+const CLIENT_BASE = config.base.clientBase;
 const audioStreamerRouter = express.Router();
-
 
 audioStreamerRouter.get('/uploads/audios/:file', (req, res) => {
     if (CLIENT_BASE.split(', ').indexOf(req.get('Origin'))) {
@@ -11,7 +13,7 @@ audioStreamerRouter.get('/uploads/audios/:file', (req, res) => {
     
     const audioFileName = req.params.file;
 
-    const audioPath = path.join(__dirname, '..', '..', '..', 'uploads', 'audios', audioFileName);
+    const audioPath = path.join(__dirname, '..', '..', 'uploads', 'audios', audioFileName);
     const audioStat = fs.statSync(audioPath);
     const audioSize = audioStat.size;
     const audioRange = req.headers.range;

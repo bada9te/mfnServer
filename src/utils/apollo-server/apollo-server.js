@@ -25,10 +25,14 @@ const launchApollo = async(app) => {
     ],
     context: ({req, res}) => {
       return ({
-        res,
         user: req.user,
         logIn: req.logIn,
         logout: req.logout,
+
+        updateSessionUser: async(user) => {
+          req.session.passport.user = user;
+          req.session.save()
+        },
       });
     }
   });
