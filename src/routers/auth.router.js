@@ -10,8 +10,11 @@ const authRouter = express.Router();
 
 // logout
 authRouter.get('/logout', function(req, res) {
-    req.logout();
-    res.redirect('/');
+    req.logout((err) => {
+        err && console.log('Logout error:', err);
+    });
+    //res.redirect(config.base.clientBase)
+    res.end();
 });
 
 authRouter.get("/current-user", (req, res) => {
