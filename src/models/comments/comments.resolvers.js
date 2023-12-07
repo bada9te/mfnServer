@@ -26,7 +26,7 @@ module.exports = {
                     // assign comment to post
                     await postsModel.addOrRemoveComment(comment.post, data[0]._id);
                 }
-                comment._id = data[0]._id;
+                comment = {...comment, ...data[0]._doc}
                 createdComment = comment;
             });
             return createdComment;

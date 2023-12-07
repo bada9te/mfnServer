@@ -3,7 +3,7 @@ const Comments = require('./comments.mongo');
 
 // add
 const addComment = async(comment) => {
-    return await Comments.insertMany([comment])
+    return await Comments.insertMany([comment], { populate: ["owner", "post"] })
     .catch((err) => {
         throw new Error(err)
     });
