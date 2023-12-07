@@ -3,7 +3,7 @@ const Playlist = require("./playlists.mongo");
 
 // create
 const createPlaylist = async(playlist) => {
-    return await Playlist.insertMany(playlist)
+    return await Playlist.insertMany([playlist], { populate: "owner" })
     .catch(err => {
         throw new err(err);
     });
