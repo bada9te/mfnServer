@@ -9,6 +9,13 @@ module.exports = {
         },
         comment: async(_, { _id }) => {
             return await commentsModel.getById(_id);
+        },
+        commentReplies: async(_, { _id }) => {
+            const data = await commentsModel.getCommentReplies(_id);
+            return data.replies;
+        },
+        commentsByPostId: async(_, { _id }) => {
+            return await commentsModel.getCommentsByPostId(_id);
         }
     },
     Mutation: {

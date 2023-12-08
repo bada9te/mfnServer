@@ -1,3 +1,4 @@
+const { populate } = require('./comments.mongo');
 const Comments = require('./comments.mongo');
 
 
@@ -64,6 +65,29 @@ const getAllWithIds = async(ids) => {
 }
 
 
+const getCommentReplies = async(id) => {
+    return await Comments.findById(
+        id, 
+        { populate: "replies" }
+    ).select({ 
+        "replies": 1, 
+        "_id": 0,
+        "__v": 0,
+        "owner": 0,
+    }).catch(err => {
+        throw new Error(err);
+    })
+}
+
+const getCommentsByPostId = async(postId) => {
+    return await Comments.find({
+        post: postId
+    }).catch(err => {
+        throw new Error(err);
+    })
+}
+
+
 
 module.exports = {
     addComment,
@@ -72,4 +96,6 @@ module.exports = {
     updateById,
     removeManyByIds,
     getAllWithIds,
+    getCommentReplies,
+    getCommentsByPostId,
 }

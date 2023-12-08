@@ -1,13 +1,15 @@
 type Query {
     comment(_id: ID!): Comment!
     commentsByIds(ids: [ID!]!): [Comment!]
+    commentReplies(_id: ID!): [Comment!]
+    commentsByPostId(_id: ID!): [Comment!]
 }
 
 type Comment {
     _id: ID!
     owner: User!
     text: String!
-    isReply: Boolean!
+    isReply: Boolean
     replies: [Comment!]
     post: Post!
     createdAt: String!
