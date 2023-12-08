@@ -8,6 +8,11 @@ const commentsSchema = mongoose.Schema({
         ref: 'User',
         autopopulate: true,
     },
+    receiver: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        autopopulate: true, 
+    },
     text: {
         type: String,
         required: true,

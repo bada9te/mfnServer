@@ -7,7 +7,8 @@ type Query {
 
 type Comment {
     _id: ID!
-    owner: User!
+    owner: User
+    receiver: User
     text: String!
     isReply: Boolean
     replies: [Comment!]
@@ -22,6 +23,7 @@ type Mutation {
 
 input AddCommentInput {
     owner: ID!
+    receiver: ID
     text: String!
     isReply: Boolean!
     isReplyTo: ID
