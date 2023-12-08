@@ -5,8 +5,8 @@ type Query {
 type Battle {
     _id: ID!
     title: String!
-    post1: Post!
-    post2: Post!
+    post1: Post
+    post2: Post
     post1Score: Int!
     post2Score: Int!
     winner: Post
