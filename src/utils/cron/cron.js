@@ -3,20 +3,20 @@ const path = require('path');
 const cron = require("node-schedule");
 const battlesModel = require('../../models/battles/battles.model');
 const removeJunkFiles = require('../cleaner/cleaner');
-
+require('dotenv').config();
 
 
 // planned tasks file path and init vars / handlers
 const plannedTasksFilePath = path.join(__dirname, 'plannedTasks.json');
 let currentData = JSON.parse(fs.readFileSync(plannedTasksFilePath, 'utf8').toString());;
-// program will not close instantly
-process.stdin.resume();
+
 
 function exitHandler(options, exitCode) {
     saveFile();
     if (exitCode || exitCode === 0) console.log(exitCode);
     if (options.exit) process.exit();
 }
+
 
 // do something when app is closing
 process.on('exit', exitHandler.bind(null, {exit:true}));
@@ -35,14 +35,21 @@ process.on('uncaughtException', exitHandler.bind(null, {exit:true}));
 
 // init
 const initDefaultCronTasks = () => {
-    // default task
-    cron.scheduleJob("automated_cleaner", '0 * * * *', () => {
-        removeJunkFiles();
-    });
-    // apply saved
-    applySavedTasks();
-    // notify
-    console.log("[CRON] Tasks initialized.")
+    if (process.env.ENV_TYPE === "test") {
+        console.log('[CRON] Skipping because of TEST env.')
+    } else {
+        // program will not close instantly
+        process.stdin.resume();
+        
+        // default task
+        cron.scheduleJob("automated_cleaner", '0 * * * *', () => {
+            removeJunkFiles();
+        });
+        // apply saved
+        applySavedTasks();
+        // notify
+        console.log("[CRON] Tasks initialized.")
+    }
 }
 
 // create task
