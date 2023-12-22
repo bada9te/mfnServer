@@ -11,35 +11,13 @@ const plannedTasksFilePath = path.join(__dirname, 'plannedTasks.json');
 let currentData = JSON.parse(fs.readFileSync(plannedTasksFilePath, 'utf8').toString());;
 
 
-function exitHandler(options, exitCode) {
-    saveFile();
-    if (exitCode || exitCode === 0) console.log(exitCode);
-    if (options.exit) process.exit();
-}
-
-
-// do something when app is closing
-process.on('exit', exitHandler.bind(null, {exit:true}));
-
-// catches ctrl+c event
-process.on('SIGINT', exitHandler.bind(null, {exit:true}));
-
-// catches "kill pid" (for example: nodemon restart)
-process.on('SIGUSR1', exitHandler.bind(null, {exit:true}));
-process.on('SIGUSR2', exitHandler.bind(null, {exit:true}));
-
-// catches uncaught exceptions
-process.on('uncaughtException', exitHandler.bind(null, {exit:true}));
-
-
-
 // init
 const initDefaultCronTasks = () => {
     if (process.env.ENV_TYPE === "test") {
         console.log('[CRON] Skipping because of TEST env.')
     } else {
         // program will not close instantly
-        process.stdin.resume();
+        //process.stdin.resume();
         
         // default task
         cron.scheduleJob("automated_cleaner", '0 * * * *', () => {
@@ -52,24 +30,28 @@ const initDefaultCronTasks = () => {
     }
 }
 
+
 // create task
 const createTask = (id, date, cb, taskType) => {
     cron.scheduleJob(date, cb)
     currentData.push({id, date, taskType});
+    saveFile();
 }
+
 
 // cancel task
 const cancelTask = (id) => {
     cron.cancelJob(id);
     currentData.splice(currentData.indexOf(item => item.id === id), 1);
+    saveFile();
 }
+
 
 // read planned tasks after restart
 const applySavedTasks = () => {
     // battle ids array
     let battleIdsToRemove = [];
-    // [{"id":"65604f5df640a05008f08fe4","date":"2023-11-25T07:23:09.901Z","taskType":"finishBattle"}]
-    // do important staff
+    // do important stuff
     currentData.forEach(task => {
         // battle
         if (task.taskType === "finishBattle") {
@@ -91,7 +73,6 @@ const applySavedTasks = () => {
 }
 
 
-
 // operate battle ids
 const setBattlesWinnersByIds = async(ids) => {
     for await (const id of ids) {
@@ -102,8 +83,8 @@ const setBattlesWinnersByIds = async(ids) => {
         })
         .catch(console.error);
     }
+    saveFile();
 }
-
 
 
 // WRITE FILE
@@ -115,8 +96,6 @@ const saveFile = () => {
         console.log('Error writing plannedTasks.json :' + err.message)
     }
 }
-
-
 
 
 // export all

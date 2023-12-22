@@ -5,7 +5,7 @@
   "main": "src/server.js",
   "scripts": {
     "start": "npx nodemon src/server.js",
-    "test": "cross-env ENV_TYPE=test jest --testTimeout=5000 --runInBand"
+    "test": "cross-env ENV_TYPE=test jest --testTimeout=5000 --runInBand --forceExit --detectOpenHandles --injectGlobals"
   },
   "keywords": [],
   "author": "",

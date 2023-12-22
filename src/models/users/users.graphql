@@ -28,6 +28,7 @@ type UserWithAction {
 }
 
 type Mutation {
+    userCreate(input: AddUserInput!): UserWithAction!
     userDeleteById(_id: ID!): User!
     userUpdate(input: UpdateUserInput!): User!
     userSwitchSubscription(input: SwitchSubscriptionOnUserInput!): TwoUsers!
@@ -40,6 +41,7 @@ type Mutation {
 
 
 input AddUserInput {
+    _id: ID,
     email: String!
     nick: String!
     password: String!

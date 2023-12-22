@@ -10,9 +10,13 @@ const audioExtensions = ['.mp3', '.wav', '.m4a', '.flac', '.pcm', '.ogg', '.oga'
 
 // main 
 const removeJunkFiles = async() => {
-    console.log("[CLEANER] Cleaning junk files...")
-    await cleanJunk().catch(console.error);
-    console.log("[CLEANER] Junk files successfully removed.")
+    if (process.env.ENV_TYPE === "test") {
+        console.log("[CLEANER] Skipping because of TEST env.")
+    } else {
+        console.log("[CLEANER] Cleaning junk files...")
+        await cleanJunk().catch(console.error);
+        console.log("[CLEANER] Junk files successfully removed.")
+    }
 }
 
 // users
