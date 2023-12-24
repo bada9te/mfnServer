@@ -47,9 +47,11 @@ const launchServer = async() => {
     await removeJunkFiles();
 
     // run server
-    SERVER.listen(PORT, () => {
-        console.log(`[APP] Server is running on port ${PORT}...`);
-    });
+    if (process.env.ENV_TYPE !== 'test') {
+        SERVER.listen(PORT, () => {
+            console.log(`[APP] Server is running on port ${PORT}...`);
+        });
+    }
 }
 
 // create folder at path 

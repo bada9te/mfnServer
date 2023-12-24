@@ -1,6 +1,6 @@
 type Query {
     supportRequest(_id: ID!): SupportRequest
-    supportRequests: [SupportRequest!]!
+    supportRequests(offset: Int!, limit: Int!): [SupportRequest!]!
 }
 
 type SupportRequest {

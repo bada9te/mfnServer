@@ -44,13 +44,13 @@ module.exports =  {
         }
     }),
 
-    ALL_USERS_QUERY: {
+    ALL_USERS_QUERY: () => ({
         query: `query users {
             users {
                 _id
             }
         }`,
-    },
+    }),
 
     // get user by id 
     USER_BY_ID_QUERY: (id) => ({

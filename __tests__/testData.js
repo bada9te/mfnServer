@@ -12,7 +12,9 @@ module.exports = {
         nick:     "test",
         password: new User().generateHash("testpassword"),
     },
-    supportRequestId:   new mt(),
+    supportRequest: {
+        _id: new mt(),
+    },
     reportId:           new mt(),
     postId1:            new mt(),
     postId2:            new mt(),

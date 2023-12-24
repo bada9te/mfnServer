@@ -10,8 +10,10 @@ const createSupportRequest = async(supReq) => {
 }
 
 // get all
-const getAllSupportRequests = async() => {
+const getAllSupportRequests = async(range) => {
     return await SupportRequest.find()
+    .skip(range.offset)
+    .limit(range.limit)
     .catch((err) => {
         throw new Error(err);
     });

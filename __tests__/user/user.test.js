@@ -13,19 +13,18 @@ const {
     USER_UPDATE_NICKNAME_MUTATION,
     USER_PREPARE_ACCOUNT_TO_RESTORE_MUTATION,
     USER_DELETE_BY_ID_MUTATION,
-} = require('./part1.gql');
+} = require('./user.gql');
 
 
 const GQL_PATH = '/graphql';
 
-
-describe("Part 1 (Basic user operations)", () => {
+describe("User tests", () => {
     beforeAll(() => {
         require("../../src/server");
     });
 
-    afterAll(() => {
-        mongoose.connection.close();
+    afterAll(async() => {
+        await mongoose.connection.close();
     });
 
     // create user
@@ -52,7 +51,7 @@ describe("Part 1 (Basic user operations)", () => {
     
     // users
     it("Get all users", async() => {
-        const { statusCode } = await request(app).post(GQL_PATH).send(ALL_USERS_QUERY);
+        const { statusCode } = await request(app).post(GQL_PATH).send(ALL_USERS_QUERY());
         expect(statusCode).toBe(200);   
     });
 

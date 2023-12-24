@@ -2,8 +2,8 @@ const supportRequestModel = require("./support-requests.model");
 
 module.exports = {
     Query: {
-        supportRequests: async() => {
-            return await supportRequestModel.getAllSupportRequests()
+        supportRequests: async(_, { offset, limit }) => {
+            return await supportRequestModel.getAllSupportRequests({offset, limit})
         },
         supportRequest: async(_, { _id }) => {
             return await supportRequestModel.getSupportRequestById(_id);
@@ -12,7 +12,7 @@ module.exports = {
     Mutation: {
         supportRequestCreate: async(_, { input }) => {
             let createdSupportReq;
-            await supportRequestModel.createSupportRequest(supportRequest)
+            await supportRequestModel.createSupportRequest(input)
                 .then(data => {
                     createdSupportReq = data[0];
                 })
