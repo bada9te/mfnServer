@@ -18,8 +18,12 @@ module.exports = {
     report: {
         _id: new mt(),
     },
-    postId1:            new mt(),
-    postId2:            new mt(),
+    post1: {
+        _id: new mt(),
+    },
+    post2: {
+        _id: new mt(),
+    },
     playlistId:         new mt(),
     notificationId:     new mt(),
     moderationAction: {

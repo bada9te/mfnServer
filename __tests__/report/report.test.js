@@ -26,7 +26,6 @@ describe("Reports tests", () => {
             //reportedComment: ID
         }
         const { statusCode, body } = await request(app).post(GQL_PATH).send(REPORT_CREATE_MUTATION(report));
-        console.log(body)
         data.report._id = body.data.reportCreate._id;
         expect(statusCode).toBe(200);
         expect(body.data.reportCreate.email).toBe(data.user.email);
