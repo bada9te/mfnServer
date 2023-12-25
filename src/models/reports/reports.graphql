@@ -1,6 +1,6 @@
 type Query {
     report(_id: ID!): Report
-    reports: [Report!]
+    reports(offset: Int!, limit: Int!): [Report!]
 }
 
 type Report {

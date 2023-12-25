@@ -2,8 +2,8 @@ const reportsModel = require('../../models/reports/reports.model');
 
 module.exports = {
     Query: {
-        reports: async() => {
-            return await reportsModel.getAllReports();
+        reports: async(_, { offset, limit }) => {
+            return await reportsModel.getAllReports({ offset, limit });
         },
         report: async(_, { _id }) => {
             return await reportsModel.getReportById(_id);
@@ -13,7 +13,7 @@ module.exports = {
         reportCreate: async(_, { input }) => {
             let createdReport;
             await reportsModel.createReport(input).then(data => {
-                createReportDB = data[0];
+                createdReport = data[0];
             });
             return createdReport;
         },

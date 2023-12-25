@@ -9,8 +9,10 @@ const createReport = async(report) => {
     });
 }
 
-const getAllReports = async() => {
+const getAllReports = async(range) => {
     return await Report.find({})
+    .skip(range.offset)
+    .limit(range.limit)
     .catch((err) => {
         throw new Error(err);
     });

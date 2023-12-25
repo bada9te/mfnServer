@@ -15,7 +15,9 @@ module.exports = {
     supportRequest: {
         _id: new mt(),
     },
-    reportId:           new mt(),
+    report: {
+        _id: new mt(),
+    },
     postId1:            new mt(),
     postId2:            new mt(),
     playlistId:         new mt(),
