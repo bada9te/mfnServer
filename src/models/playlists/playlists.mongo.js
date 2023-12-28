@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 // schema
-const playlistsSchema = new mongoose.Schema({
+const playlistsSchema = mongoose.Schema({
     owner: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
@@ -15,13 +15,13 @@ const playlistsSchema = new mongoose.Schema({
     tracks: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Post',
-        autopopulate: true,
+        //autopopulate: true,
     }],
     public: {
         type: Boolean,
         default: false,
     }
-}, {timestamps: true});
+}, { timestamps: true });
 
 // autopopulate plugin
 playlistsSchema.plugin(require('mongoose-autopopulate'));

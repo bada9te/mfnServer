@@ -1,3 +1,4 @@
+const mongoose = require("mongoose");
 const Playlist = require("./playlists.mongo");
 
 
@@ -19,9 +20,8 @@ const deletePlaylistById = async(id) => {
 
 // append track
 const swicthTrackInPlaylist = async(playlistId, trackId) => {
-    return await Playlist.findOneAndUpdate(
-        { _id: playlistId }, 
-        [{
+    trackId = new mongoose.Types.ObjectId(trackId);
+    return await Playlist.findOneAndUpdate({ _id: playlistId }, [{
             $set: {
                 tracks: {
                     $cond: [

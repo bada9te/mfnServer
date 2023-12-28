@@ -24,7 +24,10 @@ module.exports = {
     post2: {
         _id: new mt(),
     },
-    playlistId:         new mt(),
+    playlist: {
+        _id: new mt(),
+        title: "test"
+    },
     notificationId:     new mt(),
     moderationAction: {
         _id:         new mt(),

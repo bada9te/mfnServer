@@ -11,6 +11,7 @@ const config = require('./config');
 // server config
 const PORT      = config.base.port || 8000;
 const MONGO_URL = config.mongo.url;
+const MONGO_URL_TEST = config.mongo.url_test;
 
 
 // http server
@@ -39,9 +40,9 @@ const launchServer = async() => {
         console.error(`[DB] ${err}`);
     });
 
-    console.log('[DB] Connecting...')
+    console.log(`[DB] Connecting...`)
     // connect mongo
-    await mongoose.connect(MONGO_URL).catch(console.error);
+    await mongoose.connect(config.base.envType !== "test" ? MONGO_URL : MONGO_URL_TEST).catch(console.error);
 
     // clean junk
     await removeJunkFiles();

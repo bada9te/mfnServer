@@ -12,6 +12,7 @@ module.exports = {
     },
     mongo: {
         url: process.env.MONGO_URL,
+        url_test: process.env.MONGO_URL_TEST,
     },
     passport: {
         facebookAuth: {

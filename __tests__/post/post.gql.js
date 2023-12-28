@@ -87,6 +87,7 @@ module.exports = {
         query: `mutation postUpdate($input: UpdatePostInput!) {
             postUpdate(input: $input) {
                 _id
+                title
             }
         }`,
         variables: {
@@ -107,6 +108,9 @@ module.exports = {
         query: `mutation postSwitchLike($input: SwitchLikeOrPostInSavedInput!) {
             postSwitchLike(input: $input) {
                 _id
+                likedBy {
+                    _id
+                }
             }
         }`,
         variables: {
@@ -117,6 +121,9 @@ module.exports = {
         query: `mutation postSwicthInSaved($input: SwitchLikeOrPostInSavedInput!) {
             postSwicthInSaved(input: $input) {
                 _id
+                savedBy {
+                    _id
+                }
             }
         }`,
         variables: {
