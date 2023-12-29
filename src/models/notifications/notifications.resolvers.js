@@ -25,13 +25,15 @@ module.exports = {
             return await notificationsModel.deleteNotificationById(_id);
         },
         notificationsDeleteByIds: async(_, { ids }) => {
-            return await notificationsModel.deleteNotificationsByIds(ids);
+            const data = await notificationsModel.deleteNotificationsByIds(ids)
+            return { count: data.deletedCount };
         },
         notificationMarkAsReadById: async(_, { _id }) => {
             return await notificationsModel.markNotificationAsRead(_id);
         },
         notificationsMarkAsReadByIds: async(_, { ids }) => {
-            return await notificationsModel.markNotificationsAsRead(ids);
+            const data = await notificationsModel.markNotificationsAsRead(ids)
+            return { count: data.modifiedCount };
         }
     }
 }

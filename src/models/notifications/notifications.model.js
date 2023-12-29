@@ -31,6 +31,7 @@ const markNotificationAsRead = async(id) => {
     }, {
         checked: true,
     }, {
+        new: true,
         upsert: true,
     })
     .catch((err) => {

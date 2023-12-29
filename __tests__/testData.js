@@ -12,6 +12,12 @@ module.exports = {
         nick:     "test",
         password: new User().generateHash("testpassword"),
     },
+    secondUser: {
+        _id:      new mt(),
+        email:    "test@gmail.com",
+        nick:     "test",
+        password: new User().generateHash("testpassword"),
+    },
     supportRequest: {
         _id: new mt(),
     },
@@ -28,7 +34,9 @@ module.exports = {
         _id: new mt(),
         title: "test"
     },
-    notificationId:     new mt(),
+    notification: {
+        _id: new mt(),
+    },
     moderationAction: {
         _id:         new mt(),
         type:        "",

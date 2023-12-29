@@ -14,12 +14,16 @@ type Notification {
     createdAt: String!
 }
 
+type NotificationCount {
+    count: Int!
+}
+
 type Mutation {
     notificationCreate(input: CreateNotificationInput!): Notification!
     notificationDeleteById(_id: ID!): Notification!
-    notificationsDeleteByIds(ids: [ID!]!): [Notification!]
+    notificationsDeleteByIds(ids: [ID!]!): NotificationCount!
     notificationMarkAsReadById(_id: ID!): Notification!
-    notificationsMarkAsReadByIds(ids: [ID!]!): [Notification!]
+    notificationsMarkAsReadByIds(ids: [ID!]!): NotificationCount!
 }
 
 input CreateNotificationInput {
