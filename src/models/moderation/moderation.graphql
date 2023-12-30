@@ -25,4 +25,5 @@ input ModerateActionInput {
     userId: ID!
     actionId: ID!
     type: String!
+    verifyToken: String!
 }

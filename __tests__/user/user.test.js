@@ -42,7 +42,6 @@ describe("User tests", () => {
         const { statusCode, body } = await request(app)
             .post(GQL_PATH)
             .send(USER_CONFIRM_ACCOUNT_MUTATION(data.user._id, data.moderationAction._id, data.moderationAction.verifyToken));
-        
         const resData = body.data.userConfirmAccount; // { user, action }
         expect(statusCode).toBe(200);
         expect(resData.user._id).toBe(data.user._id.toString());

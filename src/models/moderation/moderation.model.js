@@ -14,7 +14,7 @@ const deleteAction = async(userId, actionId, verifyToken, actionType) => {
     return await Moderation.findOneAndRemove({ 
         _id: actionId,
         user: userId,
-        verifyToken: verifyToken,
+        verifyToken,
         type: actionType,
     })
     .catch(err => {
@@ -28,7 +28,7 @@ const validateAction = async(userId, actionId, verifyToken, actionType) => {
         _id: actionId,
         user: userId,
         type: actionType,
-        verifyToken
+        verifyToken,
     })
     .catch(err => {
         throw new Error(err);
