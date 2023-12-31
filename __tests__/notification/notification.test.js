@@ -81,7 +81,6 @@ describe("Notification tests", () => {
             const { statusCode, body } = await request(app)
                 .post(GQL_PATH)
                 .send(NOTIFICATIONS_MARK_AS_READ_BY_IDS([data.notification._id]));
-                console.log(body)
             expect(statusCode).toBe(200);
             expect(body.data.notificationsMarkAsReadByIds.count).not.toBe(0)
         });

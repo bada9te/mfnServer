@@ -43,6 +43,8 @@ module.exports = {
         verifyToken: "",
         user:        "",
     },
-    commentId:          new mt(),
+    comment: {
+        _id: new mt(),
+    },
     battleId:           new mt(),
 }
