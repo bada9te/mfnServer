@@ -46,5 +46,7 @@ module.exports = {
     comment: {
         _id: new mt(),
     },
-    battleId:           new mt(),
+    battle: {
+        _id: new mt(),
+    }
 }

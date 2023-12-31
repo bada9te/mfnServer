@@ -3,16 +3,15 @@ const postsModel = require('../posts/posts.model');
 
 
 // add battle
-const addBattleByIds = async(id1, id2, title, createdAt, willFinishAt) => {
-    const posts = await postsModel.getManyByIds([id1, id2]);
+const addBattleByIds = async(id1, id2, title, willFinishAt) => {
+    //const posts = await postsModel.getManyByIds([id1, id2]);
 
     //console.log(posts);
     const newBattle = {
-        post1: posts[0]._id,
-        post2: posts[1]._id,
-        createdAt: createdAt,
-        willFinishAt: willFinishAt,
-        title: title,
+        post1: id1,
+        post2: id2,
+        willFinishAt,
+        title,
     }
 
     return await Battles.insertMany([newBattle])
