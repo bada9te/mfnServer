@@ -2,7 +2,10 @@ module.exports = {
     BATTLES_BY_STATUS_QUERY: (status, offset, limit) => ({
         query: `query battlesByStatus($status: String!, $offset: Int!, $limit: Int!) {
             battlesByStatus(status: $status, offset: $offset, limit: $limit) {
-                _id
+                battles {
+                    _id
+                }
+                count
             }
         }`,
         variables: {

@@ -1,5 +1,6 @@
 const battlesModel = require("../../models/battles/battles.model");
 const { createTask } = require("../../utils/cron/cron");
+const config = require("../../config");
 
 module.exports = {
     Query: {
@@ -25,10 +26,12 @@ module.exports = {
             await battlesModel.addBattleByIds(battle.post1, battle.post2, battle.title, battle.willFinishAt)
                 .then(async(insertedBattle) => {
                     createdBattle = insertedBattle[0];
-                    createTask(createdBattle._id, new Date(createdBattle.willFinishAt), async() => {
-                        console.log(createdBattle._id, "setting battle as finished...")
-                        await battlesModel.setWinnerByBattleId(createdBattle._id);
-                    }, 'finishBattle');
+                    if (config.base.envType !== "test") {
+                        createTask(createdBattle._id, new Date(createdBattle.willFinishAt), async() => {
+                            console.log(createdBattle._id, "setting battle as finished...")
+                            await battlesModel.setWinnerByBattleId(createdBattle._id);
+                        }, 'finishBattle');
+                    }
                 });
             return createdBattle;
         },

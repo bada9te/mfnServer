@@ -22,7 +22,7 @@ const addBattleByIds = async(id1, id2, title, willFinishAt) => {
 
 // remove battle 
 const deleteBattle = async(id) => {
-    await Battles.findOneAndDelete({
+    return await Battles.findOneAndDelete({
         _id: id,
     })
     .catch((err) => {
