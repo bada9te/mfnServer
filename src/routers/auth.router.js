@@ -61,7 +61,6 @@ authRouter.post("/update-session-user", (req, res) => {
                 res.end(info.message);
                 return;
             }
-            
             return res.status(201).json(user);
         })(req, res, next);
     });

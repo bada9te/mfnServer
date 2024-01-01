@@ -36,7 +36,6 @@ module.exports = (passport) => {
             if (!user.validPassword(password)) {
                 return done(null, false, { message: 'Wrong password.' });
             }
-            
             return done(null, user);
         } catch (error) {
             return done(error);
