@@ -15,7 +15,7 @@ const playlistsSchema = mongoose.Schema({
     tracks: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Post',
-        //autopopulate: true,
+        autopopulate: true,
     }],
     public: {
         type: Boolean,
