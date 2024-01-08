@@ -53,6 +53,7 @@ const getPlaylistByOwnerId = async(ownerId, range) => {
     return await Playlist.find({ owner: ownerId })
     .skip(range.offset)
     .limit(range.limit)
+    .sort({ createdAt: -1 })
     .catch(err => {
         throw new Error(err);
     });
@@ -63,6 +64,7 @@ const getPublicAvailablePlaylists = async(range) => {
     return await Playlist.find({ public: true })
     .skip(range.offset)
     .limit(range.limit)
+    .sort({ createdAt: -1 })
     .catch(err => {
         throw new Error(err);
     });

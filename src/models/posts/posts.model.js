@@ -58,6 +58,7 @@ const getAllPosts = async(range) => {
     })
     .skip(range.offset)
     .limit(range.limit)
+    .sort({ createdAt: -1 })
     .catch((err) => {
         throw new Error(err);
     });
@@ -69,6 +70,7 @@ const getAllWithOwnerId = async(id, range) => {
     })
     .skip(range.offset)
     .limit(range.limit)
+    .sort({ createdAt: -1 })
     .catch((err) => {
         throw new Error(err);
     });
@@ -80,6 +82,7 @@ const getSavedPostsByUserId = async(userId, range) => {
     })
     .skip(range.offset)
     .limit(range.limit)
+    .sort({ createdAt: -1 })
     .catch((err) => {
         throw new Error(err);
     });

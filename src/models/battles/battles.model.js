@@ -68,6 +68,7 @@ const getAllBattlesByStatus = async(status, range) => {
     return await Battles.find({ finished: status }, { '__v': 0 })
     .skip(range.offset)
     .limit(range.limit)
+    .sort({ createdAt: -1 })
     .catch((err) => {
         throw new Error(err);
     });

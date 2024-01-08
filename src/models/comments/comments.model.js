@@ -82,7 +82,9 @@ const getCommentReplies = async(id) => {
 const getCommentsByPostId = async(postId) => {
     return await Comments.find({
         post: postId
-    }).catch(err => {
+    })
+    .sort({ createdAt: -1 })
+    .catch(err => {
         throw new Error(err);
     })
 }
