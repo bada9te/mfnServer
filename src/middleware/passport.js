@@ -160,9 +160,10 @@ module.exports = (passport) => {
     // =========================================================================
 
     passport.use(new TwitterStrategy({
-        consumerKey     : configAuth.twitterAuth.consumerKey,
-        consumerSecret  : configAuth.twitterAuth.consumerSecret,
-        callbackURL     : configAuth.twitterAuth.callbackURL,
+        consumerKey      : configAuth.twitterAuth.consumerKey,
+        consumerSecret   : configAuth.twitterAuth.consumerSecret,
+        callbackURL      : configAuth.twitterAuth.callbackURL,
+        includeEmail     : true,
         passReqToCallback: true // allows us to pass in the req from our route (lets us check if a user is logged in or not)
     }, async(req, token, tokenSecret, profile, done) => {
         process.nextTick(function() {
@@ -174,6 +175,7 @@ module.exports = (passport) => {
                             user.twitter.token       = token;
                             user.twitter.username    = profile.username;
                             user.twitter.displayName = profile.displayName;
+                            user.twitter.email       = profile.emails[0].value;
     
                             user.save
                                 .then(updatedUser => {
@@ -187,11 +189,13 @@ module.exports = (passport) => {
                     } else {
                         // if there is no user, create 
                         let newUser = new User();
+                        console.log(profile)
                         newUser.nick                = profile.displayName
                         newUser.twitter.id          = profile.id;
                         newUser.twitter.token       = token;
                         newUser.twitter.username    = profile.username;
                         newUser.twitter.displayName = profile.displayName;
+                        newUser.twitter.email       = profile.emails[0].value;
     
                         newUser.save()
                             .then(createdUser => {
@@ -212,6 +216,7 @@ module.exports = (passport) => {
                 user.twitter.token       = token;
                 user.twitter.username    = profile.username;
                 user.twitter.displayName = profile.displayName;
+                user.twitter.email       = profile.emails[0].value;
 
                 user.save()
                     .then(updatedUser => {

@@ -107,7 +107,6 @@ authRouter.post("/update-session-user", (req, res) => {
     authRouter.get('/connect/twitter', passport.authorize('twitter', { scope : 'email' }));
     authRouter.get('/connect/twitter/callback', passport.authorize('twitter'));
 
-
 // google ---------------------------------
     authRouter.get('/connect/google', passport.authorize('google', { scope : ['profile', 'email'] }));
     authRouter.get('/connect/google/callback', passport.authorize('google'));
@@ -157,4 +156,3 @@ authRouter.post("/update-session-user", (req, res) => {
 
 
 module.exports = authRouter;
-
