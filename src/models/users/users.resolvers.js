@@ -81,18 +81,29 @@ module.exports = {
             return { action, user };
         },
         userRestoreAccount: async(_, { input }) => {
-            const { userId, actionId, verifyToken, type, newValue } = input;
+            let { userId, actionId, verifyToken, type, newValue } = input;
             const action = await moderationModel.validateAction(userId, actionId, verifyToken, type);
             let affectedUser;
             if (action) {
                 if (type === "password") {
-                    newValue = bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
+                    type = "local.password";
+                    newValue = bcrypt.hashSync(newValue, bcrypt.genSaltSync(8), null);
+                } else if (type === "email") {
+                    type = "local.email";
+                    // try to find a user with the same email
+                    const user = await usersModel.getUserByEmail(newValue);
+                    if (user) {
+                        throw new Error("This email was already taken");
+                    }
                 }
+                
                 await usersModel.restoreAccount(userId, newValue, type).then(async(user) => {
                     affectedUser = user;
+                    // delete action
                     await moderationModel.deleteAction(userId, actionId, verifyToken, type);
+                    // send confirmination mail
                     sendMail.sendInfoEmail(
-                        user.email,
+                        user.local.email,
                         user.nick,
                         `Your account ${type} was successfully updated.`  
                     );
@@ -106,7 +117,7 @@ module.exports = {
             const user = await usersModel.getUserByEmail(email);
             let createdAction;
             if (user) {
-                const verifyToken = await generateRandomString();
+                const verifyToken = generateRandomString();
                 await moderationModel.createAction({
                     user: user._id,
                     type: type,
@@ -114,10 +125,11 @@ module.exports = {
                     verifyToken: verifyToken,
                 }).then((action) => {
                     createdAction = action[0];
+                    console.log(user)
                     sendMail.sendRestoreEmail(
-                        user.email,
+                        user.local.email,
                         user.nick,
-                        `${process.env.CLIENT_BASE}/account-restore/${user._id}/${action[0]._id}/${verifyToken}/${type}`,
+                        `${process.env.CLIENT_BASE}/app/account-restore/${user._id}/${action[0]._id}/${verifyToken}/${type}`,
                     );
                 });
             }
