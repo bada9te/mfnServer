@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Post = require('./posts.mongo');
+const postsModel = require('./posts.mongo');
 
 
 // add post
@@ -201,6 +202,37 @@ const addOrRemoveComment = async(postId, commentId) => {
 }
 
 
+const getMostPopularPostsByStartDate = async(date) => {
+    return await Post.aggregate([
+        {
+            $match: {
+                createdAt: { $gte: date }
+            },
+        },
+        {
+            $lookup: {
+                from: 'users',
+                localField: 'owner',
+                foreignField: '_id',
+                as: 'owner'
+            }
+        },
+        {
+            $set: {
+                owner: { $first: "$owner" }
+            }
+        },
+        {
+            $addFields: {
+                score: { $sum: [{ $size: "$likedBy" }, {$size: "$savedBy"}] }
+            }
+        },
+    ]).sort({ score: -1 }).limit(3).catch(err => {
+        throw new Error(err);
+    }); 
+}
+
+
 
 
 
@@ -221,4 +253,5 @@ module.exports = {
     switchIsLiked,
     addOrRemoveComment,
     getManyByIds,
+    getMostPopularPostsByStartDate
 }

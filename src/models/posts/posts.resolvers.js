@@ -38,6 +38,9 @@ module.exports = {
         postsByIds: async(_, { ids }) => {
             return await postsModel.getManyByIds(ids);
         },
+        postsMostPopular: async(_, { date }) => {
+            return await postsModel.getMostPopularPostsByStartDate(new Date(date));
+        }
     },
     Mutation: {
         postCreate: async(_, { input }) => {
