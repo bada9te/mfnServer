@@ -43,6 +43,10 @@ const postsSchema = mongoose.Schema({
             ref: 'Comment' 
         }],
     },
+    category: {
+        type: String,
+        required: true,
+    },
     downloadsAllowed: {
         type: Boolean,
         required: true,
