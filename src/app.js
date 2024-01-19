@@ -6,17 +6,17 @@ const session      = require('express-session');
 const cookieParser = require('cookie-parser');
 const errorHandler = require('./middleware/errorHandler');
 const config       = require('./config');
+const MongoDBStore = require('connect-mongodb-session')(session);
 
 
 console.log('[APP] Launching...');
 
 
-
-
 // ########################### BASE ###########################
   // app config
-  const CLIENT_BASE    = config.base.clientBase;
-  const SESSION_SECRET = config.base.sessionSecret
+  const CLIENT_BASE       = config.base.clientBase;
+  const SESSION_SECRET    = config.base.sessionSecret;
+  const MONGO_URL         = config.mongo.url;
 
   // express app
   const app = express();
@@ -24,6 +24,7 @@ console.log('[APP] Launching...');
   // cors
   const whitelist = [CLIENT_BASE, 'https://studio.apollographql.com'];
   console.log(`[CORS] Origins in whitelist: `, whitelist)
+  
   app.use(cors({
     origin: function (origin, callback) {
       if (whitelist.indexOf(origin) !== -1 || !origin) {
@@ -35,6 +36,7 @@ console.log('[APP] Launching...');
     credentials: true,
   }));
   
+  
 
   // cookie 
   app.use(cookieParser());
@@ -45,12 +47,16 @@ console.log('[APP] Launching...');
 
 // ######################## AUTH SESSION ########################
   // session
+  //mongoose.connect(MONGO_SESSION_URL);
   app.use(session({
     secret: SESSION_SECRET,
     rolling: true,
     resave: true, 
     saveUninitialized: false,
-    cookie: { maxAge: 24 * 60 * 60 * 1000 }
+    cookie: { maxAge: 24 * 60 * 60 * 1000, sameSite: true },
+    store: new MongoDBStore({ 
+      uri: MONGO_URL,
+    }),
   }));
 
 
