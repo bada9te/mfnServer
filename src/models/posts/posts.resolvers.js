@@ -40,6 +40,9 @@ module.exports = {
         },
         postsMostPopular: async(_, { date }) => {
             return await postsModel.getMostPopularPostsByStartDate(new Date(date));
+        },
+        postsByCategory: async(_, { category, offset, limit }) => {
+            return await postsModel.getPostsByCategory(category, { offset, limit });
         }
     },
     Mutation: {

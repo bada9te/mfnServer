@@ -8,6 +8,7 @@ type Query {
     postsByTitle(input: PostsByTitleInput!): [Post!]
     postsByIds(ids: [ID!]!): [Post!]
     postsMostPopular(date: Date!): [Post!]
+    postsByCategory(category: String!, offset: Int!, limit: Int!): [Post!]
 }
 
 input PostsByTitleInput {

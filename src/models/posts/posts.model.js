@@ -233,7 +233,17 @@ const getMostPopularPostsByStartDate = async(date) => {
 }
 
 
-
+const getPostsByCategory = async(category, range) => {
+    return await Post.find({ category }, {
+        '__v': 0,
+    })
+    .skip(range.offset)
+    .limit(range.limit)
+    .sort({ createdAt: -1 })
+    .catch((err) => {
+        throw new Error(err);
+    });
+}
 
 
 module.exports = {
@@ -253,5 +263,6 @@ module.exports = {
     switchIsLiked,
     addOrRemoveComment,
     getManyByIds,
-    getMostPopularPostsByStartDate
+    getMostPopularPostsByStartDate,
+    getPostsByCategory,
 }
