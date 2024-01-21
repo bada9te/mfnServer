@@ -2,11 +2,10 @@ const fs = require('fs');
 const path = require('path');
 const postsModel = require('../../models/posts/posts.model');
 const usersModel = require('../../models/users/users.model');
+const config = require('../../config');
 
 
-const imageExtensions = ['.png', '.jpg', '.jpeg', '.gif', '.jjpeg', '.bmp', '.tiff', '.svg'];
-const audioExtensions = ['.mp3', '.wav', '.m4a', '.flac', '.pcm', '.ogg', '.oga', '.aiff'];
-
+const MONGO_PREFIX = config.mongo.prefix;
 
 // main 
 const removeJunkFiles = async() => {
@@ -57,7 +56,7 @@ const readPathAndRemoveUnnecessary = (directoryPath, mustInclude) => {
     fs.readdir(directoryPath, (err, files) => {
         files.forEach(file => {
             // remove if unnecessary
-            if (!mustInclude.includes(file)) {
+            if (!mustInclude.includes(file) && file.startsWith(MONGO_PREFIX)) {
                 fs.unlink(path.join(directoryPath, file), (err) => {
                     if (err) throw err;
                 });

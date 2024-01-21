@@ -1,10 +1,11 @@
 const multer = require('multer');
 const path = require('path');
+const config = require('../config');
 
 
 const imageExtensions = ['.jpg', '.jpeg', '.png'];
 const audioExtensions = ['.wav', '.mp3'];
-
+const MONGO_PREFIX = config.mongo.prefix;
 
 // storage
 const storage = multer.diskStorage({
@@ -23,20 +24,18 @@ const storage = multer.diskStorage({
         callBack(null, destPath);
     },
     filename: (req, file, callBack) => {
-        callBack(null, Date.now() + file.originalname)
+        callBack(null, MONGO_PREFIX + Date.now() + file.originalname)
     },
-    
 });
 
 
 // filter
 const fileFilter = (req, file, callBack) => {
-    /*
     const extension = path.extname(file.originalname);
-    if (![...audioExtensions, ...imageExtensions, ].includes(extension)) {
+    if (![ ...audioExtensions, ...imageExtensions ].includes(extension)) {
         return callBack(new Error('This type of file is not allowed'));
     }
-    */
+    
     if (file.size > 8388608) {
         return callBack(new Error('File size exceeds 8 MB'));
     }
