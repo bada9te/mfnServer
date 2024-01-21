@@ -1,7 +1,7 @@
 require('dotenv-expand').expand(require('dotenv').config())
 
 const MONGO_URL = process.env.ENV_TYPE !== "test" ? process.env.MONGO_URL : process.env.MONGO_URL_TEST;
-const mongoPrefix = MONGO_URL.split(MONGO_URL.lastIndexOf('/'), MONGO_URL.length);
+const mongoPrefix = MONGO_URL.slice(MONGO_URL.lastIndexOf('/'), MONGO_URL.length);
 
 module.exports = {
     base: {
