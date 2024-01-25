@@ -13,6 +13,15 @@ const getChatById = async(id) => {
     });
 }
 
+// get user related
+const getUserRelatedChats = async(userId) => {
+    return await chatsModel.find(
+        { 
+            $or: [{ owner: userId }, { participants: userId }] 
+        }
+    );
+}
+
 // get many by ids
 const getManyChatsByIds = async(ids) => {
     return await chatsModel.find({_id: {"$in": ids}})
@@ -56,6 +65,7 @@ module.exports = {
     createChat,
     getChatById,
     getManyChatsByIds,
+    getUserRelatedChats,
     updateChat,
     swicthMessage,
     deleteChatById,

@@ -1,0 +1,30 @@
+type Query {
+    chat(_id: ID!): Chat!
+    chatsByIds(ids: [ID!]!): [Chat!]
+    chatsUserRelatedByUserId(_id: ID!): [Chat!]
+}
+
+type Chat {
+    _id: ID!
+    owner: User
+    participants: [User]
+    messages: [ChatMessage]
+}
+
+type Mutation {
+    chatCreate(input: ChatCreateInput!): Chat!
+    chatUpdate(input: ChatUpdateInput!): Chat!
+    chatSwicthMessage(chatId: ID!, messageId: ID!): Chat!
+    chatDeleteById(_id: ID!): Chat!
+}
+
+input ChatCreateInput {
+    owner: ID!
+    participants: [ID!]
+}
+
+input ChatUpdateInput {
+    _id: ID!
+    what: String!
+    value: String!
+}

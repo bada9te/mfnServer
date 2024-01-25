@@ -1,0 +1,30 @@
+type Query {
+    chatMessage(_id: ID!): ChatMessage!
+    chatMessagesByChatId(_id: ID!, offset: Int!, limit: Int!): [ChatMessage!]
+}
+
+type ChatMessage {
+    owner: User!
+    chat: Chat!
+    text: String!
+    isReply: Boolean!
+    replies: [ChatMessage!]
+    createdAt: String!
+}
+
+type Mutation {
+    chatMessageCreate(input: ChatMessageCreateInput!): ChatMessage!
+    chatMessageDeleteById(_id: ID!): ChatMessage!
+    chatMessageUpdate(input: ChatMessageUpdateInput!)
+}
+
+input ChatMessageCreateInput {
+    owner: ID!
+    text: String!
+    isReply: Boolean
+}
+
+type ChatMessageUpdateInput {
+    _id: ID!
+    text: String!
+}

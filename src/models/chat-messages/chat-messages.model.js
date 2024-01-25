@@ -34,3 +34,11 @@ const getMessagesByChat = async(chatId, range) => {
         .limit(range.limit)
         .sort({ createdAt: -1 })
 }
+
+module.exports = {
+    createMessage,
+    deleteMessageById,
+    updateMessage,
+    getMessageById,
+    getMessagesByChat,
+}
