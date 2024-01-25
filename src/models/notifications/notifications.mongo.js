@@ -5,13 +5,13 @@ const notificationsSchema = new mongoose.Schema({
     receiver: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
-        autopopulate: true,
+        autopopulate: { select: '_id email nick avatar' },
         required: true,
     },
     sender: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
-        autopopulate: true,
+        autopopulate: { select: '_id email nick avatar' },
         required: true,
     },
     post: {

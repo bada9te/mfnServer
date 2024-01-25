@@ -7,7 +7,7 @@ const postsSchema = mongoose.Schema({
     owner: { 
         type: mongoose.Schema.Types.ObjectId, 
         ref: 'User', 
-        autopopulate: true 
+        autopopulate: { select: '_id email nick avatar' }
     },
     title: {
         type: String,

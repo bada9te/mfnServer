@@ -6,12 +6,12 @@ const commentsSchema = mongoose.Schema({
     owner: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
-        autopopulate: true,
+        autopopulate: { select: '_id email nick avatar' }
     },
     receiver: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
-        autopopulate: true, 
+        autopopulate: { select: '_id email nick avatar' } 
     },
     text: {
         type: String,

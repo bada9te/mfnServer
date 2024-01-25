@@ -17,7 +17,7 @@ const reportsSchema = mongoose.Schema({
     reportOwner: { 
         type: mongoose.Schema.Types.ObjectId, 
         ref: 'User',
-        autopopulate: true,
+        autopopulate: { select: '_id email nick avatar' },
         required: false,
     },
     reportedPost: {
