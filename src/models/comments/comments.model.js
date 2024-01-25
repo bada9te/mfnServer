@@ -44,7 +44,7 @@ const updateById = async(id, value, what) => {
 
 // remove many by ids
 const removeManyByIds = async(ids) => {
-    return await Comments.deleteMany({_id: ids })
+    return await Comments.deleteMany({_id: {"$in": ids} })
     .catch((err) => {
         throw new Error(err);
     });

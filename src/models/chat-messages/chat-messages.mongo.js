@@ -6,6 +6,11 @@ const chatMessagesSchema = mongoose.Schema({
         ref: 'User',
         autopopulate: { select: '_id email nick avatar' }
     },
+    chat: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Chat',
+        required: true,
+    },
     text: {
         type: String,
         required: true
@@ -19,7 +24,7 @@ const chatMessagesSchema = mongoose.Schema({
         ref: 'ChatMessage',
         autopopulate: true,
     }],
-});
+}, {timestamps: true});
 
 // plugin
 chatMessagesSchema.plugin(require('mongoose-autopopulate'));
