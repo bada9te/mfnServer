@@ -22,6 +22,6 @@ const chatsSchema = mongoose.Schema({
 chatsSchema.plugin(require('mongoose-autopopulate'));
 
 // model
-const chatsModel = mongoose.Model('Chat', chatsSchema);
+const chatsModel = mongoose.model('Chat', chatsSchema);
 
 module.exports = chatsModel;

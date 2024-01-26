@@ -4,6 +4,7 @@ type Query {
 }
 
 type ChatMessage {
+    _id: ID!
     owner: User!
     chat: Chat!
     text: String!
@@ -15,7 +16,7 @@ type ChatMessage {
 type Mutation {
     chatMessageCreate(input: ChatMessageCreateInput!): ChatMessage!
     chatMessageDeleteById(_id: ID!): ChatMessage!
-    chatMessageUpdate(input: ChatMessageUpdateInput!)
+    chatMessageUpdate(input: ChatMessageUpdateInput!): ChatMessage!
 }
 
 input ChatMessageCreateInput {
@@ -24,7 +25,7 @@ input ChatMessageCreateInput {
     isReply: Boolean
 }
 
-type ChatMessageUpdateInput {
+input ChatMessageUpdateInput {
     _id: ID!
     text: String!
 }

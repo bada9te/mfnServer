@@ -30,6 +30,6 @@ const chatMessagesSchema = mongoose.Schema({
 chatMessagesSchema.plugin(require('mongoose-autopopulate'));
 
 // model
-const chatMessagesModel = mongoose.Model('ChatMessage', chatMessagesSchema);
+const chatMessagesModel = mongoose.model('ChatMessage', chatMessagesSchema);
 
 module.exports = chatMessagesModel;

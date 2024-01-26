@@ -1,3 +1,4 @@
+const { default: mongoose } = require('mongoose');
 const User = require('./users.mongo');
 
 /*
@@ -101,7 +102,9 @@ const getOnlyImagesAndAudios = async() => {
     });
 }
 
-const switchSubscriptionOnUser = async(subscriberId, userId, actionType) => {
+const switchSubscriptionOnUser = async(subscriberId, userId) => {
+    subscriberId = new mongoose.Types.ObjectId(subscriberId);
+    userId       = new mongoose.Types.ObjectId(userId);
     return await User.findOneAndUpdate(
         { _id: userId }, 
         [{ 
@@ -123,6 +126,8 @@ const switchSubscriptionOnUser = async(subscriberId, userId, actionType) => {
 }
 
 const switchSubscribedOnUser = async(subscriberId, userId) => {
+    subscriberId = new mongoose.Types.ObjectId(subscriberId);
+    userId       = new mongoose.Types.ObjectId(userId);
     return await User.findOneAndUpdate(
         { _id: subscriberId }, 
         [{ 

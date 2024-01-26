@@ -64,12 +64,17 @@ module.exports = {
             }
             return user;
         },
-        userSwitchSubscription: async(_, { input }) => {
+        userSwitchSubscription: async(_, { input }, context) => {
             const { userId, subscriberId } = input;
-            return {
-                user1: await usersModel.switchSubscriptionOnUser(subscriberId, userId),
-                user2: await usersModel.switchSubscribedOnUser(subscriberId, userId)
-            };
+
+            const user1 = await usersModel.switchSubscriptionOnUser(subscriberId, userId)
+            const user2 = await usersModel.switchSubscribedOnUser(subscriberId, userId)
+            
+            if (context.user) {
+                await context.updateSessionUser(user2);
+            }
+
+            return { user1, user2 };
         },
         userConfirmAccount: async(_, { input }) => {
             const { userId, actionId, verifyToken } = input;
