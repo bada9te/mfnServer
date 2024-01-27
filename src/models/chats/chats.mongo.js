@@ -20,6 +20,10 @@ const chatsSchema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'ChatMessage',
     }],
+    lastMessage: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'ChatMessage',
+    }
 }, {timestamps: true});
 
 // plugin

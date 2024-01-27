@@ -10,6 +10,7 @@ type Chat {
     owner: User
     participants: [User]
     messages: [ChatMessage]
+    lastMessage: ChatMessage
 }
 
 type Mutation {

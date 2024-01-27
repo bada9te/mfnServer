@@ -21,7 +21,7 @@ module.exports = {
                 });
             return createdChat;
         },
-        chatUpdate: async(_, { _id, what, value }) => {
+        chatUpdate: async(_, { input: { _id, what, value } }) => {
             return await chatsModel.updateChat(_id, what, value);
         },
         chatSwicthMessage: async(_, { chatId, messageId }) => {
