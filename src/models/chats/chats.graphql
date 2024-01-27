@@ -6,6 +6,7 @@ type Query {
 
 type Chat {
     _id: ID!
+    title: String!
     owner: User
     participants: [User]
     messages: [ChatMessage]
@@ -19,6 +20,7 @@ type Mutation {
 }
 
 input ChatCreateInput {
+    title: String!
     owner: ID!
     participants: [ID!]
 }

@@ -14,7 +14,12 @@ module.exports = {
     },
     Mutation: {
         chatCreate: async(_, { input }) => {
-            return await chatsModel.createChat(input);
+            let createdChat;
+            await chatsModel.createChat(input)
+                .then(data => {
+                    createdChat = data[0];
+                });
+            return createdChat;
         },
         chatUpdate: async(_, { _id, what, value }) => {
             return await chatsModel.updateChat(_id, what, value);
