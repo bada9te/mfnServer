@@ -1,3 +1,4 @@
+const { default: mongoose } = require("mongoose");
 const chatsModel = require("./chats.mongo")
 
 
@@ -37,21 +38,48 @@ const updateChat = async(id, what, value) => {
     );
 }
 
-// insert msg
+// insert / remove participant
+const switchParticipants = async(chatId, participants) => {
+    participants = participants.map(i => new mongoose.Types.ObjectId(i));
+    return await chatsModel.findOneAndUpdate(
+        { _id: chatId },
+        [
+            {
+                $set: {
+                    participants: {
+                        $cond: [
+                            { $setIsSubset: [participants, "$participants"] },
+                            { $setDifference: ["$participants", participants] },
+                            { $concatArrays: ["$participants", participants] }
+                        ]
+                    }
+                }
+            }
+        ],
+        { new: true }
+    );
+}
+
+
+// insert / remove msg
 const swicthMessage = async(chatId, messageId) => {
+    messageId = new mongoose.Types.ObjectId(messageId);
     return await chatsModel.findOneAndUpdate(
         { _id: chatId },
         [
             { 
                 $set: {
-                    $cond: [
-                        { $in: [messageId, "$messages"] },
-                        { $setDifference: ["$messages", [messageId]] },
-                        { $concatArrays: ["$messages", [messageId]] }
-                    ]
+                    messages: {
+                        $cond: [
+                            { $in: [messageId, "$messages"] },
+                            { $setDifference: ["$messages", [messageId]] },
+                            { $concatArrays: ["$messages", [messageId]] }
+                        ]
+                    }
                 } 
             }
-        ]
+        ],
+        { new: true }
     );
 }
 
@@ -67,6 +95,7 @@ module.exports = {
     getManyChatsByIds,
     getUserRelatedChats,
     updateChat,
+    switchParticipants,
     swicthMessage,
     deleteChatById,
 }

@@ -24,7 +24,10 @@ module.exports = {
         chatUpdate: async(_, { input: { _id, what, value } }) => {
             return await chatsModel.updateChat(_id, what, value);
         },
-        chatSwicthMessage: async(_, { chatId, messageId }) => {
+        chatSwitchParticipants: async(_, { chatId, participants }) => {
+            return await chatsModel.switchParticipants(chatId, participants);
+        },
+        chatSwitchMessage: async(_, { chatId, messageId }) => {
             return await chatsModel.swicthMessage(chatId, messageId);
         },
         chatDeleteById: async(_, { _id }) => {
