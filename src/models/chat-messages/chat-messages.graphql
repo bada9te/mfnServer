@@ -22,7 +22,9 @@ type Mutation {
 input ChatMessageCreateInput {
     owner: ID!
     text: String!
-    isReply: Boolean
+    isReply: Boolean,
+    isReplyTo: ID,
+    chat: ID!,
 }
 
 input ChatMessageUpdateInput {

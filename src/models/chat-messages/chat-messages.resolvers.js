@@ -11,7 +11,12 @@ module.exports = {
     },
     Mutation: {
         chatMessageCreate: async(_, { input }) => {
-            return await chatMessagesModel.createMessage(input);
+            let createdMsg;
+            await chatMessagesModel.createMessage(input)
+                .then(data => {
+                    createdMsg = data[0];
+                });
+            return createdMsg;
         },
         chatMessageDeleteById: async(_, { _id }) => {
             return await chatMessagesModel.deleteMessageById(_id);

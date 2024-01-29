@@ -32,7 +32,7 @@ const getMessagesByChat = async(chatId, range) => {
     return await chatMessagesModel.find({ chat: chatId })
         .skip(range.offset)
         .limit(range.limit)
-        .sort({ createdAt: -1 })
+        .sort({ createdAt: 1 })
 }
 
 module.exports = {
