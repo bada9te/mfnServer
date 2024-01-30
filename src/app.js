@@ -92,9 +92,6 @@ console.log('[APP] Launching...');
   app.use('/uploads/others', express.static(path.join(__dirname, '..', 'uploads', 'others')));
 
 
-// ########################## GRAPHQL ###########################
-  require('./utils/apollo-server/apollo-server')(app);
-
 
 // error handler
   //app.use(errorHandler);
