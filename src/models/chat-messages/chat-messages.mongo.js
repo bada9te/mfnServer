@@ -13,7 +13,6 @@ const chatMessagesSchema = mongoose.Schema({
     },
     text: {
         type: String,
-        required: true
     },
     isReply: {
         type: Boolean,

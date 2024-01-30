@@ -21,10 +21,12 @@ type Mutation {
 
 input ChatMessageCreateInput {
     owner: ID!
-    text: String!
+    text: String
     isReply: Boolean,
     isReplyTo: ID,
-    chat: ID!,
+    chat: ID,
+    toUser: ID,
+    sharedItem: ID,
 }
 
 input ChatMessageUpdateInput {

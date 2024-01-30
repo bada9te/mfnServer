@@ -1,3 +1,5 @@
+const { createChat } = require("../chats/chats.model");
+const { getUsersByIds } = require("../users/users.model");
 const chatMessagesModel = require("./chat-messages.model")
 
 module.exports = {
@@ -11,6 +13,16 @@ module.exports = {
     },
     Mutation: {
         chatMessageCreate: async(_, { input }) => {
+            if (!input.chat) {
+                const users = getUsersByIds([input.owner, input.toUser]);
+                await createChat({
+                    title: users.map(user => user.nick).join(' '),
+                    owner: input.owner,
+                    participants: users.map(user => user._id)
+                }).then(data => {
+                    input.chat = data[0]._id;
+                });
+            }
             let createdMsg;
             await chatMessagesModel.createMessage(input)
                 .then(data => {
