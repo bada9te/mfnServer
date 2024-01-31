@@ -33,3 +33,7 @@ input ChatMessageUpdateInput {
     _id: ID!
     text: String!
 }
+
+type Subscription {
+    chatMessageCreated: ChatMessage
+}

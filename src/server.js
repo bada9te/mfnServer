@@ -13,6 +13,7 @@ const {
 } = require("apollo-server-core");
 const { expressMiddleware } = require('@apollo/server/express4');
 const { ApolloServer }      = require('@apollo/server');
+const { MongodbPubSub }     = require('graphql-mongodb-subscriptions');
 const removeJunkFiles       = require('./utils/cleaner/cleaner');
 const gqlSCHEMA             = require('./utils/apollo-server/schema');
 
@@ -62,11 +63,12 @@ const APServer = new ApolloServer({
       ],
     context: ({req, res}) => {
         return ({
-                user: req.user,
-                logIn: req.logIn,
-                logout: req.logout,
+            user: req.user,
+            logIn: req.logIn,
+            logout: req.logout,
+            pubsub: new MongodbPubSub(),
 
-                updateSessionUser: async(user) => {
+            updateSessionUser: async(user) => {
                 req.session.passport.user = user;
                 req.session.save()
             },
