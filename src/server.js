@@ -13,7 +13,6 @@ const {
 } = require("apollo-server-core");
 const { expressMiddleware } = require('@apollo/server/express4');
 const { ApolloServer }      = require('@apollo/server');
-const { MongodbPubSub }     = require('graphql-mongodb-subscriptions');
 const removeJunkFiles       = require('./utils/cleaner/cleaner');
 const gqlSCHEMA             = require('./utils/apollo-server/schema');
 
@@ -35,7 +34,6 @@ const wsSERVER = new WebSocketServer({
 // Save the returned server's info so we can shutdown this server later
 const serverCleanup = useServer({ schema: gqlSCHEMA }, wsSERVER);
 
-
 // Set up ApolloServer.
 const APServer = new ApolloServer({
     schema: gqlSCHEMA,
@@ -49,63 +47,63 @@ const APServer = new ApolloServer({
 
         // Proper shutdown for the HTTP server.
         ApolloServerPluginDrainHttpServer({ httpServer: SERVER }),
-    
+        
         // Proper shutdown for the WebSocket server.
         {
             async serverWillStart() {
                 return {
-                        async drainServer() {
+                    async drainServer() {
                         await serverCleanup.dispose();
                     },
                 };
             },
         },
-      ],
+    ],
     context: ({req, res}) => {
         return ({
             user: req.user,
             logIn: req.logIn,
             logout: req.logout,
-            pubsub: new MongodbPubSub(),
-
+            
             updateSessionUser: async(user) => {
                 req.session.passport.user = user;
                 req.session.save()
             },
         });
-    }
+    },
 });
 
 // prepare and launch server
 const launchServer = async() => {
-    // launch AP server
-    await APServer.start();
-    app.use('/graphql', expressMiddleware(APServer));
-
-    // create a bunch of folders
-    const uploadsTypes = ['audios', 'images', 'others'];
-    const uploadsPath = path.join(__dirname, '..', 'uploads');
-    createFolderAtPathIfNotExists(uploadsPath);
-
-    uploadsTypes.forEach(type => {
-        createFolderAtPathIfNotExists(path.join(uploadsPath, type));
-    });
-
     // prepare mongoose events
     mongoose.connection.once('open', () => {
-        console.log('[DB] MongoDB connection established.')
+        console.log('[DB] MongoDB connection established.');
     });
     mongoose.connection.on('error', (err) => {
         console.error(`[DB] ${err}`);
     });
-
+    
     console.log(`[DB] Connecting...`)
+    
     // connect mongo
-    await mongoose.connect(config.base.envType !== "test" ? MONGO_URL : MONGO_URL_TEST).catch(console.error);
+    mongoose.connect(config.base.envType !== "test" ? MONGO_URL : MONGO_URL_TEST).catch(console.error);
 
+    // launch AP server
+    await APServer.start();
+    app.use('/graphql', expressMiddleware(APServer));
+    
+    // create a bunch of folders
+    const uploadsTypes = ['audios', 'images', 'others'];
+    const uploadsPath = path.join(__dirname, '..', 'uploads');
+    createFolderAtPathIfNotExists(uploadsPath);
+    
+    uploadsTypes.forEach(type => {
+        createFolderAtPathIfNotExists(path.join(uploadsPath, type));
+    });
+    
     // clean junk
     await removeJunkFiles();
-
+    
     // run server
     if (process.env.ENV_TYPE !== 'test') {
         SERVER.listen(PORT, () => {

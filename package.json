@@ -27,7 +27,6 @@
     "express-fileupload": "^1.4.0",
     "express-session": "^1.17.3",
     "graphql": "^16.8.1",
-    "graphql-mongodb-subscriptions": "^1.0.0",
     "graphql-subscriptions": "^2.0.0",
     "graphql-tools": "^9.0.0",
     "graphql-ws": "^5.14.3",
