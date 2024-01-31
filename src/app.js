@@ -6,7 +6,6 @@ const session      = require('express-session');
 const cookieParser = require('cookie-parser');
 const errorHandler = require('./middleware/errorHandler');
 const config       = require('./config');
-const connectMongo = require('./utils/mongo/connectMongo');
 const MongoDBStore = require('connect-mongodb-session')(session);
 
 
@@ -17,7 +16,6 @@ console.log('[APP] Launching...');
   const CLIENT_BASE       = config.base.clientBase;
   const SESSION_SECRET    = config.base.sessionSecret;
   const MONGO_URL         = config.mongo.url;
-  connectMongo();
 
   // express app
   const app = express();
