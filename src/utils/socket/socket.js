@@ -5,21 +5,29 @@ const config = require('../../config');
 
 // socket.io
 const initSocketIO = async(SERVER) => {
-    console.log(`[SOCKET] Initializing...`);
+    console.log(`[SOCKET] [*] Initializing...`);
     const io = new Server(SERVER, { cors: { origin: config.base.clientBase } });
     io.on("connection", (socket) => {
+        console.log(`[SOCKET] [+] User is connected, ${JSON.stringify({ SID: socket.id, UID: socket.userId }, null)}`);
         const users = [];
         for (let [id, socket] of io.of("/").sockets) {
             users.push({
                 socketId: id,
-                userId: socket.userId
+                userId: socket.userId,
             });
         }
         socket.emit("users", users);
-        console.log(`[SOCKET] User is connected, socketID: ${socket.id}`);
+        socket.broadcast.emit("user connected", {
+            socketId: socket.id,
+            userId: socket.userId,
+        });
 
         socket.on('disconnect', () => {
-            console.log(`[SOCKET] User disconnected, socketID: ${socket.id}`);
+            socket.broadcast.emit("user disconnected", {
+                socketId: socket.id, 
+                userId: socket.userId,
+            });
+            console.log(`[SOCKET] [-] User disconnected, ${JSON.stringify({ SID: socket.id, UID: socket.userId }, null)}`);
         });
     });
 
@@ -32,7 +40,7 @@ const initSocketIO = async(SERVER) => {
         socket.userId = userId;
         next();
     });
-    console.log(`[SOCKET] Initialized.`);
+    console.log(`[SOCKET] [*] Initialized.`);
 }
 
 
