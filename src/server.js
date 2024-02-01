@@ -6,6 +6,7 @@ const config = require('./config');
 const removeJunkFiles       = require('./utils/cleaner/cleaner');
 const connectMongo          = require('./utils/mongo/connectMongo');
 const setupApollo           = require('./utils/apollo-server/server');
+const initSocketIO = require('./utils/socket/socket');
 
 
 // server config
@@ -21,6 +22,7 @@ const SERVER = http.createServer(app);
 // prepare and launch server
 const launchServer = async() => {
     connectMongo();
+    initSocketIO(SERVER);
     setupApollo(app, SERVER);
 
     // create a bunch of folders
