@@ -44,12 +44,9 @@ const initSocketIO = async(SERVER) => {
         // create
         socket.on('message create', ({ message, toUsers }) => {
             console.log(message, toUsers)
-            const users = getCurrentUsers(io).filter(i => toUsers.includes(i.userId));
-            socket.to(users.map(i => i.socketId)).emit('message create', {
-                message,
-            });
+            const users = getCurrentUsers(io).filter(i => toUsers.includes(i.userId)).map(i => i.socketId);
+            io.to(users).emit('message created', message);
         });
-        
     });
 
     // middleware to check for userId
