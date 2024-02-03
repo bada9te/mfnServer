@@ -15,6 +15,10 @@ const getCurrentUsers = (io) => {
     return users;
 }
 
+// get users includes in [toUsers]
+const getUsersByToUsersArray = (io, toUsers) => {
+    return getCurrentUsers(io).filter(i => toUsers.includes(i.userId)).map(i => i.socketId);
+}
 
 // socket.io
 const initSocketIO = async(SERVER) => {
@@ -43,9 +47,22 @@ const initSocketIO = async(SERVER) => {
         /***************** CHATS HANDLERS *****************/
         // create
         socket.on('message create', ({ message, toUsers }) => {
-            console.log(message, toUsers)
-            const users = getCurrentUsers(io).filter(i => toUsers.includes(i.userId)).map(i => i.socketId);
-            io.to(users).emit('message created', message);
+            io.to(getUsersByToUsersArray(io, toUsers)).emit('message created', message);
+        });
+
+        // read
+        socket.on('message read', ({ message, toUsers }) => {
+            io.to(getUsersByToUsersArray(io, toUsers)).emit('message read', message);
+        });
+
+        // update
+        socket.on('message update', ({ message, toUsers }) => {
+            io.to(getUsersByToUsersArray(io, toUsers)).emit('messsage update', message);
+        });
+
+        // delete 
+        socket.on('message delete', ({ message, toUsers }) => {
+            io.to(getUsersByToUsersArray(io, toUsers)).emit('messsage delete', message);
         });
     });
 
