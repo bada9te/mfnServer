@@ -43,24 +43,50 @@ const initSocketIO = async(SERVER) => {
             console.log(`[SOCKET] [-] User disconnected, ${JSON.stringify({ SID: socket.id, UID: socket.userId }, null)}`);
         });
 
-
-        /***************** CHATS HANDLERS *****************/
-        // create
-        socket.on('message create', ({ message, toUsers }) => {
-            io.to(getUsersByToUsersArray(io, toUsers)).emit('message created', message);
+        /***************** USERS HANDLERS *****************/
+        // subscribe
+        socket.on('user subscribed', ({ userId, toUsers }) => {
+            io.to(getUsersByToUsersArray(io, toUsers)).emit('user subscribed', userId);
         });
 
-        // read
+        // subscribe
+        socket.on('user unsubscribed', ({ userId, toUsers }) => {
+            io.to(getUsersByToUsersArray(io, toUsers)).emit('user unsubscribed', userId);
+        });
+
+        /***************** CHATS HANDLERS *****************/
+        // create chat
+        socket.on('chat create', ({ chat, toUsers }) => {
+            io.to(getUsersByToUsersArray(io, toUsers)).emit('chat create', chat);
+        });
+
+        // update chat
+        socket.on('chat update', ({ chat, toUsers }) => {
+            io.to(getUsersByToUsersArray(io, toUsers)).emit('chat update', chat);
+        });
+
+        // delete chat
+        socket.on('chat delete', ({ chat, toUsers }) => {
+            io.to(getUsersByToUsersArray(io, toUsers)).emit('chat delete', chat);
+        });
+
+        /**************** C-MSGS HANDLERS *****************/
+        // create msg
+        socket.on('message create', ({ message, toUsers }) => {
+            io.to(getUsersByToUsersArray(io, toUsers)).emit('message create', message);
+        });
+
+        // read msg
         socket.on('message read', ({ message, toUsers }) => {
             io.to(getUsersByToUsersArray(io, toUsers)).emit('message read', message);
         });
 
-        // update
+        // update msg
         socket.on('message update', ({ message, toUsers }) => {
             io.to(getUsersByToUsersArray(io, toUsers)).emit('messsage update', message);
         });
 
-        // delete 
+        // delete msg
         socket.on('message delete', ({ message, toUsers }) => {
             io.to(getUsersByToUsersArray(io, toUsers)).emit('messsage delete', message);
         });
