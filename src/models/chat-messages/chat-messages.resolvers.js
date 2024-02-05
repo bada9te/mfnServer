@@ -1,10 +1,6 @@
 const { createChat } = require("../chats/chats.model");
 const { getUsersByIds } = require("../users/users.model");
 const chatMessagesModel = require("./chat-messages.model");
-const { withFilter, PubSub } = require("graphql-subscriptions");
-
-
-const pubsub = new PubSub();
 
 module.exports = {
     Query: {
@@ -33,7 +29,6 @@ module.exports = {
                 .then(data => {
                     createdMsg = data[0];
                 });
-            pubsub.publish('CHAT-MESSAGE_CREATED', { onChatMessageCreated: args });
             return createdMsg;
         },
         chatMessageDeleteById: async(_, { _id }) => {
@@ -43,16 +38,4 @@ module.exports = {
             return await chatMessagesModel.updateMessage(_id, text);
         },
     },
-    Subscription: {
-        onChatMessageCreated: {
-            subscribe: withFilter(
-                () => pubsub.asyncIterator('CHAT-MESSAGE_CREATED'),
-                (payload, variables) => {
-                    return (
-                        variables.chatsIds.includes(payload.onChatMessageCreated.chat)
-                    );
-                }
-            )
-        }
-    }
 }
