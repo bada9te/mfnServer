@@ -25,6 +25,7 @@ input ChatCreateInput {
     title: String!
     owner: ID!
     participants: [ID!]
+    lastMessage: ID
 }
 
 input ChatUpdateInput {

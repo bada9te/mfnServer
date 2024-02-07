@@ -23,6 +23,7 @@ const chatsSchema = mongoose.Schema({
     lastMessage: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'ChatMessage',
+        autopopulate: { select: '_id text createdAt' }
     }
 }, {timestamps: true});
 
