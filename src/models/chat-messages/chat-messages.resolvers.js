@@ -35,7 +35,7 @@ module.exports = {
         chatMessageDeleteById: async(_, { _id }) => {
             return await chatMessagesModel.deleteMessageById(_id);
         },
-        chatMessageUpdate: async(_, { _id, text }) => {
+        chatMessageUpdate: async(_, { input: {_id, text} }) => {
             return await chatMessagesModel.updateMessage(_id, text);
         },
     },

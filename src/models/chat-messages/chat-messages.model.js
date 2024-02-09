@@ -13,11 +13,7 @@ const deleteMessageById = async(id) => {
 
 // update
 const updateMessage = async(id, value) => {
-    return await chatMessagesModel.findOmeAndUpdate(
-        { _id: id },
-        { text: value },
-        { new: true }
-    );
+    return await chatMessagesModel.findOneAndUpdate({ _id: id }, { text: value }, { new: true });
 }
 
 // get by id
