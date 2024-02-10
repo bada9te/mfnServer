@@ -16,15 +16,6 @@ const chatsSchema = mongoose.Schema({
         ref: 'User',
         autopopulate: { select: '_id email nick avatar' },
     }],
-    messages: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'ChatMessage',
-    }],
-    lastMessage: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'ChatMessage',
-        autopopulate: { select: '_id text createdAt' }
-    }
 }, {timestamps: true});
 
 // plugin

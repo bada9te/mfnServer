@@ -10,7 +10,6 @@ type Chat {
     owner: User
     participants: [User]
     messages: [ChatMessage]
-    lastMessage: ChatMessage
 }
 
 type Mutation {
@@ -25,7 +24,6 @@ input ChatCreateInput {
     title: String!
     owner: ID!
     participants: [ID!]
-    lastMessage: ID
 }
 
 input ChatUpdateInput {
