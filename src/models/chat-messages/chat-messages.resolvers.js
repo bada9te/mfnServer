@@ -1,5 +1,5 @@
 const { createChat, updateChat, getChatById } = require("../chats/chats.model");
-const { getUsersByIds } = require("../users/users.model");
+const { getUsersByIds, getUserById } = require("../users/users.model");
 const chatMessagesModel = require("./chat-messages.model");
 
 module.exports = {
@@ -26,8 +26,9 @@ module.exports = {
             }
             let createdMsg;
             await chatMessagesModel.createMessage(input)
-                .then(data => {
+                .then(async data => {
                     createdMsg = data[0];
+                    createdMsg.owner = await getUserById(data[0].owner)
                 });
             return createdMsg;
         },
