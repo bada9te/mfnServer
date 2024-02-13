@@ -30,6 +30,10 @@ module.exports = {
                     createdMsg = data[0];
                     createdMsg.owner = await getUserById(data[0].owner)
                 });
+
+            if (input.reply) {
+                createdMsg.reply = await chatMessagesModel.getMessageById(input.reply)
+            }
             
             return createdMsg;
         },
