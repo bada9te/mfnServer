@@ -26,26 +26,10 @@ const getMessageById = async(id) => {
 
 // get chat messages 
 const getMessagesByChat = async(chatId, range) => {
-    return await chatMessagesModel.find({ chat: chatId, isReply: false })
+    return await chatMessagesModel.find({ chat: chatId })
         .sort({ createdAt: -1 })
         .skip(range.offset)
         .limit(range.limit)
-}
-
-// switch in msg replies 
-const switchMessageInReplies = async(messageId, replyingMessageId) => {
-    replyingMessageId = new mongoose.Types.ObjectId(replyingMessageId)
-    return await chatMessagesModel.findOneAndUpdate({_id: messageId}, [{
-        $set: {
-            replies: {
-                $cond: [
-                    { $in: [replyingMessageId, "$replies" ] },
-                    { $setDifference: ["$replies", [replyingMessageId]] },
-                    { $concatArrays: ["$replies", [replyingMessageId]] }
-                ]
-            }
-        },
-    }], { new: true });
 }
 
 module.exports = {
@@ -54,5 +38,4 @@ module.exports = {
     updateMessage,
     getMessageById,
     getMessagesByChat,
-    switchMessageInReplies,
 }

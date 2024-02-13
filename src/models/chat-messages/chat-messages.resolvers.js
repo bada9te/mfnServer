@@ -31,14 +31,6 @@ module.exports = {
                     createdMsg.owner = await getUserById(data[0].owner)
                 });
             
-            if (input.isReply) {
-                try {
-                    
-                    await chatMessagesModel.switchMessageInReplies(input.isReplyTo, createdMsg._id);
-                } catch (error) {
-                    console.log(error)
-                }
-            }
             return createdMsg;
         },
         chatMessageDeleteById: async(_, { _id }) => {

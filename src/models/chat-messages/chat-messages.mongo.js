@@ -14,15 +14,11 @@ const chatMessagesSchema = mongoose.Schema({
     text: {
         type: String,
     },
-    isReply: {
-        type: Boolean,
-        default: false,
-    },
-    replies: [{
+    reply: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'ChatMessage',
         autopopulate: true,
-    }],
+    },
 }, {timestamps: true});
 
 // plugin
