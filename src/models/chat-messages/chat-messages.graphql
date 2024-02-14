@@ -7,7 +7,12 @@ type ChatMessage {
     _id: ID!
     owner: User!
     chat: Chat!
-    text: String!
+    text: String
+    image: String
+    video: String
+    audio: String
+    file: String
+    spotify: String
     reply: ChatMessage
     createdAt: String!
 }
@@ -21,6 +26,11 @@ type Mutation {
 input ChatMessageCreateInput {
     owner: ID!
     text: String
+    image: String
+    video: String
+    audio: String
+    file: String
+    spotify: String
     reply: ID
     chat: ID
     toUser: ID

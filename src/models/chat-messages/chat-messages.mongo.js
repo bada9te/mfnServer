@@ -11,9 +11,23 @@ const chatMessagesSchema = mongoose.Schema({
         ref: 'Chat',
         required: true,
     },
-    text: {
+    type: {
         type: String,
+        required: true,
     },
+    // for type text
+    text: { type: String },
+    // for type photo
+    image: { type: String },
+    // for type video
+    video: { type: String },
+    // for type audio
+    audio: { type: String },
+    // for type file
+    file: { type: String },
+    // for type spotify
+    spotify: { type: String },
+    // text
     reply: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'ChatMessage',
