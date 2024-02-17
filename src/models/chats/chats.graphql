@@ -1,5 +1,5 @@
 type Query {
-    chat(_id: ID!): Chat!
+    chat(_id: ID!, userId: ID): Chat!
     chatsByIds(ids: [ID!]!): [Chat!]
     chatsUserRelatedByUserId(_id: ID!): [Chat!]
 }
@@ -9,7 +9,7 @@ type Chat {
     title: String!
     owner: User
     participants: [User]
-    messages: [ChatMessage]
+    lastMessageReadBy: [User]
 }
 
 type Mutation {

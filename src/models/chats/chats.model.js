@@ -38,6 +38,15 @@ const updateChat = async(id, what, value) => {
     );
 }
 
+// update last message read by
+const updateLastMessageReadBy = async(chatId, userId) => {
+    return await chatsModel.findOneAndUpdate(
+        { _id: chatId },
+        { $addToSet: { lastMessageReadBy: userId } },
+        { new: true }
+    );
+}
+
 // insert / remove participant
 const switchParticipants = async(chatId, participants) => {
     participants = participants.map(i => new mongoose.Types.ObjectId(i));
@@ -95,6 +104,7 @@ module.exports = {
     getManyChatsByIds,
     getUserRelatedChats,
     updateChat,
+    updateLastMessageReadBy,
     switchParticipants,
     swicthMessage,
     deleteChatById,

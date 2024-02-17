@@ -2,7 +2,12 @@ const chatsModel = require("./chats.model")
 
 module.exports = {
     Query: {
-        chat: async(_, { _id }) => {
+        chat: async(_, { _id, userId }) => {
+            if (userId) {
+                const i = await chatsModel.updateLastMessageReadBy(_id, userId);
+                console.log(i)
+                return i
+            }
             return await chatsModel.getChatById(_id);
         },
         chatsByIds: async(_, { ids }) => {
