@@ -4,12 +4,17 @@ type Query {
     chatsUserRelatedByUserId(_id: ID!): [Chat!]
 }
 
+type MessagesUnreadCount {
+    user: User!
+    count: Int!
+}
+
 type Chat {
     _id: ID!
     title: String!
     owner: User
     participants: [User]
-    lastMessageReadBy: [User]
+    messagesUnreadCount: [MessagesUnreadCount]
 }
 
 type Mutation {

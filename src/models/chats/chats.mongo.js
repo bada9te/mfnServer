@@ -16,10 +16,16 @@ const chatsSchema = mongoose.Schema({
         ref: 'User',
         autopopulate: { select: '_id email nick avatar' },
     }],
-    lastMessageReadBy: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
-    }],
+    messagesUnreadCount: {
+        type: [{
+            count: Number,
+            user: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'User'
+            }
+        }],
+        default: []
+    },
 }, {timestamps: true});
 
 // plugin

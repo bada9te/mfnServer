@@ -39,10 +39,40 @@ const updateChat = async(id, what, value) => {
 }
 
 // update last message read by
-const updateLastMessageReadBy = async(chatId, userId) => {
+const updateMessagesUnreadCount = async(chatId, userId, newCount) => {
+    userId = new mongoose.Types.ObjectId(userId);
     return await chatsModel.findOneAndUpdate(
         { _id: chatId },
-        { $addToSet: { lastMessageReadBy: userId } },
+        [
+            {
+                $addFields: {
+                    messagesUnreadCount: {
+                        $map: {
+                            input: "$messagesUnreadCount",
+                            as: "mUCount",
+                            in: {
+                                $cond: [
+                                    { $eq: ["$$mUCount.user", userId] },
+                                    { user: userId, count: newCount },
+                                    "$$mUCount"
+                                ]
+                            }
+                        }
+                    }
+                }
+            },
+            {
+                $addFields: {
+                    messagesUnreadCount: {
+                        $cond: [
+                            { $in: [userId, "$messagesUnreadCount.user"] },
+                            "$messagesUnreadCount",
+                            { $concatArrays: ["$messagesUnreadCount", [{ user: userId, count: newCount }]] }
+                        ]
+                    }
+                }
+            }
+        ],
         { new: true }
     );
 }
@@ -104,7 +134,7 @@ module.exports = {
     getManyChatsByIds,
     getUserRelatedChats,
     updateChat,
-    updateLastMessageReadBy,
+    updateMessagesUnreadCount,
     switchParticipants,
     swicthMessage,
     deleteChatById,

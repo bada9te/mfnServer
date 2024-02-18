@@ -4,9 +4,7 @@ module.exports = {
     Query: {
         chat: async(_, { _id, userId }) => {
             if (userId) {
-                const i = await chatsModel.updateLastMessageReadBy(_id, userId);
-                console.log(i)
-                return i
+                return await chatsModel.updateMessagesUnreadCount(_id, userId, 0);
             }
             return await chatsModel.getChatById(_id);
         },
