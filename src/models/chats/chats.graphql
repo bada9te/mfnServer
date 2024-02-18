@@ -20,6 +20,7 @@ type Chat {
 type Mutation {
     chatCreate(input: ChatCreateInput!): Chat!
     chatUpdate(input: ChatUpdateInput!): Chat!
+    chatReadAllMessages(chatId: ID!, userId: ID!): Chat!
     chatSwitchParticipants(chatId: ID!, participants: [ID!]!): Chat!
     chatSwitchMessage(chatId: ID!, messageId: ID!): Chat!
     chatDeleteById(_id: ID!): Chat!

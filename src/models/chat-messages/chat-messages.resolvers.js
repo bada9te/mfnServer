@@ -41,7 +41,6 @@ module.exports = {
             
             chat.participants.forEach(async(participant) => {
                 if (participant._id.toString() !== createdMsg.owner._id.toString()) {
-                    console.log(participant._id, createdMsg.owner._id, "NOT EQ")
                     const index = chat.messagesUnreadCount.map(i => i.user.toString()).indexOf(participant._id.toString())
                     const count = chat.messagesUnreadCount[index]?.count + 1 || 0;
                     await chatsModel.updateMessagesUnreadCount(chat._id, participant._id, count)
