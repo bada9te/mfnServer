@@ -14,10 +14,7 @@ const addBattleByIds = async(id1, id2, title, willFinishAt) => {
         title,
     }
 
-    return await Battles.insertMany([newBattle])
-    .catch((err) => {
-        throw new Error(err);
-    });
+    return await Battles.insertMany([newBattle]);
 }
 
 // remove battle 
@@ -25,9 +22,6 @@ const deleteBattle = async(id) => {
     return await Battles.findOneAndDelete({
         _id: id,
     })
-    .catch((err) => {
-        throw new Error(err);
-    });
 }
 
 
@@ -58,9 +52,6 @@ const setWinnerByBattleId = async(battleId) => {
             }
         }
     ])
-    .catch((err) => {
-        throw new Error(err);
-    });
 }
 
 // get all battles
@@ -83,17 +74,11 @@ const updateScore = async(battleId, scoreType, value, voterId) => {
         },
         { new: true }
     )
-    .catch((err) => {
-        throw new Error(err);
-    })
 }
 
 // count docs
 const getDocsCount = async(filter) => {
     return await Battles.countDocuments(filter).exec()
-    .catch((err) => {
-        throw new Error(err);
-    })
 }
 
 

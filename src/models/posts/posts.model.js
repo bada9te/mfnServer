@@ -6,9 +6,6 @@ const postsModel = require('./posts.mongo');
 // add post
 const addPost = async(post) => {
     return await Post.insertMany([post])
-    .catch((err) => {
-        throw new Error(err);
-    });
 }
 
 // update post
@@ -21,25 +18,16 @@ const updatePost = async(id, value, what) => {
         upsert: true,
         new: true,
     })
-    .catch((err) => {
-        throw new Error(err);
-    });
 }
 
 // delete post
 const deletePostById = async(id) => {
     return await Post.findOneAndDelete({ _id: id, })
-    .catch((err) => {
-        throw new Error(err);
-    });
 }
 
 // delete many posts
 const deletePostsByIds = async(ids) => {
     return await Post.deleteMany({ _id: ids })
-    .catch((err) => {
-        throw new Error(err);
-    });
 }
 
 // get post
@@ -47,9 +35,6 @@ const getPostById = async(id) => {
     return await Post.findById(id, { 
         '__v': 0, 
     })
-    .catch((err) => {
-        throw new Error(err);
-    });
 }
 
 // get all posts
@@ -60,9 +45,6 @@ const getAllPosts = async(range) => {
     .skip(range.offset)
     .limit(range.limit)
     .sort({ createdAt: -1 })
-    .catch((err) => {
-        throw new Error(err);
-    });
 }
 
 const getAllWithOwnerId = async(id, range) => {
@@ -72,9 +54,6 @@ const getAllWithOwnerId = async(id, range) => {
     .skip(range.offset)
     .limit(range.limit)
     .sort({ createdAt: -1 })
-    .catch((err) => {
-        throw new Error(err);
-    });
 }
 
 const getSavedPostsByUserId = async(userId, range) => {
@@ -84,18 +63,12 @@ const getSavedPostsByUserId = async(userId, range) => {
     .skip(range.offset)
     .limit(range.limit)
     .sort({ createdAt: -1 })
-    .catch((err) => {
-        throw new Error(err);
-    });
 }
 
 const getByTitle = async(title) => {
     return await Post.find({title: { $regex: '.*' + title + '.*' }}, {
         '__v': 0,
     })
-    .catch((err) => {
-        throw new Error(err);
-    });
 }
 
 // by title and owner id
@@ -106,9 +79,6 @@ const getByTitleWithUserId = async(title, useOwnerId, userId) => {
     }, {
         '__v': 0,
     })
-    .catch((err) => {
-        throw new Error(err);
-    });
 }
 
 // count docs
@@ -124,9 +94,6 @@ const getOnlyImagesAndAudios = async() => {
         {},
         { 'image': 1, 'audio': 1}
     )
-    .catch((err) => {
-        throw new Error(err);
-    });
 }
 
 // switch saved
@@ -145,9 +112,6 @@ const switchInSaved = async(postId, userId) => {
         }],
         { new: true }
     )
-    .catch((err) => {
-        throw new Error(err);
-    });
 }
 
 // switch liked
@@ -166,9 +130,6 @@ const switchIsLiked = async(postId, userId) => {
         }],
         { new: true }
     )
-    .catch((err) => {
-        throw new Error(err);
-    });
 }
 
 
@@ -176,9 +137,6 @@ const getManyByIds = async(ids) => {
     return await Post.find({_id: { "$in": ids }}, {
         '__v': 0,
     })
-    .catch((err) => {
-        throw new Error(err);
-    });
 }
 
 
@@ -196,9 +154,6 @@ const addOrRemoveComment = async(postId, commentId) => {
         }],
         { new: true }
     )
-    .catch((err) => {
-        throw new Error(err);
-    });
 }
 
 
@@ -227,9 +182,7 @@ const getMostPopularPostsByStartDate = async(date) => {
                 score: { $sum: [{ $size: "$likedBy" }, {$size: "$savedBy"}] }
             }
         },
-    ]).sort({ score: -1 }).limit(3).catch(err => {
-        throw new Error(err);
-    }); 
+    ]).sort({ score: -1 }).limit(3)
 }
 
 
@@ -240,9 +193,6 @@ const getPostsByCategory = async(category, range) => {
     .skip(range.offset)
     .limit(range.limit)
     .sort({ createdAt: -1 })
-    .catch((err) => {
-        throw new Error(err);
-    });
 }
 
 

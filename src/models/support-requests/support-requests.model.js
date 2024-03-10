@@ -4,9 +4,6 @@ const SupportRequest = require('./support-requests.mongo');
 // create report
 const createSupportRequest = async(supReq) => {
     return await SupportRequest.insertMany([supReq])
-    .catch((err) => {
-        throw new Error(err);
-    });
 }
 
 // get all
@@ -14,9 +11,6 @@ const getAllSupportRequests = async(range) => {
     return await SupportRequest.find()
     .skip(range.offset)
     .limit(range.limit)
-    .catch((err) => {
-        throw new Error(err);
-    });
 }
 
 // close report
@@ -29,9 +23,6 @@ const closeSupportRequest = async(id) => {
         upsert: true,
         new: true,
     })
-    .catch((err) => {
-        throw new Error(err);
-    });
 }
 
 // get all
@@ -39,9 +30,6 @@ const getSupportRequestById = async(id) => {
     return await SupportRequest.findOne({
         _id: id
     })
-    .catch((err) => {
-        throw new Error(err);
-    });
 }
 
 

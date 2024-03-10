@@ -9,9 +9,6 @@ const file = await fileModel.getFile("64296620726cf61f011540e9")
 // add new user
 const addUser = async(user) => {
     return await User.insertMany([user])
-    .catch((err) => { 
-        throw new Error(err); 
-    });
 }
 
 // remove user by email
@@ -19,9 +16,6 @@ const deleteUserById = async(id) => {
     return await User.findOneAndDelete({
         _id: id,
     })
-    .catch((err) => {
-        throw new Error(err);
-    });
 }
 
 // update user
@@ -33,25 +27,16 @@ const updateUser = async(id, value, what) => {
     }, {
         new: true,
     })
-    .catch((err) => {
-        throw new Error(err);
-    });
 }
 
 // get user by email
 const getUserByEmail = async(email) => {
     return await User.findOne({ 'local.email': email }, { '__v': 0 })
-    .catch((err) => {
-        throw new Error(err);
-    });
 }
 
 // get by id
 const getUserById = async(id) => {
     return await User.findById(id, { '__v': 0 })
-    .catch((err) => {
-        throw new Error(err);
-    });
 }
 
 // get by ids array
@@ -61,9 +46,6 @@ const getUsersByIds = async(ids) => {
         'verifyToken': 0,
         '__v': 0,
     })
-    .catch((err) => {
-        throw new Error(err);
-    });
 }
 
 // get all
@@ -73,9 +55,6 @@ const getAllUsers = async() => {
         'password': 0,
         '__v': 0,
     })
-    .catch(err => {
-        throw new Error(err);
-    });
 }
 
 // get by nickname 
@@ -87,9 +66,6 @@ const getByNickname = async(nickname) => {
         'password': 0,
         '__v': 0,
     })
-    .catch((err) => {
-        throw new Error(err);
-    })
 }
 
 const getOnlyImagesAndAudios = async() => {
@@ -97,9 +73,6 @@ const getOnlyImagesAndAudios = async() => {
         {},
         { 'avatar': 1, 'background': 1 }
     )
-    .catch((err) => {
-        throw new Error(err);
-    });
 }
 
 const switchSubscriptionOnUser = async(subscriberId, userId) => {
@@ -120,9 +93,6 @@ const switchSubscriptionOnUser = async(subscriberId, userId) => {
         }],
         { new: true }
     )
-    .catch(err => {
-        throw new Error(err);
-    });
 }
 
 const switchSubscribedOnUser = async(subscriberId, userId) => {
@@ -143,9 +113,6 @@ const switchSubscribedOnUser = async(subscriberId, userId) => {
         }],
         { new: true }
     )
-    .catch(err => {
-        throw new Error(err);
-    });
 }
 
 
@@ -156,9 +123,6 @@ const confirmAccount = async(userId) => {
         { verified: true },
         { new: true }
     )
-    .catch(err => {
-        throw new Error(err);
-    });
 }
 
 // restore account
@@ -168,9 +132,6 @@ const restoreAccount = async(userId, newValue, type) => {
         { [type]: newValue },
         { new: true },
     )
-    .catch(err => {
-        throw new Error(err);
-    });
 }
 
 

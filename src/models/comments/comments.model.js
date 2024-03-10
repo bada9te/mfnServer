@@ -5,9 +5,6 @@ const Comments = require('./comments.mongo');
 // add
 const addComment = async(comment) => {
     return await Comments.insertMany([comment])
-    .catch((err) => {
-        throw new Error(err)
-    });
 }
 
 // get by id
@@ -15,17 +12,11 @@ const getById = async(id) => {
     return await Comments.findById(id, {
         '__v': 0,
     })
-    .catch((err) => {
-        throw new Error(err);
-    });
 }
 
 // remove by id
 const removeById = async(id) => {
     return await Comments.findOneAndDelete({ _id: id })
-    .catch((err) => {
-        throw new Error(err);
-    });
 }
 
 // update by id
@@ -37,17 +28,11 @@ const updateById = async(id, value, what) => {
     }, {
         upsert: true,
     })
-    .catch((err) => {
-        throw new Error(err);
-    });
 }
 
 // remove many by ids
 const removeManyByIds = async(ids) => {
     return await Comments.deleteMany({_id: {"$in": ids} })
-    .catch((err) => {
-        throw new Error(err);
-    });
 }
 
 
@@ -59,9 +44,6 @@ const getAllWithIds = async(ids) => {
     }, { 
         '__v': 0 
     })
-    .catch((err) => {
-        throw new Error(err);
-    });
 }
 
 
@@ -74,8 +56,6 @@ const getCommentReplies = async(id) => {
         "_id": 0,
         "__v": 0,
         "owner": 0,
-    }).catch(err => {
-        throw new Error(err);
     })
 }
 
@@ -84,9 +64,6 @@ const getCommentsByPostId = async(postId) => {
         post: postId
     })
     .sort({ createdAt: -1 })
-    .catch(err => {
-        throw new Error(err);
-    })
 }
 
 
