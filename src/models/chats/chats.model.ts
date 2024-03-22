@@ -1,21 +1,22 @@
-const { default: mongoose } = require("mongoose");
-const chatsModel = require("./chats.mongo")
+import mongoose from "mongoose";
+import chatsModel from "./chats.mongo";
+import { TNewChat } from "./types";
 
 
 // create
-const createChat = async(chat) => {
+const createChat = async(chat: TNewChat) => {
     return await chatsModel.insertMany([chat]);
 }
 
 // get by id
-const getChatById = async(id) => {
+const getChatById = async(id: string) => {
     return await chatsModel.findById(id, {
         '__v': 0,
     });
 }
 
 // get user related
-const getUserRelatedChats = async(userId) => {
+const getUserRelatedChats = async(userId: string) => {
     return await chatsModel.find(
         { 
             $or: [{ owner: userId }, { participants: userId }] 
@@ -24,7 +25,7 @@ const getUserRelatedChats = async(userId) => {
 }
 
 // get many by ids
-const getManyChatsByIds = async(ids) => {
+const getManyChatsByIds = async(ids: string[]) => {
     return await chatsModel.find({_id: {"$in": ids}})
         .sort({createdAt: -1});
 }
@@ -39,7 +40,7 @@ const updateChat = async(id, what, value) => {
 }
 
 // update last message read by
-const updateMessagesUnreadCount = async(chatId, userId, newCount) => {
+const updateMessagesUnreadCount = async(chatId: string, userId: string | mongoose.Types.ObjectId, newCount: number) => {
     userId = new mongoose.Types.ObjectId(userId);
     return await chatsModel.findOneAndUpdate(
         { _id: chatId },
@@ -78,8 +79,8 @@ const updateMessagesUnreadCount = async(chatId, userId, newCount) => {
 }
 
 // insert / remove participant
-const switchParticipants = async(chatId, participants) => {
-    participants = participants.map(i => new mongoose.Types.ObjectId(i));
+const switchParticipants = async(chatId: string, participants: string[] | mongoose.Types.ObjectId[]) => {
+    participants = participants.map((i: string | mongoose.Types.ObjectId) => new mongoose.Types.ObjectId(i));
     return await chatsModel.findOneAndUpdate(
         { _id: chatId },
         [
@@ -101,7 +102,7 @@ const switchParticipants = async(chatId, participants) => {
 
 
 // insert / remove msg
-const swicthMessage = async(chatId, messageId) => {
+const swicthMessage = async(chatId: string, messageId: string | mongoose.Types.ObjectId) => {
     messageId = new mongoose.Types.ObjectId(messageId);
     return await chatsModel.findOneAndUpdate(
         { _id: chatId },
@@ -123,12 +124,12 @@ const swicthMessage = async(chatId, messageId) => {
 }
 
 // delete 
-const deleteChatById = async(id) => {
+const deleteChatById = async(id: string) => {
     return await chatsModel.findOneAndDelete({ _id: id, });
 }
 
 
-module.exports = {
+export {
     createChat,
     getChatById,
     getManyChatsByIds,

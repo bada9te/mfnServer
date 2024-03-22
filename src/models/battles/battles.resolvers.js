@@ -5,13 +5,8 @@ const config = require("../../config");
 module.exports = {
     Query: {
         battlesByStatus: async(_, { status, offset, limit }) => {
-            if (status === 'running') {
-                status = false;
-            } else {
-                status = true;
-            }
             return {
-                battles: await battlesModel.getAllBattlesByStatus(status, { offset, limit }),
+                battles: await battlesModel.getAllBattlesByStatus(status === 'running', { offset, limit }),
                 count: await battlesModel.getDocsCount({ finished: status }),
             }
         }
@@ -23,7 +18,8 @@ module.exports = {
             dateEnd.setDate(dateEnd.getDate() + 1);
             battle.willFinishAt = dateEnd.toISOString();
             let createdBattle;
-            await battlesModel.addBattleByIds(battle.post1, battle.post2, battle.title, battle.willFinishAt)
+
+            await battlesModel.addBattleByIds(battle)
                 .then(async(insertedBattle) => {
                     createdBattle = insertedBattle[0];
                     if (config.base.envType !== "test") {

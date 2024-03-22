@@ -1,32 +1,22 @@
-const Battles = require('./battles.mongo');
-const postsModel = require('../posts/posts.model');
-
+import { TRange } from '../types';
+import Battles from './battles.mongo';
+import { TNewBattle } from './types';
 
 // add battle
-const addBattleByIds = async(id1, id2, title, willFinishAt) => {
-    //const posts = await postsModel.getManyByIds([id1, id2]);
-
-    //console.log(posts);
-    const newBattle = {
-        post1: id1,
-        post2: id2,
-        willFinishAt,
-        title,
-    }
-
+const addBattleByIds = async(newBattle: TNewBattle) => {
     return await Battles.insertMany([newBattle]);
 }
 
 // remove battle 
-const deleteBattle = async(id) => {
+const deleteBattle = async(id: string) => {
     return await Battles.findOneAndDelete({
         _id: id,
-    })
+    });
 }
 
 
 // set winner
-const setWinnerByBattleId = async(battleId) => {
+const setWinnerByBattleId = async(battleId: string) => {
     await Battles.updateOne({ _id: battleId }, [
         {
             $set: {
@@ -55,17 +45,14 @@ const setWinnerByBattleId = async(battleId) => {
 }
 
 // get all battles
-const getAllBattlesByStatus = async(status, range) => {
-    return await Battles.find({ finished: status }, { '__v': 0 })
+const getAllBattlesByStatus = async(finished: boolean, range: TRange) => {
+    return await Battles.find({ finished }, { '__v': 0 })
     .skip(range.offset)
     .limit(range.limit)
-    .sort({ createdAt: -1 })
-    .catch((err) => {
-        throw new Error(err);
-    });
+    .sort({ createdAt: -1 });
 }
 
-const updateScore = async(battleId, scoreType, value, voterId) => {
+const updateScore = async(battleId: string, scoreType: string, value: number, voterId: string) => {
     return await Battles.findOneAndUpdate(
         { _id: battleId }, 
         { 
@@ -77,13 +64,13 @@ const updateScore = async(battleId, scoreType, value, voterId) => {
 }
 
 // count docs
-const getDocsCount = async(filter) => {
+const getDocsCount = async(filter: any) => {
     return await Battles.countDocuments(filter).exec()
 }
 
 
 
-module.exports = {
+export {
     addBattleByIds,
     deleteBattle,
     setWinnerByBattleId,

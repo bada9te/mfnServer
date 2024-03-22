@@ -50,6 +50,7 @@
   },
   "devDependencies": {
     "@shelf/jest-mongodb": "^4.2.0",
+    "@types/mongoose": "^5.11.97",
     "jest": "^29.7.0",
     "supertest": "^6.3.3"
   }

@@ -3,16 +3,14 @@ const app    = require('./app');
 const path   = require('path');
 const http   = require('http');
 const config = require('./config');
-const removeJunkFiles       = require('./utils/cleaner/cleaner');
-const connectMongo          = require('./utils/mongo/connectMongo');
-const setupApollo           = require('./utils/apollo-server/server');
-const initSocketIO = require('./utils/socket/socket');
+const removeJunkFiles = require('./utils/cleaner/cleaner');
+const connectMongo    = require('./utils/mongo/connectMongo');
+const setupApollo     = require('./utils/apollo-server/server');
+const initSocketIO    = require('./utils/socket/socket');
 
 
 // server config
 const PORT           = config.base.port || 8000;
-const MONGO_URL      = config.mongo.url;
-const MONGO_URL_TEST = config.mongo.url_test;
 
 
 // http server
