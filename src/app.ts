@@ -1,11 +1,11 @@
-const path         = require('path');
-const cors         = require('cors');
-const express      = require('express');
-const passport     = require('passport');
-const session      = require('express-session');
-const cookieParser = require('cookie-parser');
-const errorHandler = require('./middleware/errorHandler');
-const config       = require('./config');
+import path from 'path';
+import cors from 'cors';
+import express from 'express';
+import passport from 'passport';
+import session from 'express-session';
+import cookieParser from 'cookie-parser';
+import errorHandler from './middleware/errorHandler';
+import config from './config';
 const MongoDBStore = require('connect-mongodb-session')(session);
 
 
@@ -96,4 +96,4 @@ console.log('[APP] Launching...');
   //app.use(errorHandler);
 
 
-module.exports = app;
+export default app;

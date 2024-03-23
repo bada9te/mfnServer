@@ -1,32 +1,35 @@
-const { Server } = require('socket.io');
-const notificationsModel = require('../../models/notifications/notifications.model');
-const usersModel = require('../../models/users/users.model');
-const config = require('../../config');
+import { Server } from 'socket.io';
+//import notificationsModel from '../../models/notifications/notifications.model';
+//import usersModel from '../../models/users/users.model';
+import config from '../../config';
+import http from "http";
+import { IClientToServerEvents, ICustomSocket, IInterServerEvents, IServerToClientEvents, ISocketData, TUser } from './types';
 
 // get current connections 
-const getCurrentUsers = (io) => {
-    const users = [];
+const getCurrentUsers = (io: Server<IClientToServerEvents, IServerToClientEvents, IInterServerEvents, ISocketData>) => {
+    const users: TUser[] = [];
     for (let [id, socket] of io.of("/").sockets) {
+        const customSock = socket as ICustomSocket;
         users.push({
             socketId: id,
-            userId: socket.userId,
+            userId: customSock.userId,
         });
     }
     return users;
 }
 
 // get users includes in [toUsers]
-const getUsersByToUsersArray = (io, toUsers) => {
+const getUsersByToUsersArray = (io: Server<IClientToServerEvents, IServerToClientEvents, IInterServerEvents, ISocketData>, toUsers: string[]) => {
     return getCurrentUsers(io).filter(i => toUsers.includes(i.userId)).map(i => i.socketId);
 }
 
 // socket.io
-const initSocketIO = async(SERVER) => {
+const initSocketIO = async(SERVER: http.Server) => {
     console.log(`[SOCKET] [*] Initializing...`);
-    const io = new Server(SERVER, { cors: { origin: config.base.clientBase } });
+    const io = new Server<IClientToServerEvents, IServerToClientEvents, IInterServerEvents, ISocketData>(SERVER, { cors: { origin: config.base.clientBase } });
 
     // main
-    io.on("connection", (socket) => {
+    io.on("connection", (socket: ICustomSocket) => {
         console.log(`[SOCKET] [+] User is connected, ${JSON.stringify({ SID: socket.id, UID: socket.userId }, null)}`);
         const users = getCurrentUsers(io);
         socket.emit('users', users);
@@ -46,54 +49,54 @@ const initSocketIO = async(SERVER) => {
         /***************** USERS HANDLERS *****************/
         // subscribe
         socket.on('user subscribed', ({ userId, toUsers }) => {
-            io.to(getUsersByToUsersArray(io, toUsers)).emit('user subscribed', userId);
+            io.to(getUsersByToUsersArray(io, toUsers)).emit("userIdEmit", "user subscribed", userId);
         });
 
         // subscribe
         socket.on('user unsubscribed', ({ userId, toUsers }) => {
-            io.to(getUsersByToUsersArray(io, toUsers)).emit('user unsubscribed', userId);
+            io.to(getUsersByToUsersArray(io, toUsers)).emit("userIdEmit", 'user unsubscribed', userId);
         });
 
         /***************** CHATS HANDLERS *****************/
         // create chat
         socket.on('chat create', ({ chat, toUsers }) => {
-            io.to(getUsersByToUsersArray(io, toUsers)).emit('chat create', chat);
+            io.to(getUsersByToUsersArray(io, toUsers)).emit("chatEmit", 'chat create', chat);
         });
 
         // update chat
         socket.on('chat update', ({ chat, toUsers }) => {
-            io.to(getUsersByToUsersArray(io, toUsers)).emit('chat update', chat);
+            io.to(getUsersByToUsersArray(io, toUsers)).emit("chatEmit", 'chat update', chat);
         });
 
         // delete chat
         socket.on('chat delete', ({ chat, toUsers }) => {
-            io.to(getUsersByToUsersArray(io, toUsers)).emit('chat delete', chat);
+            io.to(getUsersByToUsersArray(io, toUsers)).emit("chatEmit", 'chat delete', chat);
         });
 
         /**************** C-MSGS HANDLERS *****************/
         // create msg
         socket.on('message create', ({ message, toUsers }) => {
-            io.to(getUsersByToUsersArray(io, toUsers)).emit('message create', message);
+            io.to(getUsersByToUsersArray(io, toUsers)).emit("chatMessageEmit", 'message create', message);
         });
 
         // read msg
         socket.on('message read', ({ message, toUsers }) => {
-            io.to(getUsersByToUsersArray(io, toUsers)).emit('message read', message);
+            io.to(getUsersByToUsersArray(io, toUsers)).emit("chatMessageEmit", 'message read', message);
         });
 
         // update msg
         socket.on('message update', ({ message, toUsers }) => {
-            io.to(getUsersByToUsersArray(io, toUsers)).emit('messsage update', message);
+            io.to(getUsersByToUsersArray(io, toUsers)).emit("chatMessageEmit", 'messsage update', message);
         });
 
         // delete msg
         socket.on('message delete', ({ message, toUsers }) => {
-            io.to(getUsersByToUsersArray(io, toUsers)).emit('messsage delete', message);
+            io.to(getUsersByToUsersArray(io, toUsers)).emit("chatMessageEmit", 'messsage delete', message);
         });
     });
 
     // middleware to check for userId
-    io.use((socket, next) => {
+    io.use((socket: ICustomSocket, next) => {
         const userId = socket.handshake.auth.userId;
         if (!userId) {
             return next(new Error("Invalid user id"));
@@ -105,4 +108,4 @@ const initSocketIO = async(SERVER) => {
 }
 
 
-module.exports = initSocketIO;
+export default initSocketIO;

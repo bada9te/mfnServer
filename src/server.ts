@@ -1,12 +1,12 @@
-const fs     = require('fs');
-const app    = require('./app');
-const path   = require('path');
-const http   = require('http');
-const config = require('./config');
-const removeJunkFiles = require('./utils/cleaner/cleaner');
-const connectMongo    = require('./utils/mongo/connectMongo');
-const setupApollo     = require('./utils/apollo-server/server');
-const initSocketIO    = require('./utils/socket/socket');
+import fs from 'fs';
+import app from './app';
+import path from 'path';
+import http from 'http';
+import config from './config';
+import removeJunkFiles from './utils/cleaner/cleaner';
+import connectMongo from './utils/mongo/connectMongo';
+import setupApollo from './utils/apollo-server/server';
+import initSocketIO from './utils/socket/socket';
 
 
 // server config
