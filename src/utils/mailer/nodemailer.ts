@@ -1,6 +1,6 @@
-const nodemailer = require('nodemailer');
-const path = require('path');
-const hbs = require('nodemailer-express-handlebars')
+import nodemailer from 'nodemailer';
+import path from 'path';
+import hbs from 'nodemailer-express-handlebars/index';
 
 // our email
 const email = 'musicfromnothing@outlook.com';
@@ -9,7 +9,7 @@ const email = 'musicfromnothing@outlook.com';
 const htmlTeamplatesPATH = path.join(__dirname, 'htmlTemplates');
 
 // transporter
-const transporter = nodemailer.createTransport({
+const transporter: hbs.HbsTransporter = nodemailer.createTransport({
     service: 'hotmail',
     auth: {
         user: 'musicfromnothing@outlook.com',
@@ -18,7 +18,7 @@ const transporter = nodemailer.createTransport({
 });
 
 // point to the template folder
-const handlebarOptions = {
+const handlebarOptions: hbs.NodemailerExpressHandlebarsOptions = {
     viewEngine: {
         partialsDir: path.resolve(htmlTeamplatesPATH),
         defaultLayout: false,
@@ -27,11 +27,19 @@ const handlebarOptions = {
 };
 
 // use a template file with nodemailer
-transporter.use('compile', hbs(handlebarOptions))
+transporter.use('compile', hbs(handlebarOptions));
+
+const catchErrCallback = (err: Error, info: nodemailer.SentMessageInfo): void => {
+    if (err) {
+        console.log(err);
+    } else {
+        console.log('Email was sent:', info.response);
+    }
+}
 
 
 // send verify email
-const sendVerifyEmail = (to, userName, link, passcode) => {
+const sendVerifyEmail = (to: string, userName: string, link: string, passcode: string) => {
     transporter.sendMail({
         from: email,
         to,
@@ -42,38 +50,27 @@ const sendVerifyEmail = (to, userName, link, passcode) => {
             link,
             passcode,
         },
-    }, (err, info) => {
-        if (err) {
-            console.log(err);
-        } else {
-            console.log('Email send:', info.response);
-        }
-    });
+    }, catchErrCallback);
 }
 
 // const send restore email
-const sendRestoreEmail = (to, userName, linkRestore) => {
+const sendRestoreEmail = (to: string, userName: string, linkRestore: string) => {
     transporter.sendMail({
         from: email,
         to,
         subject: '[MFN] Account restoring',
         template: 'restore',
+        
         context: {
             userName, 
             linkRestore,
         },
-    }, (err, info) => {
-        if (err) {
-            console.log(err);
-        } else {
-            console.log('Email send:', info.response);
-        }
-    });
+    }, catchErrCallback);
 }
 
 
 // info email
-const sendInfoEmail = (to, userName, text) => {
+const sendInfoEmail = (to: string, userName: string, text: string) => {
     transporter.sendMail({
         from: email,
         to,
@@ -83,18 +80,12 @@ const sendInfoEmail = (to, userName, text) => {
             userName, 
             text,
         },
-    }, (err, info) => {
-        if (err) {
-            console.log(err);
-        } else {
-            console.log('Email send:', info.response);
-        }
-    });
+    }, catchErrCallback);
 }
 
 
 // chnage email
-const sendChangeEmail = (to, userName, newEmail, link, passcode) => {
+const sendChangeEmail = (to: string, userName: string, newEmail: string, link: string, passcode: string) => {
     transporter.sendMail({
         from: email,
         to,
@@ -102,22 +93,17 @@ const sendChangeEmail = (to, userName, newEmail, link, passcode) => {
         template: 'emailChange',
         context: {
             userName, 
-            text,
             link,
             passcode,
         },
-    }, (err, info) => {
-        if (err) {
-            console.log(err);
-        } else {
-            console.log('Email send:', info.response);
-        }
-    });
+    }, catchErrCallback);
 }
 
 
+sendVerifyEmail("wotgamer257@gmail.com", "testUSER", "www.google.com", "passcodeEXAMPLE");
 
-module.exports = {
+
+export {
     sendVerifyEmail,
     sendRestoreEmail,
     sendInfoEmail,

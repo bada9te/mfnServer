@@ -1,5 +1,5 @@
-const mongoose = require('mongoose');
-const config = require('../../config');
+import mongoose from 'mongoose';
+import config from '../../config';
 
 
 const MONGO_URL      = config.mongo.url;
@@ -20,4 +20,4 @@ const connectMongo = async() => {
     await mongoose.connect(config.base.envType !== "test" ? MONGO_URL : MONGO_URL_TEST).catch(console.error);
 }
 
-module.exports = connectMongo;
+export default connectMongo;
