@@ -1,22 +1,23 @@
-const Notification = require('./notifications.mongo');
+import Notification from './notifications.mongo';
+import { TNewNotification } from './types';
 
 // create notification
-const createNotification = async(notification) => {
+const createNotification = async(notification: TNewNotification) => {
     return await Notification.insertMany([notification])
 }
 
 // delete notification
-const deleteNotificationById = async(id) => {
+const deleteNotificationById = async(id: string) => {
     return await Notification.findByIdAndDelete(id)
 }
 
 // delete notification
-const deleteNotificationsByIds = async(ids) => {
+const deleteNotificationsByIds = async(ids: string[]) => {
     return await Notification.deleteMany({ _id: ids })
 }
 
 // mark as read
-const markNotificationAsRead = async(id) => {
+const markNotificationAsRead = async(id: string) => {
     return await Notification.findOneAndUpdate({ 
         _id: id,
     }, {
@@ -28,7 +29,7 @@ const markNotificationAsRead = async(id) => {
 }
 
 // mark as read
-const markNotificationsAsRead = async(ids) => {
+const markNotificationsAsRead = async(ids: string[]) => {
     return await Notification.updateMany({ 
         _id: ids,
     }, {
@@ -39,7 +40,7 @@ const markNotificationsAsRead = async(ids) => {
 }
 
 // get with receiver id
-const getAllUnreadNotifications = async(id) => {
+const getAllUnreadNotifications = async(id: string) => {
     return await Notification.find({ 
         receiver: id,
         checked: false,
@@ -47,7 +48,7 @@ const getAllUnreadNotifications = async(id) => {
 }
 
 // get with receiver id
-const getAllReadNotifications = async(id) => {
+const getAllReadNotifications = async(id: string) => {
     return await Notification.find({ 
         receiver: id,
         checked: true,
@@ -55,13 +56,13 @@ const getAllReadNotifications = async(id) => {
 }
 
 // get with ids
-const getAllNotificationsByIds = async(ids) => {
+const getAllNotificationsByIds = async(ids: string[]) => {
     return await Notification.find({ _id: ids })
 }
 
 
 
-module.exports = {
+export {
     createNotification,
     deleteNotificationById,
     deleteNotificationsByIds,

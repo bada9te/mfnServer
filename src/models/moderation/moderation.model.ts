@@ -1,13 +1,14 @@
-const Moderation = require('./moderation.mongo');
+import Moderation from './moderation.mongo';
+import { TNewAction } from './types';
 
 
 // create 
-const createAction = async(action) => {
+const createAction = async(action: TNewAction) => {
     return await Moderation.insertMany([action])
 }
 
 // delete
-const deleteAction = async(userId, actionId, verifyToken, actionType) => {
+const deleteAction = async(userId: string, actionId: string, verifyToken: string, actionType: string) => {
     return await Moderation.findOneAndRemove({ 
         _id: actionId,
         user: userId,
@@ -17,7 +18,7 @@ const deleteAction = async(userId, actionId, verifyToken, actionType) => {
 }
 
 // check
-const validateAction = async(userId, actionId, verifyToken, actionType) => {
+const validateAction = async(userId: string, actionId: string, verifyToken: string, actionType: string) => {
     return await Moderation.findOne({
         _id: actionId,
         user: userId,
@@ -27,7 +28,7 @@ const validateAction = async(userId, actionId, verifyToken, actionType) => {
 }
 
 
-module.exports = {
+export {
     createAction,
     deleteAction,
     validateAction,

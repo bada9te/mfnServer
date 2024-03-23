@@ -1,19 +1,21 @@
-const Report = require('./reports.mongo');
+import { TRange } from '../types';
+import Report from './reports.mongo';
+import { TNewReport } from './types';
 
 
 // create report
-const createReport = async(report) => {
+const createReport = async(report: TNewReport) => {
     return await Report.insertMany([report])
 }
 
-const getAllReports = async(range) => {
+const getAllReports = async(range: TRange) => {
     return await Report.find({})
     .skip(range.offset)
     .limit(range.limit)
 }
 
 // close report
-const closeReport = async(id) => {
+const closeReport = async(id: string) => {
     return await Report.findOneAndUpdate({
         _id: id,
     }, {
@@ -26,14 +28,14 @@ const closeReport = async(id) => {
 
 
 // close report
-const getReportById = async(id) => {
+const getReportById = async(id: string) => {
     return await Report.findOne({
         _id: id,
     })
 }
 
 
-module.exports = {
+export {
     createReport,
     getAllReports,
     closeReport,

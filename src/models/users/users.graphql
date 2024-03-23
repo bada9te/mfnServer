@@ -41,7 +41,6 @@ type Mutation {
 
 
 input AddUserInput {
-    _id: ID,
     email: String!
     nick: String!
     password: String!

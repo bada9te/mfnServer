@@ -1,15 +1,16 @@
-const mongoose = require('mongoose');
-const Post = require('./posts.mongo');
-const postsModel = require('./posts.mongo');
+import mongoose from 'mongoose';
+import Post from './posts.mongo';
+import { TNewPost } from './types';
+import { TRange } from '../types';
 
 
 // add post
-const addPost = async(post) => {
+const addPost = async(post: TNewPost) => {
     return await Post.insertMany([post])
 }
 
 // update post
-const updatePost = async(id, value, what) => {
+const updatePost = async(id: string, value: any, what: string) => {
     return await Post.findOneAndUpdate({
         _id: id,
     }, {
@@ -21,24 +22,24 @@ const updatePost = async(id, value, what) => {
 }
 
 // delete post
-const deletePostById = async(id) => {
+const deletePostById = async(id: string) => {
     return await Post.findOneAndDelete({ _id: id, })
 }
 
 // delete many posts
-const deletePostsByIds = async(ids) => {
+const deletePostsByIds = async(ids: string[]) => {
     return await Post.deleteMany({ _id: ids })
 }
 
 // get post
-const getPostById = async(id) => {
+const getPostById = async(id: string) => {
     return await Post.findById(id, { 
         '__v': 0, 
     })
 }
 
 // get all posts
-const getAllPosts = async(range) => {
+const getAllPosts = async(range: TRange) => {
     return await Post.find({}, { 
         '__v': 0, 
     })
@@ -47,7 +48,7 @@ const getAllPosts = async(range) => {
     .sort({ createdAt: -1 })
 }
 
-const getAllWithOwnerId = async(id, range) => {
+const getAllWithOwnerId = async(id: string, range: TRange) => {
     return await Post.find({owner: id}, {
         '__v': 0,
     })
@@ -56,7 +57,7 @@ const getAllWithOwnerId = async(id, range) => {
     .sort({ createdAt: -1 })
 }
 
-const getSavedPostsByUserId = async(userId, range) => {
+const getSavedPostsByUserId = async(userId: string, range: TRange) => {
     return await Post.find({ savedBy: userId }, {
         '__v': 0,
     })
@@ -65,14 +66,14 @@ const getSavedPostsByUserId = async(userId, range) => {
     .sort({ createdAt: -1 })
 }
 
-const getByTitle = async(title) => {
+const getByTitle = async(title: string) => {
     return await Post.find({title: { $regex: '.*' + title + '.*' }}, {
         '__v': 0,
     })
 }
 
 // by title and owner id
-const getByTitleWithUserId = async(title, useOwnerId, userId) => {
+const getByTitleWithUserId = async(title: string, useOwnerId: boolean, userId: string) => {
     return await Post.find({
         title: { $regex: '.*' + title + '.*' },
         owner: useOwnerId === true ? userId : { "$ne": userId }
@@ -82,7 +83,7 @@ const getByTitleWithUserId = async(title, useOwnerId, userId) => {
 }
 
 // count docs
-const getDocsCount = async(filter) => {
+const getDocsCount = async(filter: any) => {
     return await Post.countDocuments(filter).exec()
     .catch((err) => {
         throw new Error(err);
@@ -97,7 +98,7 @@ const getOnlyImagesAndAudios = async() => {
 }
 
 // switch saved
-const switchInSaved = async(postId, userId) => {
+const switchInSaved = async(postId: string, userId: string | mongoose.Types.ObjectId) => {
     userId = new mongoose.Types.ObjectId(userId);
     return await Post.findOneAndUpdate({ _id: postId }, [{
             $set: {
@@ -115,7 +116,7 @@ const switchInSaved = async(postId, userId) => {
 }
 
 // switch liked
-const switchIsLiked = async(postId, userId) => {
+const switchIsLiked = async(postId: string, userId: string | mongoose.Types.ObjectId) => {
     userId = new mongoose.Types.ObjectId(userId);
     return await Post.findOneAndUpdate({ _id: postId }, [{
             $set: {
@@ -133,14 +134,14 @@ const switchIsLiked = async(postId, userId) => {
 }
 
 
-const getManyByIds = async(ids) => {
+const getManyByIds = async(ids: string[]) => {
     return await Post.find({_id: { "$in": ids }}, {
         '__v': 0,
     })
 }
 
 
-const addOrRemoveComment = async(postId, commentId) => {
+const addOrRemoveComment = async(postId: string, commentId: string) => {
     return await Post.findOneAndUpdate({ _id: postId }, [{
             $set: {
                 comments: {
@@ -157,7 +158,7 @@ const addOrRemoveComment = async(postId, commentId) => {
 }
 
 
-const getMostPopularPostsByStartDate = async(date) => {
+const getMostPopularPostsByStartDate = async(date: Date) => {
     return await Post.aggregate([
         {
             $match: {
@@ -186,7 +187,7 @@ const getMostPopularPostsByStartDate = async(date) => {
 }
 
 
-const getPostsByCategory = async(category, range) => {
+const getPostsByCategory = async(category: string, range: TRange) => {
     return await Post.find({ category }, {
         '__v': 0,
     })
@@ -196,7 +197,7 @@ const getPostsByCategory = async(category, range) => {
 }
 
 
-module.exports = {
+export {
     addPost, 
     updatePost,
     deletePostById,

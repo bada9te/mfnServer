@@ -1,5 +1,6 @@
-const { default: mongoose } = require('mongoose');
-const User = require('./users.mongo');
+import mongoose from "mongoose";
+import User from './users.mongo';
+import { TNewUser } from "./types";
 
 /*
 const file = await fileModel.getFile("64296620726cf61f011540e9")
@@ -7,19 +8,19 @@ const file = await fileModel.getFile("64296620726cf61f011540e9")
     await updateUser(user);
 */ 
 // add new user
-const addUser = async(user) => {
+const addUser = async(user: TNewUser) => {
     return await User.insertMany([user])
 }
 
 // remove user by email
-const deleteUserById = async(id) => {
+const deleteUserById = async(id: string) => {
     return await User.findOneAndDelete({
         _id: id,
     })
 }
 
 // update user
-const updateUser = async(id, value, what) => {
+const updateUser = async(id: string, value: any, what: string) => {
     return await User.findOneAndUpdate({
         _id: id,
     }, { 
@@ -30,17 +31,17 @@ const updateUser = async(id, value, what) => {
 }
 
 // get user by email
-const getUserByEmail = async(email) => {
+const getUserByEmail = async(email: string) => {
     return await User.findOne({ 'local.email': email }, { '__v': 0 })
 }
 
 // get by id
-const getUserById = async(id) => {
+const getUserById = async(id: string) => {
     return await User.findById(id, { '__v': 0 })
 }
 
 // get by ids array
-const getUsersByIds = async(ids) => {
+const getUsersByIds = async(ids: string[]) => {
     return await User.find({_id: {"$in": ids}}, {
         'password': 0,
         'verifyToken': 0,
@@ -58,7 +59,7 @@ const getAllUsers = async() => {
 }
 
 // get by nickname 
-const getByNickname = async(nickname) => {
+const getByNickname = async(nickname: string) => {
     return await User.find({
         nick: { $regex: '.*' + nickname + '.*' }
     }, {
@@ -75,7 +76,7 @@ const getOnlyImagesAndAudios = async() => {
     )
 }
 
-const switchSubscriptionOnUser = async(subscriberId, userId) => {
+const switchSubscriptionOnUser = async(subscriberId: string | mongoose.Types.ObjectId, userId: string | mongoose.Types.ObjectId) => {
     subscriberId = new mongoose.Types.ObjectId(subscriberId);
     userId       = new mongoose.Types.ObjectId(userId);
     return await User.findOneAndUpdate(
@@ -95,7 +96,7 @@ const switchSubscriptionOnUser = async(subscriberId, userId) => {
     )
 }
 
-const switchSubscribedOnUser = async(subscriberId, userId) => {
+const switchSubscribedOnUser = async(subscriberId: string | mongoose.Types.ObjectId, userId: string | mongoose.Types.ObjectId) => {
     subscriberId = new mongoose.Types.ObjectId(subscriberId);
     userId       = new mongoose.Types.ObjectId(userId);
     return await User.findOneAndUpdate(
@@ -117,7 +118,7 @@ const switchSubscribedOnUser = async(subscriberId, userId) => {
 
 
 // confirm account creation
-const confirmAccount = async(userId) => {
+const confirmAccount = async(userId: string) => {
     return await User.findOneAndUpdate(
         { _id: userId },
         { verified: true },
@@ -126,7 +127,7 @@ const confirmAccount = async(userId) => {
 }
 
 // restore account
-const restoreAccount = async(userId, newValue, type) => {
+const restoreAccount = async(userId: string, newValue: any, type: string) => {
     return await User.findOneAndUpdate(
         { _id: userId },
         { [type]: newValue },
@@ -135,12 +136,7 @@ const restoreAccount = async(userId, newValue, type) => {
 }
 
 
-
-
-
-
-
-module.exports = {
+export {
     addUser,
     deleteUserById,
     updateUser,

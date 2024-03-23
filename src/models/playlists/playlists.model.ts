@@ -1,19 +1,21 @@
-const mongoose = require("mongoose");
-const Playlist = require("./playlists.mongo");
+import mongoose from "mongoose";
+import Playlist from "./playlists.mongo";
+import { TNewPlaylist } from "./types";
+import { TRange } from "../types";
 
 
 // create
-const createPlaylist = async(playlist) => {
+const createPlaylist = async(playlist: TNewPlaylist) => {
     return await Playlist.insertMany([playlist], { populate: "owner" })
 }
 
 // delete by id
-const deletePlaylistById = async(id) => {
+const deletePlaylistById = async(id: string) => {
     return await Playlist.findByIdAndDelete(id)
 }
 
 // append track
-const swicthTrackInPlaylist = async(playlistId, trackId) => {
+const swicthTrackInPlaylist = async(playlistId: string, trackId: string | mongoose.Types.ObjectId) => {
     trackId = new mongoose.Types.ObjectId(trackId);
     return await Playlist.findOneAndUpdate({ _id: playlistId }, [{
             $set: {
@@ -31,13 +33,13 @@ const swicthTrackInPlaylist = async(playlistId, trackId) => {
 }
 
 // get by title
-const getPlaylistByTitle = async(title) => {
+const getPlaylistByTitle = async(title: string) => {
     return await Playlist.find({ title: {$regex: '.*' + title + '.*'} })
     .limit(12)
 }
 
 // get by owner id
-const getPlaylistByOwnerId = async(ownerId, range) => {
+const getPlaylistByOwnerId = async(ownerId: string, range: TRange) => {
     return await Playlist.find({ owner: ownerId })
     .skip(range.offset)
     .limit(range.limit)
@@ -45,7 +47,7 @@ const getPlaylistByOwnerId = async(ownerId, range) => {
 }
 
 // get all public
-const getPublicAvailablePlaylists = async(range) => {
+const getPublicAvailablePlaylists = async(range: TRange) => {
     return await Playlist.find({ public: true })
     .skip(range.offset)
     .limit(range.limit)
@@ -53,12 +55,12 @@ const getPublicAvailablePlaylists = async(range) => {
 }
 
 // count docs
-const getDocsCount = async(filter) => {
+const getDocsCount = async(filter: any) => {
     return await Playlist.count(filter)
 }
 
 
-module.exports = {
+export {
     createPlaylist,
     deletePlaylistById,
     swicthTrackInPlaylist,
