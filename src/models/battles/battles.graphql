@@ -1,5 +1,5 @@
 type Query {
-    battlesByStatus(status: String!, offset: Int!, limit: Int!): BattlesWithCount!
+    battlesByStatus(finished: Boolean!, offset: Int!, limit: Int!): BattlesWithCount!
 }
 
 type Battle {

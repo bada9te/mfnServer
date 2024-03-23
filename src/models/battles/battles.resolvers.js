@@ -4,10 +4,10 @@ const config = require("../../config");
 
 module.exports = {
     Query: {
-        battlesByStatus: async(_, { status, offset, limit }) => {
+        battlesByStatus: async(_, { finished, offset, limit }) => {
             return {
-                battles: await battlesModel.getAllBattlesByStatus(status === 'running', { offset, limit }),
-                count: await battlesModel.getDocsCount({ finished: status }),
+                battles: await battlesModel.getAllBattlesByStatus(finished, { offset, limit }),
+                count: await battlesModel.getDocsCount({ finished }),
             }
         }
     },

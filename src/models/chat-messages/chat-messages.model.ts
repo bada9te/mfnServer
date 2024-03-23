@@ -1,5 +1,5 @@
 import { TRange } from "../types";
-import chatMessagesModel from  "./chat-messages.mongo";
+import chatMessagesModel from "./chat-messages.mongo";
 import { TNewMessage } from "./types";
 
 

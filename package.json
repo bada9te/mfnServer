@@ -5,7 +5,9 @@
   "main": "src/server.js",
   "scripts": {
     "start": "npx nodemon --ignore src/utils/cron/plannedTasks.json src/server.js",
-    "test": "cross-env ENV_TYPE=test jest --testTimeout=5000 --runInBand --forceExit --detectOpenHandles --injectGlobals"
+    "test": "cross-env ENV_TYPE=test jest --testTimeout=5000 --runInBand --forceExit --detectOpenHandles --injectGlobals",
+    "clean": "node ./cleanBuild.js",
+    "build": "npx tsc && npm start"
   },
   "keywords": [],
   "author": "",
@@ -51,7 +53,10 @@
   "devDependencies": {
     "@shelf/jest-mongodb": "^4.2.0",
     "@types/mongoose": "^5.11.97",
+    "@types/node": "^20.11.30",
     "jest": "^29.7.0",
-    "supertest": "^6.3.3"
+    "supertest": "^6.3.3",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.3"
   }
 }

@@ -10,7 +10,7 @@ const initSocketIO    = require('./utils/socket/socket');
 
 
 // server config
-const PORT           = config.base.port || 8000;
+const PORT = config.base.port || 8000;
 
 
 // http server
