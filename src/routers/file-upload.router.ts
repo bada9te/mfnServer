@@ -1,5 +1,6 @@
-const express = require('express');
-const { upload, multi_upload } = require('../middleware/multer');
+import express from 'express';
+import { upload, multi_upload } from '../middleware/multer';
+import multer from 'multer';
 
 const fileUploadRouter = express.Router();
 

@@ -1,9 +1,9 @@
-const { createChat, updateChat, getChatById } = require("../chats/chats.model");
-const chatsModel = require("../chats/chats.model");
-const { getUsersByIds, getUserById } = require("../users/users.model");
-const chatMessagesModel = require("./chat-messages.model");
+import { createChat, updateChat, getChatById } from "../chats/chats.model";
+import * as chatsModel from "../chats/chats.model";
+import * as usersModel from "../users/users.model";
+import * as chatMessagesModel from "./chat-messages.model";
 
-module.exports = {
+export default {
     Query: {
         chatMessage: async(_, { _id }) => {
             return await chatMessagesModel.getMessageById(_id);
@@ -18,7 +18,7 @@ module.exports = {
 
             let chat;
             if (!input.chat) {
-                const users = getUsersByIds([input.owner, input.toUser]);
+                const users = usersModel.getUsersByIds([input.owner, input.toUser]) as unknown as any[];
                 await createChat({
                     title: users.map(user => user.nick).join(' '),
                     owner: input.owner,
@@ -35,7 +35,7 @@ module.exports = {
             await chatMessagesModel.createMessage(input)
                 .then(async data => {
                     createdMsg = data[0];
-                    createdMsg.owner = await getUserById(data[0].owner)
+                    createdMsg.owner = await usersModel.getUserById(data[0].owner)
                 });
 
             

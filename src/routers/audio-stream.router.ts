@@ -1,7 +1,7 @@
-const fs = require('fs');
-const path = require('path');
-const express = require('express');
-const config = require('../config');
+import fs from 'fs';
+import path from 'path';
+import express from 'express';
+import config from '../config';
 
 const CLIENT_BASE = config.base.clientBase;
 const audioStreamerRouter = express.Router();

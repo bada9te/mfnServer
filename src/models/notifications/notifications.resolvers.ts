@@ -1,6 +1,6 @@
-const notificationsModel = require('../../models/notifications/notifications.model');
+import * as notificationsModel from '../../models/notifications/notifications.model';
 
-module.exports = {
+export default {
     Query: {
         notifications: async(_, { receiverId, checked }) => {
             if (checked) {

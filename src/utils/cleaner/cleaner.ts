@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
-import { getOnlyImagesAndAudios as postsModelGetImagesAndAudios } from '../../models/posts/posts.model';
-import { getOnlyImagesAndAudios as usersModelGetImagesAndAudios } from '../../models/users/users.model';
+import * as postsModel from '../../models/posts/posts.model';
+import * as usersModel from '../../models/users/users.model';
 import config from '../../config';
 import { TPostAssets, TUserAssets } from './types';
 
@@ -26,14 +26,14 @@ const cleanJunk = async() => {
     let otherFiles: string[] = [];
     
     // collecting users
-    const users: TUserAssets[] = await usersModelGetImagesAndAudios()
+    const users: TUserAssets[] = await usersModel.getOnlyImagesAndAudios() as unknown as TUserAssets[];
     users.forEach((user) => {
         imageFiles.push(user.avatar);
         imageFiles.push(user.background);
     });
 
     // collecting posts
-    const posts: TPostAssets[] = await postsModelGetImagesAndAudios();
+    const posts: TPostAssets[] = await postsModel.getOnlyImagesAndAudios() as unknown as TPostAssets[];
     posts.forEach((post) => {
         imageFiles.push(post.image);
         audioFiles.push(post.audio);

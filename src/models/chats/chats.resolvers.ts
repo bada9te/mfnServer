@@ -1,6 +1,7 @@
-const chatsModel = require("./chats.model")
+import * as chatsModel from "./chats.model";
 
-module.exports = {
+
+export default {
     Query: {
         chat: async(_, { _id, userId }) => {
             if (userId) {

@@ -56,4 +56,4 @@ const multi_upload = multer({
 let upload = multer({ storage, fileFilter });
 
     
-export default { multi_upload, upload };
+export { multi_upload, upload };

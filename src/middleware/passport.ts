@@ -5,7 +5,10 @@ const LocalStrategy    = require('passport-local').Strategy;
 const FacebookStrategy = require('passport-facebook').Strategy;
 const TwitterStrategy  = require('passport-twitter').Strategy;
 const GoogleStrategy   = require('passport-google-oauth').OAuth2Strategy;
-const configAuth = require('../config').passport;
+import config from "../config";
+
+
+const configAuth = config.passport;
 
 
 module.exports = (passport: passport.PassportStatic) => {

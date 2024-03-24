@@ -79,7 +79,7 @@ usersSchema.pre('deleteOne', async function(next) {
 
 // generating a hash
 usersSchema.methods.generateHash = function(password) {
-    return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
+    return bcrypt.hashSync(password, bcrypt.genSaltSync(8));
 };
 
 // checking if password is valid

@@ -1,7 +1,7 @@
-const postsModel = require('../../models/posts/posts.model');
+import * as postsModel from '../../models/posts/posts.model';
 
 
-module.exports = {
+export default {
     Query: {
         post: async(_, { _id }) => {
             return await postsModel.getPostById(_id); 

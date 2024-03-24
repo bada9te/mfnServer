@@ -1,5 +1,7 @@
 export type TNewUser = {
-    email: string,
     nick: string,
-    password: string,
+    local: {
+        email: string,
+        password: string,
+    }
 }

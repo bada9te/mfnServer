@@ -3,7 +3,7 @@ import { TTask } from "./types";
 import fs from 'fs';
 import path from 'path';
 import cron from "node-schedule";
-import { setWinnerByBattleId } from '../../models/battles/battles.model';
+import battlesModel from '../../models/battles/battles.model';
 import removeJunkFiles from '../cleaner/cleaner';
 require('dotenv').config();
 
@@ -80,7 +80,7 @@ const applySavedTasks = (): void => {
 const setBattlesWinnersByIds = async(ids: string[]): Promise<void> => {
     for await (const id of ids) {
         console.log(`[CRON] Executing setWinner task, bId: ${id}`);
-        await setWinnerByBattleId(id)
+        await battlesModel.setWinnerByBattleId(id)
         .then(() => {
             const idx = currentData.findIndex(item => item.id === id);
             idx !== -1 && currentData.splice(idx, 1);

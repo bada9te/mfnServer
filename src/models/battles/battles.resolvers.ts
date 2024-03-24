@@ -1,8 +1,8 @@
-const battlesModel = require("../../models/battles/battles.model");
-const { createTask } = require("../../utils/cron/cron");
-const config = require("../../config");
+import battlesModel from "./battles.model";
+import { createTask } from "../../utils/cron/cron";
+import config from "../../config";
 
-module.exports = {
+export default {
     Query: {
         battlesByStatus: async(_, { finished, offset, limit }) => {
             return {

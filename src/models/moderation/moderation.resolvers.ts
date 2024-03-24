@@ -1,7 +1,7 @@
-const moderationModel = require('../../models/moderation/moderation.model');
-const generateRandomString = require('../../utils/functions/generateRandomString');
+import * as moderationModel from '../../models/moderation/moderation.model';
+import generateRandomString from '../../utils/functions/generateRandomString';
 
-module.exports = {
+export default {
     Query: {
         moderationActionValidate: async(_, { input }) => {
             const { userId, actionId, type, verifyToken } = input;

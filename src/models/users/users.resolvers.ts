@@ -1,8 +1,8 @@
-const usersModel = require('../../models/users/users.model');
-const moderationModel = require('../../models/moderation/moderation.model');
-const sendMail = require('../../utils/mailer/nodemailer');
-const bcrypt = require('bcrypt-nodejs');
-const generateRandomString = require('../../utils/functions/generateRandomString');
+import * as usersModel from '../../models/users/users.model';
+import * as moderationModel from '../../models/moderation/moderation.model';
+import * as sendMail from '../../utils/mailer/nodemailer';
+import bcrypt from 'bcrypt-nodejs';
+import generateRandomString from '../../utils/functions/generateRandomString';
 
 
 module.exports = {
@@ -92,7 +92,7 @@ module.exports = {
             if (action) {
                 if (type === "password") {
                     type = "local.password";
-                    newValue = bcrypt.hashSync(newValue, bcrypt.genSaltSync(8), null);
+                    newValue = bcrypt.hashSync(newValue, bcrypt.genSaltSync(8));
                 } else if (type === "email") {
                     type = "local.email";
                     // try to find a user with the same email
@@ -124,9 +124,8 @@ module.exports = {
             if (user) {
                 const verifyToken = generateRandomString();
                 await moderationModel.createAction({
-                    user: user._id,
+                    user: String(user._id),
                     type: type,
-                    createdAt: new Date().toISOString(),
                     verifyToken: verifyToken,
                 }).then((action) => {
                     createdAction = action[0];

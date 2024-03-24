@@ -100,7 +100,7 @@ const sendChangeEmail = (to: string, userName: string, newEmail: string, link: s
 }
 
 
-sendVerifyEmail("wotgamer257@gmail.com", "testUSER", "www.google.com", "passcodeEXAMPLE");
+//sendVerifyEmail("wotgamer257@gmail.com", "testUSER", "www.google.com", "passcodeEXAMPLE");
 
 
 export {

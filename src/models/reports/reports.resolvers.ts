@@ -1,6 +1,6 @@
-const reportsModel = require('../../models/reports/reports.model');
+import * as reportsModel from '../../models/reports/reports.model';
 
-module.exports = {
+export default {
     Query: {
         reports: async(_, { offset, limit }) => {
             return await reportsModel.getAllReports({ offset, limit });

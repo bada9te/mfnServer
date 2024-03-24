@@ -1,9 +1,9 @@
 // https://www.digitalocean.com/community/tutorials/easy-node-authentication-linking-all-accounts-together
 
 
-const express = require('express');
-const passport = require('passport');
-const config = require('../config');
+import express from 'express';
+import passport from 'passport';
+import config from '../config';
 
 
 const authRouter = express.Router();
@@ -24,12 +24,14 @@ authRouter.get("/current-user", (req, res) => {
     });
 });
 
+/*
 authRouter.post("/update-session-user", (req, res) => {
     req.logIn(req.body.user, function(err) {
         if (err) { return next(err); }
         return res.status(200).json(user);
     });
 });
+*/
 
 // =============================================================================
 // AUTHENTICATE (FIRST LOGIN) ==================================================
@@ -119,7 +121,7 @@ authRouter.post("/update-session-user", (req, res) => {
 
 // local -----------------------------------
     authRouter.get('/unlink/local', function(req, res) {
-        let user            = req.user;
+        let user            = req.user as any;
         user.local.email    = undefined;
         user.local.password = undefined;
         user.save(function(err) {
@@ -129,7 +131,7 @@ authRouter.post("/update-session-user", (req, res) => {
 
 // facebook -------------------------------
     authRouter.get('/unlink/facebook', function(req, res) {
-        let user            = req.user;
+        let user            = req.user as any;
         user.facebook.token = undefined;
         user.save(function(err) {
             res.redirect('/');
@@ -138,7 +140,7 @@ authRouter.post("/update-session-user", (req, res) => {
 
 // twitter --------------------------------
     authRouter.get('/unlink/twitter', function(req, res) {
-        let user           = req.user;
+        let user           = req.user as any;
         user.twitter.token = undefined;
         user.save(function(err) {
             res.redirect('/profile');
@@ -147,7 +149,7 @@ authRouter.post("/update-session-user", (req, res) => {
 
 // google ---------------------------------
     authRouter.get('/unlink/google', function(req, res) {
-        let user          = req.user;
+        let user          = req.user as any;
         user.google.token = undefined;
         user.save(function(err) {
             res.redirect('/profile');

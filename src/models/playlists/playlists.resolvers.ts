@@ -1,7 +1,7 @@
-const playlistsModel = require("../../models/playlists/playlists.model");
+import * as playlistsModel from "../../models/playlists/playlists.model";
 
 
-module.exports = {
+export default {
     Query: {
         playlistsByTitle: async(_, { title }) => {
             return await playlistsModel.getPlaylistByTitle(title);

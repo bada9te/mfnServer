@@ -1,6 +1,6 @@
-const supportRequestModel = require("./support-requests.model");
+import * as supportRequestModel from "./support-requests.model";
 
-module.exports = {
+export default {
     Query: {
         supportRequests: async(_, { offset, limit }) => {
             return await supportRequestModel.getAllSupportRequests({offset, limit})
