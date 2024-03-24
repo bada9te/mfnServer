@@ -1,15 +1,14 @@
-const { 
-    ApolloServerPluginDrainHttpServer, 
-    ApolloServerPluginLandingPageProductionDefault,
-    ApolloServerPluginLandingPageLocalDefault,
-} = require("apollo-server-core");
-const { ApolloServer }  = require('apollo-server-express');
-const gqlSCHEMA         = require('./schema');
-const config            = require('../../config');
+import { ApolloServerPluginDrainHttpServer, ApolloServerPluginLandingPageProductionDefault, ApolloServerPluginLandingPageLocalDefault } from "apollo-server-core";
+import { ApolloServer } from 'apollo-server-express';
+import gqlSCHEMA from './schema';
+import config from '../../config';
+import http from "http";
+import express from "express";
+import { TExpressRequestWithPassport } from "./types";
 
 
 // Set up ApolloServer.
-const setupApollo = async(app, httpServer) => {
+const setupApollo = async(app: express.Express, httpServer: http.Server) => {
     const APServer = new ApolloServer({
         schema: gqlSCHEMA,
         plugins: [
@@ -24,14 +23,16 @@ const setupApollo = async(app, httpServer) => {
             ApolloServerPluginDrainHttpServer({ httpServer }),
         ],
         context: ({req, res}) => {
+            const reqWithPassport = req as TExpressRequestWithPassport;
+            
             return ({
-                user: req.user,
-                logIn: req.logIn,
-                logout: req.logout,
+                user: reqWithPassport.user,
+                logIn: reqWithPassport.logIn,
+                logout: reqWithPassport.logout,
                 
                 updateSessionUser: async(user) => {
-                    req.session.passport.user = user;
-                    req.session.save()
+                    reqWithPassport.session.passport.user = user;
+                    reqWithPassport.session.save()
                 },
             });
         },
@@ -51,4 +52,4 @@ const setupApollo = async(app, httpServer) => {
         });
 }
 
-module.exports = setupApollo;
+export default setupApollo;

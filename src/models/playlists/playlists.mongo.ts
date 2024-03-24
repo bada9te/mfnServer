@@ -1,7 +1,7 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 // schema
-const playlistsSchema = mongoose.Schema({
+const playlistsSchema: mongoose.Schema = new mongoose.Schema({
     owner: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
@@ -30,4 +30,4 @@ playlistsSchema.plugin(require('mongoose-autopopulate'));
 const playlistsModel = mongoose.model("Playlist", playlistsSchema);
 
 // export
-module.exports = playlistsModel;
+export default playlistsModel;

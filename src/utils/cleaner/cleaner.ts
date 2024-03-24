@@ -1,14 +1,15 @@
-const fs = require('fs');
-const path = require('path');
-const postsModel = require('../../models/posts/posts.model');
-const usersModel = require('../../models/users/users.model');
-const config = require('../../config');
+import fs from 'fs';
+import path from 'path';
+import { getOnlyImagesAndAudios as postsModelGetImagesAndAudios } from '../../models/posts/posts.model';
+import { getOnlyImagesAndAudios as usersModelGetImagesAndAudios } from '../../models/users/users.model';
+import config from '../../config';
+import { TPostAssets, TUserAssets } from './types';
 
 
 const MONGO_PREFIX = config.mongo.prefix;
 
 // main 
-const removeJunkFiles = async() => {
+const removeJunkFiles = async(): Promise<void> => {
     if (process.env.ENV_TYPE === "test") {
         console.log("[CLEANER] Skipping because of TEST env.")
     } else {
@@ -20,19 +21,19 @@ const removeJunkFiles = async() => {
 
 // users
 const cleanJunk = async() => {
-    let imageFiles = [];
-    let audioFiles = [];
-    let otherFiles = [];
+    let imageFiles: string[] = [];
+    let audioFiles: string[] = [];
+    let otherFiles: string[] = [];
     
     // collecting users
-    const users = await usersModel.getOnlyImagesAndAudios()
+    const users: TUserAssets[] = await usersModelGetImagesAndAudios()
     users.forEach((user) => {
         imageFiles.push(user.avatar);
         imageFiles.push(user.background);
     });
 
     // collecting posts
-    const posts = await postsModel.getOnlyImagesAndAudios();
+    const posts: TPostAssets[] = await postsModelGetImagesAndAudios();
     posts.forEach((post) => {
         imageFiles.push(post.image);
         audioFiles.push(post.audio);
@@ -52,7 +53,7 @@ const cleanJunk = async() => {
 
 
 // files remover
-const readPathAndRemoveUnnecessary = (directoryPath, mustInclude) => {
+const readPathAndRemoveUnnecessary = (directoryPath: string, mustInclude: string[]) => {
     fs.readdir(directoryPath, (err, files) => {
         files.forEach(file => {
             // remove if unnecessary
@@ -67,4 +68,4 @@ const readPathAndRemoveUnnecessary = (directoryPath, mustInclude) => {
 
 
 
-module.exports = removeJunkFiles;
+export default removeJunkFiles;

@@ -1,8 +1,8 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 
 // schema
-const reportsSchema = mongoose.Schema({
+const reportsSchema: mongoose.Schema = new mongoose.Schema({
     contactReason: {
         type: String,
         required: true,
@@ -44,4 +44,4 @@ reportsSchema.plugin(require('mongoose-autopopulate'));
 const reportsModel = mongoose.model('Report', reportsSchema);
 
 // export
-module.exports = reportsModel;
+export default reportsModel;

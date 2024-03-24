@@ -1,8 +1,8 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 
 // schema
-const battlesSchema = mongoose.Schema({
+const battlesSchema: mongoose.Schema = new mongoose.Schema({
     title: {
         type: String,
         required: true,
@@ -52,4 +52,4 @@ battlesSchema.plugin(require('mongoose-autopopulate'));
 const battlesModel = mongoose.model('Battle', battlesSchema);
 
 // export
-module.exports = battlesModel;
+export default battlesModel;

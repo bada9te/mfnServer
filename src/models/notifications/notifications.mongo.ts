@@ -1,7 +1,7 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 // schema
-const notificationsSchema = new mongoose.Schema({
+const notificationsSchema: mongoose.Schema = new mongoose.Schema({
     receiver: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
@@ -41,4 +41,4 @@ notificationsSchema.plugin(require('mongoose-autopopulate'));
 const notificationsModel = mongoose.model('Notification', notificationsSchema);
 
 // export
-module.exports = notificationsModel;
+export default notificationsModel;

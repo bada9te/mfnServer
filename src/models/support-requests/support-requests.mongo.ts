@@ -1,8 +1,8 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 
 // schema
-const supportRequestsSchema = mongoose.Schema({
+const supportRequestsSchema: mongoose.Schema = new mongoose.Schema({
     contactReason: {
         type: String,
         required: true,
@@ -28,4 +28,4 @@ supportRequestsSchema.plugin(require('mongoose-autopopulate'));
 const supportRequestsModel = mongoose.model('SupportRequest', supportRequestsSchema);
 
 // export
-module.exports = supportRequestsModel;
+export default supportRequestsModel;

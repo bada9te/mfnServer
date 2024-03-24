@@ -1,4 +1,6 @@
-const User             = require('../models/users/users.mongo');
+import passport from 'passport';
+import express from "express";
+import User from '../models/users/users.mongo';
 const LocalStrategy    = require('passport-local').Strategy;
 const FacebookStrategy = require('passport-facebook').Strategy;
 const TwitterStrategy  = require('passport-twitter').Strategy;
@@ -6,7 +8,7 @@ const GoogleStrategy   = require('passport-google-oauth').OAuth2Strategy;
 const configAuth = require('../config').passport;
 
 
-module.exports = (passport) => {
+module.exports = (passport: passport.PassportStatic) => {
     // used to serialize the user for the session
     passport.serializeUser(function(user, done) {
         done(null, user);
@@ -25,7 +27,7 @@ module.exports = (passport) => {
         usernameField : 'email',
         passwordField : 'password',
         passReqToCallback : true
-    }, async(req, email, password, done) => {
+    }, async(req: express.Request, email: string, password: string, done: passport.AuthorizeCallback) => {
         try {
             const user = await User.findOne({ 'local.email' :  email })
             
@@ -50,7 +52,7 @@ module.exports = (passport) => {
         usernameField : 'email',
         passwordField : 'password',
         passReqToCallback : true // allows us to pass in the req from our route (lets us check if a user is logged in or not)
-    }, async(req, email, password, done) => {
+    }, async(req: express.Request, email: string, password: string, done: passport.AuthorizeCallback) => {
         try {
             const existingUser = await User.findOne({ 'local.email': email });
 
@@ -59,7 +61,7 @@ module.exports = (passport) => {
             }
             
             if (req.user) {
-                let user = req.user;
+                let user = req.user as any;
                 user.local.email = email;
                 user.local.password = user.generateHash(password);
 
@@ -96,10 +98,10 @@ module.exports = (passport) => {
         clientSecret    : configAuth.facebookAuth.clientSecret,
         callbackURL     : configAuth.facebookAuth.callbackURL,
         passReqToCallback : true // allows us to pass in the req from our route (lets us check if a user is logged in or not)
-    }, async(req, token, refreshToken, profile, done) => {
+    }, async(req: express.Request, token: string, refreshToken: string, profile: any, done: passport.AuthorizeCallback) => {
         try {
             if (!req.user) {
-                const user = User.findOne({ 'facebook.id' : profile.id });
+                const user = User.findOne({ 'facebook.id' : profile.id }) as any;
 
                 if (user) {
                     // if there is a user id already but no token (user was linked at one point and then removed)
@@ -135,7 +137,7 @@ module.exports = (passport) => {
                 }
             } else {
                 // user already exists and is logged in, we have to link accounts
-                let user = req.user; // pull the user out of the session
+                let user = req.user as any; // pull the user out of the session
 
                 user.facebook.id    = profile.id;
                 user.facebook.token = token;
@@ -165,10 +167,11 @@ module.exports = (passport) => {
         callbackURL      : configAuth.twitterAuth.callbackURL,
         includeEmail     : true,
         passReqToCallback: true // allows us to pass in the req from our route (lets us check if a user is logged in or not)
-    }, async(req, token, tokenSecret, profile, done) => {
+    }, async(req: express.Request, token: string, tokenSecret: string, profile: any, done: passport.AuthorizeCallback) => {
         process.nextTick(function() {
             if (!req.user) {
-                User.findOne({ 'twitter.id' : profile.id }).then(user => {
+                try {
+                    const user = User.findOne({ 'twitter.id' : profile.id }) as any;
                     if (user) {
                         // if there is a user id already but no token (user was linked at one point and then removed)
                         if (!user.twitter?.token) {
@@ -204,13 +207,13 @@ module.exports = (passport) => {
                                 throw err;
                             });
                     }
-                }).catch(err => {
-                    return done(err);
-                });
-
+                } catch (error) {
+                    return done(error);
+                }
+                
             } else {
                 // user already exists and is logged in, we have to link accounts
-                let user = req.user; // pull the user out of the session
+                let user = req.user as any; // pull the user out of the session
 
                 user.twitter.id          = profile.id;
                 user.twitter.token       = token;
@@ -236,17 +239,19 @@ module.exports = (passport) => {
         clientSecret    : configAuth.googleAuth.clientSecret,
         callbackURL     : configAuth.googleAuth.callbackURL,
         passReqToCallback : true, // allows us to pass in the req from our route (lets us check if a user is logged in or not)
-    }, (req, token, refreshToken, profile, done) => {
+    }, (req: express.Request, token: string, refreshToken: string, profile: any, done: passport.AuthorizeCallback) => {
         process.nextTick(function() {
             if (!req.user) {
-                User.findOne({ 'google.id' : profile.id }).then(user => {
+                try {
+                    const user =  User.findOne({ 'google.id' : profile.id }) as any;
+
                     if (user) {
                         // if there is a user id already but no token (user was linked at one point and then removed)
                         if (!user.google.token) {
                             user.google.token = token;
                             user.google.name  = profile.displayName;
                             user.google.email = profile.emails[0].value; // pull the first email
-
+    
                             user.save()
                                 .then(updatedUser => {
                                     return done(null, updatedUser);
@@ -254,7 +259,7 @@ module.exports = (passport) => {
                                     throw err;
                                 });
                         }
-
+    
                         return done(null, user);
                     } else {
                         var newUser          = new User();
@@ -263,7 +268,7 @@ module.exports = (passport) => {
                         newUser.google.token = token;
                         newUser.google.name  = profile.displayName;
                         newUser.google.email = profile.emails[0].value; // pull the first email
-
+    
                         newUser.save()
                             .then(createdUser => {
                                 return done(null, createdUser);
@@ -271,12 +276,12 @@ module.exports = (passport) => {
                                 throw err;
                             });
                     }
-                }).catch(err => {
-                    return done(err);
-                });
+                } catch (error) {
+                    return done(error);
+                }
             } else {
                 // user already exists and is logged in, we have to link accounts
-                var user          = req.user; // pull the user out of the session
+                var user          = req.user as any; // pull the user out of the session
                 user.google.id    = profile.id;
                 user.google.token = token;
                 user.google.name  = profile.displayName;

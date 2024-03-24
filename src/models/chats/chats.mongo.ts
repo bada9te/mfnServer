@@ -1,7 +1,7 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 // schema
-const chatsSchema = mongoose.Schema({
+const chatsSchema:mongoose.Schema = new mongoose.Schema({
     title: {
         type: String,
         required: true,
@@ -34,4 +34,4 @@ chatsSchema.plugin(require('mongoose-autopopulate'));
 // model
 const chatsModel = mongoose.model('Chat', chatsSchema);
 
-module.exports = chatsModel;
+export default chatsModel;

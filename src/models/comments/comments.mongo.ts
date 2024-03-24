@@ -1,8 +1,8 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 
 // schema
-const commentsSchema = mongoose.Schema({
+const commentsSchema: mongoose.Schema = new mongoose.Schema({
     owner: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
@@ -62,4 +62,4 @@ commentsSchema.pre('deleteMany', async function(next) {
 const commentsModel = mongoose.model('Comment', commentsSchema);
 
 // export
-module.exports = commentsModel;
+export default commentsModel;

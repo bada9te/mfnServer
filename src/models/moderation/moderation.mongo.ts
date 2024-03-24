@@ -1,6 +1,6 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
-const moderationSchema = mongoose.Schema({
+const moderationSchema: mongoose.Schema = new mongoose.Schema({
     user: {
         type: mongoose.Schema.Types.ObjectId, 
         ref: 'User',
@@ -18,4 +18,4 @@ const moderationSchema = mongoose.Schema({
 
 const Moderation = mongoose.model('Moderation', moderationSchema);
 
-module.exports = Moderation;
+export default Moderation;

@@ -1,10 +1,11 @@
-const multer = require('multer');
-const path = require('path');
-const config = require('../config');
+import multer from 'multer';
+import path from 'path';
+import config from '../config';
+import express from "express";
 
 
-const imageExtensions = ['.jpg', '.jpeg', '.png'];
-const audioExtensions = ['.wav', '.mp3'];
+const imageExtensions: string[] = ['.jpg', '.jpeg', '.png'];
+const audioExtensions: string[] = ['.wav', '.mp3'];
 const MONGO_PREFIX = config.mongo.prefix;
 
 // storage
@@ -30,7 +31,7 @@ const storage = multer.diskStorage({
 
 
 // filter
-const fileFilter = (req, file, callBack) => {
+const fileFilter = (req: express.Request, file: Express.Multer.File, callBack: multer.FileFilterCallback) => {
     const extension = path.extname(file.originalname);
     if (![ ...audioExtensions, ...imageExtensions ].includes(extension)) {
         return callBack(new Error('This type of file is not allowed'));
@@ -55,4 +56,4 @@ const multi_upload = multer({
 let upload = multer({ storage, fileFilter });
 
     
-module.exports = { multi_upload, upload };
+export default { multi_upload, upload };

@@ -1,4 +1,6 @@
-const errorHandler = (err, req, res, next) => {
+import express from "express";
+
+const errorHandler = (err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
     const eStatus = err.status || 500;
     const eMsg = err.message || 'Sth went wrong';
 

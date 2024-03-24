@@ -1,6 +1,6 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
-const chatMessagesSchema = mongoose.Schema({
+const chatMessagesSchema: mongoose.Schema = new mongoose.Schema({
     owner: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
@@ -41,4 +41,4 @@ chatMessagesSchema.plugin(require('mongoose-autopopulate'));
 // model
 const chatMessagesModel = mongoose.model('ChatMessage', chatMessagesSchema);
 
-module.exports = chatMessagesModel;
+export default chatMessagesModel;

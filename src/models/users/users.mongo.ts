@@ -1,10 +1,10 @@
-const mongoose = require('mongoose');
-const postsModel = require('../posts/posts.mongo');
-const bcrypt = require('bcrypt-nodejs');
+import mongoose from 'mongoose';
+import postsModel from '../posts/posts.mongo';
+import bcrypt from 'bcrypt-nodejs';
 
 
 // schema
-const usersSchema = mongoose.Schema({
+const usersSchema: mongoose.Schema = new mongoose.Schema({
     local: {
         email: String,
         password: String,
@@ -93,4 +93,4 @@ const User = mongoose.model('User', usersSchema);
 
 
 // export
-module.exports = User;
+export default User;

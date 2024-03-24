@@ -1,9 +1,9 @@
-const mongoose = require('mongoose');
-const commentsModel = require('../comments/comments.mongo');
+import mongoose from 'mongoose';
+import commentsModel from '../comments/comments.mongo';
 
 
 // schema
-const postsSchema = mongoose.Schema({
+const postsSchema: mongoose.Schema = new mongoose.Schema({
     owner: { 
         type: mongoose.Schema.Types.ObjectId, 
         ref: 'User', 
@@ -87,4 +87,4 @@ const postsModel = mongoose.model('Post', postsSchema);
 
 
 // export
-module.exports = postsModel;
+export default postsModel;
