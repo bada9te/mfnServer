@@ -1,18 +1,20 @@
-const fs = require('fs');
-const path = require('path');
-const cron = require("node-schedule");
-const battlesModel = require('../../models/battles/battles.model');
-const removeJunkFiles = require('../cleaner/cleaner');
+import { TTask } from "./types";
+
+import fs from 'fs';
+import path from 'path';
+import cron from "node-schedule";
+import { setWinnerByBattleId } from '../../models/battles/battles.model';
+import removeJunkFiles from '../cleaner/cleaner';
 require('dotenv').config();
 
 
 // planned tasks file path and init vars / handlers
 const plannedTasksFilePath = path.join(__dirname, 'plannedTasks.json');
-let currentData = JSON.parse(fs.readFileSync(plannedTasksFilePath, 'utf8').toString());;
+let currentData: TTask[] = JSON.parse(fs.readFileSync(plannedTasksFilePath, 'utf8').toString());
 
 
 // init
-const initDefaultCronTasks = () => {
+const initDefaultCronTasks = (): void => {
     if (process.env.ENV_TYPE === "test") {
         console.log('[CRON] Skipping because of TEST env.')
     } else {
@@ -32,7 +34,7 @@ const initDefaultCronTasks = () => {
 
 
 // create task
-const createTask = (id, date, cb, taskType) => {
+const createTask = (id: string, date: Date, cb: () => void, taskType: string): void => {
     cron.scheduleJob(date, cb)
     currentData.push({id, date, taskType});
     saveFile();
@@ -40,15 +42,16 @@ const createTask = (id, date, cb, taskType) => {
 
 
 // cancel task
-const cancelTask = (id) => {
+const cancelTask = (id: string): void => {
     cron.cancelJob(id);
-    currentData.splice(currentData.indexOf(item => item.id === id), 1);
+    const idx = currentData.findIndex(item => item.id === id);
+    idx !== -1 && currentData.splice(idx, 1);
     saveFile();
 }
 
 
 // read planned tasks after restart
-const applySavedTasks = () => {
+const applySavedTasks = (): void => {
     // battle ids array
     let battleIdsToRemove = [];
     // do important stuff
@@ -74,12 +77,13 @@ const applySavedTasks = () => {
 
 
 // operate battle ids
-const setBattlesWinnersByIds = async(ids) => {
+const setBattlesWinnersByIds = async(ids: string[]): Promise<void> => {
     for await (const id of ids) {
         console.log(`[CRON] Executing setWinner task, bId: ${id}`);
-        await battlesModel.setWinnerByBattleId(id)
+        await setWinnerByBattleId(id)
         .then(() => {
-            currentData.splice(currentData.indexOf(item => item.id === id), 1);
+            const idx = currentData.findIndex(item => item.id === id);
+            idx !== -1 && currentData.splice(idx, 1);
         })
         .catch(console.error);
     }
@@ -88,7 +92,7 @@ const setBattlesWinnersByIds = async(ids) => {
 
 
 // WRITE FILE
-const saveFile = () => {
+const saveFile = (): void => {
     console.log('[CRON] Saving tasks...')
     try {
         fs.writeFileSync(plannedTasksFilePath, JSON.stringify(currentData));
@@ -99,7 +103,7 @@ const saveFile = () => {
 
 
 // export all
-module.exports = {
+export {
     initDefaultCronTasks,
     createTask,
     cancelTask,

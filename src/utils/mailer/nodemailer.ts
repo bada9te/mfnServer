@@ -39,7 +39,7 @@ const catchErrCallback = (err: Error, info: nodemailer.SentMessageInfo): void =>
 
 
 // send verify email
-const sendVerifyEmail = (to: string, userName: string, link: string, passcode: string) => {
+const sendVerifyEmail = (to: string, userName: string, link: string, passcode: string): void => {
     transporter.sendMail({
         from: email,
         to,
@@ -54,7 +54,7 @@ const sendVerifyEmail = (to: string, userName: string, link: string, passcode: s
 }
 
 // const send restore email
-const sendRestoreEmail = (to: string, userName: string, linkRestore: string) => {
+const sendRestoreEmail = (to: string, userName: string, linkRestore: string): void => {
     transporter.sendMail({
         from: email,
         to,
@@ -70,7 +70,7 @@ const sendRestoreEmail = (to: string, userName: string, linkRestore: string) => 
 
 
 // info email
-const sendInfoEmail = (to: string, userName: string, text: string) => {
+const sendInfoEmail = (to: string, userName: string, text: string): void => {
     transporter.sendMail({
         from: email,
         to,
@@ -85,7 +85,7 @@ const sendInfoEmail = (to: string, userName: string, text: string) => {
 
 
 // chnage email
-const sendChangeEmail = (to: string, userName: string, newEmail: string, link: string, passcode: string) => {
+const sendChangeEmail = (to: string, userName: string, newEmail: string, link: string, passcode: string): void => {
     transporter.sendMail({
         from: email,
         to,
