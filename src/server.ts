@@ -19,7 +19,7 @@ const SERVER = http.createServer(app);
 
 // prepare and launch server
 const launchServer = async() => {
-    connectMongo();
+    await connectMongo();
     initSocketIO(SERVER);
     setupApollo(app, SERVER);
 
