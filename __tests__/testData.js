@@ -3,7 +3,6 @@ const User = require("../src/models/users/users.mongo");
 
 const mt = mongoose.Types.ObjectId;
 
-const userId = 
 
 module.exports = {
     user: {

@@ -1,0 +1,1 @@
+export default (): string => Math.floor(Math.random() * Date.now()).toString(36);

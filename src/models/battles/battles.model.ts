@@ -70,7 +70,7 @@ const getDocsCount = async(filter: any) => {
 
 
 
-export {
+export default {
     addBattleByIds,
     deleteBattle,
     setWinnerByBattleId,
