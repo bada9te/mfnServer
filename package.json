@@ -1,12 +1,11 @@
 {
-  "name": "server",
+  "name": "@mfn/backend",
   "version": "1.0.0",
   "description": "",
   "main": "src/server.js",
   "scripts": {
     "start": "npx nodemon --ignore dist/utils/cron/plannedTasks.json dist/server.js",
     "test": "cross-env ENV_TYPE=test jest --testTimeout=5000 --runInBand --forceExit --detectOpenHandles --injectGlobals",
-    "clean": "node ./cleanBuild.js",
     "build": "npx tsc && npm start"
   },
   "keywords": [],
