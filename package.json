@@ -4,7 +4,7 @@
   "description": "",
   "main": "src/server.js",
   "scripts": {
-    "start": "npx nodemon --ignore dist/utils/cron/plannedTasks.json dist/server.js",
+    "start": "npx nodemon dist/server.js",
     "test": "cross-env ENV_TYPE=test jest --testTimeout=5000 --runInBand --forceExit --detectOpenHandles --injectGlobals",
     "build": "npx tsc && npm start"
   },
