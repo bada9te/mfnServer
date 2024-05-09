@@ -24,14 +24,6 @@ authRouter.get("/current-user", (req, res) => {
     });
 });
 
-/*
-authRouter.post("/update-session-user", (req, res) => {
-    req.logIn(req.body.user, function(err) {
-        if (err) { return next(err); }
-        return res.status(200).json(user);
-    });
-});
-*/
 
 // =============================================================================
 // AUTHENTICATE (FIRST LOGIN) ==================================================
