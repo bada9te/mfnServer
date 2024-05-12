@@ -1,0 +1,77 @@
+type Query {
+    user(_id: ID!): User!
+    users: [User!]
+    userByEmail(email: String!): User!
+    usersByIds(ids: [ID!]!): [User!]!
+    usersByNickname(nick: String!): [User!]!
+}
+
+type User {
+    _id: ID!
+    email: String!
+    nick: String!
+    description: String!
+    avatar: String!
+    background: String!
+    subscribers: [User!]
+    subscribedOn: [User!]
+}
+
+type TwoUsers {
+    user1: User!
+    user2: User!
+}
+
+type UserWithAction {
+    user: User!
+    action: ModerationAction!
+}
+
+type Mutation {
+    userCreate(input: AddUserInput!): UserWithAction!
+    userDeleteById(_id: ID!): User!
+    userUpdate(input: UpdateUserInput!): User!
+    userSwitchSubscription(input: SwitchSubscriptionOnUserInput!): TwoUsers!
+    userConfirmAccount(input: AccountConfirmInput!): UserWithAction!
+    userRestoreAccount(input: AccountRestoreInput!): UserWithAction!
+    userPrepareAccountToRestore(input: PrepareAccountToRestoreInput): UserWithAction!
+
+    login(email: String!, password: String!): User
+}
+
+
+input AddUserInput {
+    email: String!
+    nick: String!
+    password: String!
+}
+
+input UpdateUserInput {
+    _id: ID!
+    what: String!
+    value: String!
+}
+
+input SwitchSubscriptionOnUserInput {
+    subscriberId: ID!
+    userId: ID!
+}
+
+input AccountConfirmInput {
+    userId: ID!
+    actionId: ID!
+    verifyToken: String!
+}
+
+input AccountRestoreInput {
+    userId: ID!
+    actionId: ID!
+    verifyToken: String!
+    type: String!
+    newValue: String!
+}
+
+input PrepareAccountToRestoreInput {
+    email: String!
+    type: String!
+}

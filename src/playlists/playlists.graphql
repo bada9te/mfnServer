@@ -1,0 +1,42 @@
+type Query {
+    playlistsByTitle(title: String!): [Playlist!]
+    playlistsByOwnerId(owner: ID!, offset: Int!, limit: Int!): PlaylistsWithCount!
+    playlistsPublicAvailable(offset: Int!, limit: Int!): PlaylistsWithCount!
+}
+
+type Playlist {
+    _id: ID!
+    owner: User!
+    title: String!
+    tracks: [Post!]
+    public: Boolean!
+    createdAt: String!
+}
+
+type PlaylistsWithCount {
+    playlists: [Playlist!]
+    count: Int!
+}
+
+type Mutation {
+    playlistCreate(input: CreatePlaylistInput!): Playlist!
+    playlistDeleteById(_id: ID!): Playlist!
+    playlistSwicthTrack(input: SwitchTrackInPlaylistInput): Playlist!
+}
+
+input Range {
+    offset: Int!
+    limit: Int!
+}
+
+
+input CreatePlaylistInput {
+    owner: ID!
+    title: String!
+    public: Boolean!
+}
+
+input SwitchTrackInPlaylistInput {
+    playlistId: ID!
+    trackId: ID!
+}

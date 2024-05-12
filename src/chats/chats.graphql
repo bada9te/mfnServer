@@ -1,0 +1,39 @@
+type Query {
+    chat(_id: ID!, userId: ID): Chat!
+    chatsByIds(ids: [ID!]!): [Chat!]
+    chatsUserRelatedByUserId(_id: ID!): [Chat!]
+}
+
+type MessagesUnreadCount {
+    user: User!
+    count: Int!
+}
+
+type Chat {
+    _id: ID!
+    title: String!
+    owner: User
+    participants: [User]
+    messagesUnreadCount: [MessagesUnreadCount]
+}
+
+type Mutation {
+    chatCreate(input: ChatCreateInput!): Chat!
+    chatUpdate(input: ChatUpdateInput!): Chat!
+    chatReadAllMessages(chatId: ID!, userId: ID!): Chat!
+    chatSwitchParticipants(chatId: ID!, participants: [ID!]!): Chat!
+    chatSwitchMessage(chatId: ID!, messageId: ID!): Chat!
+    chatDeleteById(_id: ID!): Chat!
+}
+
+input ChatCreateInput {
+    title: String!
+    owner: ID!
+    participants: [ID!]
+}
+
+input ChatUpdateInput {
+    _id: ID!
+    what: String!
+    value: String!
+}
