@@ -13,9 +13,11 @@ import { CommentsModule } from './comments/comments.module';
 import { ChatsModule } from './chats/chats.module';
 import { ChatMessagesModule } from './chat-messages/chat-messages.module';
 import { BattlesModule } from './battles/battles.module';
+import { MongooseModule } from '@nestjs/mongoose';
 
 @Module({
   imports: [
+    MongooseModule.forRoot('mongodb://127.0.0.1/mfn-server-nest'),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       typePaths: ['./**/*.graphql'],
