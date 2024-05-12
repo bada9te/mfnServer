@@ -1,8 +1,8 @@
 import { Prop, Schema } from "@nestjs/mongoose";
 import mongoose, { HydratedDocument } from "mongoose";
-import { Comment } from "src/comments/comments.schema";
-import { Post } from "src/posts/posts.schema";
-import { User } from "src/users/users.schema";
+import { Comment } from "src/entities/comments/comments.schema";
+import { Post } from "src/entities/posts/posts.schema";
+import { User } from "src/entities/users/users.schema";
 
 export type NotificationDocument = HydratedDocument<Notification>;
 

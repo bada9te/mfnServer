@@ -1,19 +1,20 @@
 import { Module } from '@nestjs/common';
-import { UsersModule } from './users/users.module';
+import { UsersModule } from './entities/users/users.module';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { upperDirectiveTransformer } from './common/directives/upper-case-directive';
-import { ModerationsModule } from './moderations/moderations.module';
-import { SupportRequestsModule } from './support-requests/support-requests.module';
-import { ReportsModule } from './reports/reports.module';
-import { PostsModule } from './posts/posts.module';
-import { PlaylistsModule } from './playlists/playlists.module';
-import { NotificationsModule } from './notifications/notifications.module';
-import { CommentsModule } from './comments/comments.module';
-import { ChatsModule } from './chats/chats.module';
-import { ChatMessagesModule } from './chat-messages/chat-messages.module';
-import { BattlesModule } from './battles/battles.module';
+import { ModerationsModule } from './entities/moderations/moderations.module';
+import { SupportRequestsModule } from './entities/support-requests/support-requests.module';
+import { ReportsModule } from './entities/reports/reports.module';
+import { PostsModule } from './entities/posts/posts.module';
+import { PlaylistsModule } from './entities/playlists/playlists.module';
+import { NotificationsModule } from './entities/notifications/notifications.module';
+import { CommentsModule } from './entities/comments/comments.module';
+import { ChatsModule } from './entities/chats/chats.module';
+import { ChatMessagesModule } from './entities/chat-messages/chat-messages.module';
+import { BattlesModule } from './entities/battles/battles.module';
 import { MongooseModule } from '@nestjs/mongoose';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -35,7 +36,8 @@ import { MongooseModule } from '@nestjs/mongoose';
     CommentsModule,
     ChatsModule,
     ChatMessagesModule,
-    BattlesModule, 
+    BattlesModule,
+    AuthModule, 
   ],
 })
 export class AppModule {}

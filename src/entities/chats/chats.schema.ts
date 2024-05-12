@@ -1,6 +1,6 @@
 import { Prop, Schema, raw } from "@nestjs/mongoose";
 import mongoose, { HydratedDocument } from "mongoose";
-import { User } from "src/users/users.schema";
+import { User } from "src/entities/users/users.schema";
 
 export type ChatDocument = HydratedDocument<Chat>;
 
