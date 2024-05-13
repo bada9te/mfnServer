@@ -1,4 +1,4 @@
-import { Prop, Schema } from "@nestjs/mongoose";
+import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import mongoose, { HydratedDocument } from "mongoose";
 import { User } from "src/entities/users/users.schema";
 
@@ -15,3 +15,5 @@ export class Moderation {
     @Prop({ required: true })
     verifyToken: string;
 }
+
+export const ModerationSchema = SchemaFactory.createForClass(Moderation);

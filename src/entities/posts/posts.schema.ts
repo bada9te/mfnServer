@@ -1,4 +1,4 @@
-import { Prop, Schema } from "@nestjs/mongoose";
+import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import mongoose, { HydratedDocument } from "mongoose";
 import { Comment } from "src/entities/comments/comments.schema";
 import { User } from "src/entities/users/users.schema";
@@ -42,3 +42,5 @@ export class Post {
     @Prop({ required: true })
     commentsAllowed: boolean;
 }
+
+export const PostSchema = SchemaFactory.createForClass(Post);

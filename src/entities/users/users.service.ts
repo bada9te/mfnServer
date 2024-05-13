@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { User } from './users.schema';
 import { InjectModel } from '@nestjs/mongoose';
-import mongoose, { Model } from 'mongoose';
+import { Model } from 'mongoose';
+import { UserCreationDto } from './dto';
 
 @Injectable()
 export class UsersService {
@@ -10,7 +11,7 @@ export class UsersService {
     ) {}
 
     // add new user
-    async addUser(user: any) {
+    async addUser(user: UserCreationDto) {
         const inserted = await this.userModel.insertMany([user]);
         return inserted[0];
     }

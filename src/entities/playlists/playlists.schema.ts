@@ -1,4 +1,4 @@
-import { Prop, Schema } from "@nestjs/mongoose";
+import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import mongoose, { HydratedDocument } from "mongoose";
 import { Post } from "src/entities/posts/posts.schema";
 import { User } from "src/entities/users/users.schema";
@@ -21,3 +21,5 @@ export class Playlist {
     @Prop({ default: false })
     public: boolean;
 }
+
+export const PlaylistSchema = SchemaFactory.createForClass(Playlist);

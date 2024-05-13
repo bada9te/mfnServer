@@ -1,4 +1,4 @@
-import { Prop, Schema } from "@nestjs/mongoose";
+import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { HydratedDocument } from "mongoose";
 
 export type SupportRequestDocument = HydratedDocument<SupportRequest>;
@@ -17,3 +17,5 @@ export class SupportRequest {
     @Prop({ default: false })
     isClosed: boolean;
 }
+
+export const SupportRequestSchema = SchemaFactory.createForClass(SupportRequest);

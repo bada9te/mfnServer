@@ -1,4 +1,4 @@
-import { Prop, Schema } from "@nestjs/mongoose";
+import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import mongoose, { HydratedDocument } from "mongoose";
 import { Comment } from "src/entities/comments/comments.schema";
 import { Post } from "src/entities/posts/posts.schema";
@@ -29,3 +29,5 @@ export class Report {
     @Prop({ default: false })
     isClosed: boolean;
 }
+
+export const ReportSchema = SchemaFactory.createForClass(Report);
