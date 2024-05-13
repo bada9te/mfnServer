@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import mongoose, { HydratedDocument } from "mongoose";
-import { Comment } from "src/entities/comments/comments.schema";
-import { User } from "src/entities/users/users.schema";
+import { CommentDocument } from "src/entities/comments/comments.schema";
+import { UserDocument } from "src/entities/users/users.schema";
 
 
 export type PostDocument = HydratedDocument<Post>;
@@ -10,7 +10,7 @@ export type PostDocument = HydratedDocument<Post>;
 @Schema({ timestamps: true })
 export class Post {
     @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true })
-    owner: User;
+    owner: UserDocument;
 
     @Prop({ required: true })
     title: string;
@@ -25,13 +25,13 @@ export class Post {
     image: string;
 
     @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }] })
-    likedBy: User[];
+    likedBy: UserDocument[];
 
     @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }] })
-    savedBy: User[];
+    savedBy: UserDocument[];
 
     @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Comment' }] })
-    comments: Comment[];
+    comments: CommentDocument[];
 
     @Prop({ required: true })
     category: string;

@@ -1,7 +1,7 @@
-import { Prop, Schema } from "@nestjs/mongoose";
-import mongoose, { Date, HydratedDocument } from "mongoose";
-import { Post } from "src/entities/posts/posts.schema";
-import { User } from "src/entities/users/users.schema";
+import { Prop, Schema, SchemaFactory, raw } from "@nestjs/mongoose";
+import mongoose, { HydratedDocument } from "mongoose";
+import { PostDocument } from "src/entities/posts/posts.schema";
+import { UserDocument } from "src/entities/users/users.schema";
 
 export type BattleDocument = HydratedDocument<Battle>;
 
@@ -11,10 +11,10 @@ export class Battle {
     title: string;
 
     @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Post' })
-    post1: Post;
+    post1: PostDocument;
 
     @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Post' })
-    post2: Post;
+    post2: PostDocument;
 
     @Prop({ default: 0 })
     post1Score: number;
@@ -23,7 +23,7 @@ export class Battle {
     post2Score: number;
 
     @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Post' })
-    winner: Post;
+    winner: PostDocument;
 
     @Prop({ required: true })
     willFinishAt: Date;
@@ -32,5 +32,7 @@ export class Battle {
     finished: boolean;
 
     @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }] })
-    votedBy: User;
+    votedBy: UserDocument;
 }
+
+export const BattleSchema = SchemaFactory.createForClass(Battle);

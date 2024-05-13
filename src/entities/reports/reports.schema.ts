@@ -1,8 +1,8 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import mongoose, { HydratedDocument } from "mongoose";
-import { Comment } from "src/entities/comments/comments.schema";
-import { Post } from "src/entities/posts/posts.schema";
-import { User } from "src/entities/users/users.schema";
+import { CommentDocument } from "src/entities/comments/comments.schema";
+import { PostDocument } from "src/entities/posts/posts.schema";
+import { UserDocument } from "src/entities/users/users.schema";
 
 export type ReportDocument = HydratedDocument<Report>;
 
@@ -18,13 +18,13 @@ export class Report {
     message: string;
 
     @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
-    reportOwner: User;
+    reportOwner: UserDocument;
 
     @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Post' })
-    reportedPost: Post;
+    reportedPost: PostDocument;
 
     @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Comment' })
-    reportedComment: Comment;
+    reportedComment: CommentDocument;
 
     @Prop({ default: false })
     isClosed: boolean;

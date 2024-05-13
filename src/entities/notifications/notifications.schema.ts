@@ -1,24 +1,24 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import mongoose, { HydratedDocument } from "mongoose";
-import { Comment } from "src/entities/comments/comments.schema";
-import { Post } from "src/entities/posts/posts.schema";
-import { User } from "src/entities/users/users.schema";
+import { CommentDocument } from "src/entities/comments/comments.schema";
+import { PostDocument } from "src/entities/posts/posts.schema";
+import { UserDocument } from "src/entities/users/users.schema";
 
 export type NotificationDocument = HydratedDocument<Notification>;
 
 @Schema({ timestamps: true })
 export class Notification {
     @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true })
-    receiver: User;
+    receiver: UserDocument;
 
     @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true })
-    sender: User;
+    sender: UserDocument;
 
     @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Post'})
-    post: Post;
+    post: PostDocument;
 
     @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Comment' })
-    comment: Comment;
+    comment: CommentDocument;
 
     @Prop({ required: true })
     text: string;

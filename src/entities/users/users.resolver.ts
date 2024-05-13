@@ -7,6 +7,6 @@ export class UsersResolver {
 
     @Query('user')
     async user() {
-        
+        return {a: "b"}
     }
 }

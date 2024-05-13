@@ -1,6 +1,6 @@
-import { Prop, Schema, raw } from "@nestjs/mongoose";
+import { Prop, Schema, SchemaFactory, raw } from "@nestjs/mongoose";
 import mongoose, { HydratedDocument } from "mongoose";
-import { User } from "src/entities/users/users.schema";
+import { UserDocument } from "src/entities/users/users.schema";
 
 export type ChatDocument = HydratedDocument<Chat>;
 
@@ -10,10 +10,10 @@ export class Chat {
     title: string;
 
     @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true })
-    owner: User;
+    owner: UserDocument;
 
     @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }] })
-    participants: User[];
+    participants: UserDocument[];
 
     @Prop(raw({
         type: [{
@@ -25,5 +25,7 @@ export class Chat {
         }],
         default: []
     }))
-    messagesUnreadCount: Record<number, User>;
+    messagesUnreadCount: Record<number, UserDocument>;
 }
+
+export const ChatSchema = SchemaFactory.createForClass(Chat);

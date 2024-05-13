@@ -1,17 +1,17 @@
-import { Prop, Schema } from "@nestjs/mongoose";
+import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import mongoose, { HydratedDocument } from "mongoose";
-import { Chat } from "src/entities/chats/chats.schema";
-import { User } from "src/entities/users/users.schema";
+import { ChatDocument } from "src/entities/chats/chats.schema";
+import { UserDocument } from "src/entities/users/users.schema";
 
 export type ChatMessageDocument = HydratedDocument<ChatMessage>;
 
 @Schema({ timestamps: true })
 export class ChatMessage {
     @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
-    owner: User;
+    owner: UserDocument;
 
     @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Chat', required: true })
-    chat: Chat;
+    chat: ChatDocument;
 
     @Prop({ required: true })
     type: string;
@@ -43,3 +43,5 @@ export class ChatMessage {
     @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'ChatMessage' })
     reply: ChatMessage;
 }
+
+export const ChatMessageSchema = SchemaFactory.createForClass(ChatMessage);

@@ -1,7 +1,7 @@
-import { Prop, Schema } from "@nestjs/mongoose";
+import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import mongoose, { HydratedDocument } from "mongoose";
-import { Post } from "src/entities/posts/posts.schema";
-import { User } from "src/entities/users/users.schema";
+import { PostDocument } from "src/entities/posts/posts.schema";
+import { UserDocument } from "src/entities/users/users.schema";
 
 
 export type CommentDocument = HydratedDocument<Comment>;
@@ -10,10 +10,10 @@ export type CommentDocument = HydratedDocument<Comment>;
 @Schema({ timestamps: true })
 export class Comment {
     @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
-    owner: User;
+    owner: UserDocument;
 
     @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
-    receiver: User;
+    receiver: UserDocument;
 
     @Prop({ required: true })
     text: string;
@@ -22,8 +22,10 @@ export class Comment {
     isReply: boolean;
 
     @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Comment' }] })
-    replies: Comment[];
+    replies: CommentDocument[];
 
     @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Post' })
-    post: Post;
+    post: PostDocument;
 }
+
+export const CommentSchema = SchemaFactory.createForClass(Comment);
