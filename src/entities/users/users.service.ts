@@ -40,11 +40,16 @@ export class UsersService {
         return await this.userModel.findById(_id);
     }
 
+    // get by ids
+    async getUsersByIds(ids: string[]) {
+        return await this.userModel.find({ _id: ids });
+    }
+
     // get by nickname
-    async getUserByNickname(nick: string) {
+    async getUsersByNickname(nick: string) {
         return await this.userModel.find({
             nick: { $regex: '.*' + nick + '.*' }
-        });
+        }).limit(10);
     }
 
     // subscribe or unsubscribe
