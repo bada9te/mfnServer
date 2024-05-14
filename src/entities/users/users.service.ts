@@ -1,17 +1,21 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { User } from './users.schema';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { UserCreationDto } from './dto';
+import { ConfirmAccountDto, CreateUserDto, RestoreAccountDto } from './dto';
+import { ModerationsService } from '../moderations/moderations.service';
+import bcrypt from "bcrypt-nodejs";
+
 
 @Injectable()
 export class UsersService {
     constructor(
         @InjectModel(User.name) private userModel: Model<User>,
+        private moderationsService: ModerationsService
     ) {}
 
     // add new user
-    async addUser(user: UserCreationDto) {
+    async addUser(user: CreateUserDto) {
         const inserted = await this.userModel.insertMany([user]);
         return inserted[0];
     }
@@ -89,20 +93,78 @@ export class UsersService {
     }
 
     // confirm account
-    async confirmUserAccount(_id: string) {
-        return await this.userModel.findByIdAndUpdate(
-            _id,
+    async confirmUserAccount(dto: ConfirmAccountDto) {
+        const action = await this.moderationsService.validateAction({
+            ...dto,
+            type: 'verify',
+        });
+
+        const checkUser = await this.getUserById(dto.userId);
+
+        if (!action || !checkUser) {
+            throw new BadRequestException('Invalid verification credentials');
+        }
+
+        await this.moderationsService.deleteModeration({
+            ...dto,
+            type: 'verify',
+        });
+
+        const user = await this.userModel.findByIdAndUpdate(
+            dto.userId,
             { verified: true },
             { new: true }
         );
+
+        return { action, user };
     }
 
     // restore account
-    async restoreAccount(_id: string, newValue: string, type: "password" | "email") {
-        return await this.userModel.findByIdAndUpdate(
-            _id,
+    // type: "password" | "email"
+    async restoreAccount({ userId, actionId, verifyToken, type, newValue }: RestoreAccountDto) {
+        const action = await this.moderationsService.validateAction({
+            userId,
+            actionId,
+            verifyToken,
+            type,
+        });
+
+        if (!action) {
+            throw new BadRequestException('Invalid verification credentials');
+        }
+        
+        if (type === "password") {
+            type = "local.password";
+            newValue = bcrypt.hashSync(newValue, bcrypt.genSaltSync(8));
+        } else if (type === "email") {
+            type = "local.email";
+            // try to find a user with the same email
+            const user = await this.getUserByEmail(newValue)
+            if (user) {
+                throw new BadRequestException("This email was already taken");
+            }
+        }
+
+        // update user data
+        const affectedUser = await this.userModel.findByIdAndUpdate(
+            userId,
             { [type]: newValue },
             { new: true }
         );
+
+        if (!affectedUser) {
+            throw new BadRequestException("User data can't be updated");
+        }
+
+        await this.moderationsService.deleteModeration({
+            actionId,
+            userId,
+            type,
+            verifyToken,
+        });
+
+        // TODO: send email to affected user email
+
+        return { action, user: affectedUser };
     }
 }

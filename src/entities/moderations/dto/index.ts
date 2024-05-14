@@ -1,1 +1,2 @@
-export * from "./moderations.dto";
+export * from "./create-moderation.dto";
+export * from "./moderation.dto";

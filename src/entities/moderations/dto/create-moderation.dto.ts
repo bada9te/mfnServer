@@ -1,18 +1,12 @@
 import { IsNotEmpty, IsString } from "class-validator";
+import { CreateModerationActionInput } from "src/graphql/graphql.schema";
 
-export class ModerationCreationDto {
+export class CreateModerationDto extends CreateModerationActionInput {
     @IsNotEmpty()
     @IsString()
     user: string;
 
-    @IsString()
-    actionId?: string;
-
     @IsNotEmpty()
     @IsString()
     type: string;
-
-    @IsNotEmpty()
-    @IsString()
-    verifyToken: string;
 }
