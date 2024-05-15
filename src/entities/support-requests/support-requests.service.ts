@@ -3,14 +3,14 @@ import { SupportRequest } from './support-requests.schema';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { RangeDto } from 'src/common/dto';
-import { SupportRequstCreationDto } from './dto';
+import { CreateSupportRequestDto } from './dto';
 
 @Injectable()
 export class SupportRequestsService {
     constructor(@InjectModel(SupportRequest.name) private supportRequestModel: Model<SupportRequest>) {}
 
     // create
-    async createSupportRequest(supReq: SupportRequstCreationDto) {
+    async createSupportRequest(supReq: CreateSupportRequestDto) {
         const inserted = await this.supportRequestModel.insertMany([supReq]);
         return inserted[0];
     }

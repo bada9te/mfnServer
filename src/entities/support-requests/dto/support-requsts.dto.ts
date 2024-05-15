@@ -1,6 +1,7 @@
 import { IsNotEmpty, IsString } from "class-validator";
+import { CreateSupportRequestInput } from "src/graphql/graphql.schema";
 
-export class SupportRequstCreationDto {
+export class CreateSupportRequestDto extends CreateSupportRequestInput {
     @IsNotEmpty()
     @IsString()
     contactReason: string;
