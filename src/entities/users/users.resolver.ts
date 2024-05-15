@@ -1,6 +1,6 @@
 import { Args, Mutation, Query, Resolver } from "@nestjs/graphql";
 import { UsersService } from "./users.service";
-import { SwicthSubscriptionDto, UpdateUserDto, CreateUserDto, ConfirmAccountDto, RestoreAccountDto } from "./dto";
+import { SwicthSubscriptionDto, UpdateUserDto, CreateUserDto, ConfirmAccountDto, RestoreAccountDto, PrepareToRestoreDto } from "./dto";
 import { ModerationsService } from "../moderations/moderations.service";
 
 @Resolver('User')
@@ -53,4 +53,8 @@ export class UsersResolver {
     }
     
     // userPrepareAccountToRestore
+    @Mutation()
+    async userPrepareAccountToRestore(@Args('input') dto: PrepareToRestoreDto) {
+        return await this.usersService.prepareAccountToRestore(dto);
+    }
 }

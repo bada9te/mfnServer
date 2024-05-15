@@ -2,9 +2,10 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { User } from './users.schema';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { ConfirmAccountDto, CreateUserDto, RestoreAccountDto } from './dto';
+import { ConfirmAccountDto, CreateUserDto, PrepareToRestoreDto, RestoreAccountDto } from './dto';
 import { ModerationsService } from '../moderations/moderations.service';
 import bcrypt from "bcrypt-nodejs";
+import generateRandomString from 'src/utils/functions/generateRandomString';
 
 
 @Injectable()
@@ -166,5 +167,22 @@ export class UsersService {
         // TODO: send email to affected user email
 
         return { action, user: affectedUser };
+    }
+
+    async prepareAccountToRestore({email, type}: PrepareToRestoreDto) {
+        const user = await this.getUserByEmail(email);
+
+        if (!user) {
+            throw new BadRequestException("User not found");
+        }
+
+        const moderation = await this.moderationsService.createModeration({
+            user: user._id.toString(),
+            type,
+        });
+
+        // TODO: send email to affected user email
+
+        return { action: moderation, user };
     }
 }
