@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Report } from './reports.schema';
 import { Model } from 'mongoose';
-import { ReportCreationDto } from './dto';
+import { CreateReportDto } from './dto';
 import { RangeDto } from 'src/common/dto';
 
 @Injectable()
@@ -10,7 +10,7 @@ export class ReportsService {
     constructor(@InjectModel(Report.name) private reportsModel: Model<Report>) {}
 
     // create
-    async createReport(report: ReportCreationDto) {
+    async createReport(report: CreateReportDto) {
         const inserted = await this.reportsModel.insertMany([report]);
         return inserted[0];
     }

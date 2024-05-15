@@ -1,1 +1,1 @@
-export * from "./support-requsts.dto";
+export * from "./create-support-request.dto";

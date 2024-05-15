@@ -1,6 +1,7 @@
 import { IsBoolean, IsNotEmpty, IsString } from "class-validator";
+import { AddPostInput } from "src/graphql/graphql.schema";
 
-export class PostCreationDto {
+export class CreatePostDto extends AddPostInput {
     @IsNotEmpty()
     @IsString()
     owner: string;

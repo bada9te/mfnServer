@@ -1,6 +1,7 @@
 import { IsNotEmpty, IsString } from "class-validator";
+import { CreateReportInput } from "src/graphql/graphql.schema";
 
-export class ReportCreationDto {
+export class CreateReportDto extends CreateReportInput {
     @IsString()
     @IsNotEmpty()
     contactReason: string;
