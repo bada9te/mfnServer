@@ -1,6 +1,6 @@
-import { Args, Resolver, Query } from "@nestjs/graphql";
+import { Args, Resolver, Query, Mutation } from "@nestjs/graphql";
 import { PostsService } from "./posts.service";
-import { PostsByTitleDto } from "./dto";
+import { CreatePostDto, PostsByTitleDto, UpdatePostDto } from "./dto";
 
 
 @Resolver('Post')
@@ -78,5 +78,15 @@ export class PostsResolver {
             posts: await this.postsService.getPostsByCategory(category, { offset, limit }),
             count: await this.postsService.getDocsCount({ category }),
         }
+    }
+
+    @Mutation()
+    async postCreate(@Args('input') dto: CreatePostDto) {
+        return await this.postsService.addPost(dto);
+    }
+
+    @Mutation()
+    async postUpdate(@Args('input') { post, value, what }: UpdatePostDto) {
+        return await this.postsService.updatePost(post, value, what);
     }
 }
