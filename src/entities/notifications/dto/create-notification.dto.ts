@@ -1,6 +1,7 @@
 import { IsNotEmpty, IsString } from "class-validator"
+import { CreateNotificationInput } from "src/graphql/graphql.schema";
 
-export class NotificationCreationDto {
+export class CreateNotificationDto extends CreateNotificationInput {
     @IsNotEmpty()
     @IsString()
     receiver: string;
@@ -16,5 +17,5 @@ export class NotificationCreationDto {
     comment?: string;
     
     @IsString()
-    text?: string;
+    text: string;
 }

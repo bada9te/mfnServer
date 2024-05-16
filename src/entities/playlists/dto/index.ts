@@ -1,1 +1,2 @@
-export * from "./playlists.dto";
+export * from "./create-playlist.dto";
+export * from "./swicth-track.dto";

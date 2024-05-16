@@ -5,7 +5,6 @@ import { Model } from 'mongoose';
 import { ConfirmAccountDto, CreateUserDto, PrepareToRestoreDto, RestoreAccountDto } from './dto';
 import { ModerationsService } from '../moderations/moderations.service';
 import bcrypt from "bcrypt-nodejs";
-import generateRandomString from 'src/utils/functions/generateRandomString';
 
 
 @Injectable()

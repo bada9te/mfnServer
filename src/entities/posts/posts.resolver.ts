@@ -1,6 +1,6 @@
 import { Args, Resolver, Query, Mutation } from "@nestjs/graphql";
 import { PostsService } from "./posts.service";
-import { CreatePostDto, PostsByTitleDto, UpdatePostDto } from "./dto";
+import { CreatePostDto, PostsByTitleDto, SwicthLikeOrSaveDto, UpdatePostDto } from "./dto";
 
 
 @Resolver('Post')
@@ -88,5 +88,20 @@ export class PostsResolver {
     @Mutation()
     async postUpdate(@Args('input') { post, value, what }: UpdatePostDto) {
         return await this.postsService.updatePost(post, value, what);
+    }
+
+    @Mutation()
+    async postDeleteById(@Args('_id') _id: string) {
+        return await this.postsService.deletePostById(_id);
+    }
+
+    @Mutation()
+    async postSwitchLike(@Args('input') dto: SwicthLikeOrSaveDto) {
+        return await this.postsService.switchIsLiked(dto.postId, dto.userId);
+    }
+
+    @Mutation()
+    async postSwicthInSaved(@Args('input') dto: SwicthLikeOrSaveDto) {
+        return await this.postsService.switchInSaved(dto.postId, dto.userId);
     }
 }
