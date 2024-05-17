@@ -1,6 +1,7 @@
 import { Args, Resolver, Query, Mutation } from "@nestjs/graphql";
 import { SupportRequestsService } from "./support-requests.service";
 import { CreateSupportRequestDto } from "./dto";
+import { ParseIntPipe } from "@nestjs/common";
 
 @Resolver('SuuportRequest')
 export class SupportRequestsResolver {
@@ -8,8 +9,8 @@ export class SupportRequestsResolver {
 
     @Query()
     async supportRequests(
-        @Args('offset') offset: number,
-        @Args('limit') limit: number,
+        @Args('offset', ParseIntPipe) offset: number,
+        @Args('limit', ParseIntPipe) limit: number,
     ) {
         return await this.supportRequestsService.getAllSupportRequsts({ offset, limit });
     }

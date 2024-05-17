@@ -1,6 +1,7 @@
 import { Args, Mutation, Query, Resolver } from "@nestjs/graphql";
 import { PlaylistsService } from "./playlists.service";
 import { CreatePlaylistDto, SwitchTrackDto } from "./dto";
+import { ParseIntPipe } from "@nestjs/common";
 
 @Resolver('Playlist')
 export class PlaylistResolver {
@@ -14,8 +15,8 @@ export class PlaylistResolver {
     @Query()
     async playlistsByOwnerId(
         @Args('owner') owner: string,
-        @Args('offset') offset: number,
-        @Args('limit') limit: number,
+        @Args('offset', ParseIntPipe) offset: number,
+        @Args('limit', ParseIntPipe) limit: number,
     ) {
         return {
             playlists: await this.playlistsService.getPlaylistByOwnerId(owner, {offset, limit}),
@@ -25,8 +26,8 @@ export class PlaylistResolver {
 
     @Query()
     async playlistsPublicAvailable(
-        @Args('offset') offset: number,
-        @Args('limit') limit: number
+        @Args('offset', ParseIntPipe) offset: number,
+        @Args('limit', ParseIntPipe) limit: number
     ) {
         return {
             playlists: await this.playlistsService.getPublicAvailablePlaylists({ offset, limit }),

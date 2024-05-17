@@ -52,7 +52,6 @@ export class UsersResolver {
         return await this.usersService.restoreAccount(dto);
     }
     
-    // userPrepareAccountToRestore
     @Mutation()
     async userPrepareAccountToRestore(@Args('input') dto: PrepareToRestoreDto) {
         return await this.usersService.prepareAccountToRestore(dto);

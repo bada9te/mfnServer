@@ -1,1 +1,1 @@
-export * from "./comments.dto";
+export * from "./create-comment.dto";

@@ -1,6 +1,7 @@
 import { IsBoolean, IsNotEmpty, IsString } from "class-validator";
+import { AddCommentInput } from "src/graphql/graphql.schema";
 
-export class CommentCreationDto {
+export class CreateCommentDto extends AddCommentInput {
     @IsNotEmpty()
     @IsString()
     owner: string;

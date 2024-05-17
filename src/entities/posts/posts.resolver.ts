@@ -1,6 +1,7 @@
 import { Args, Resolver, Query, Mutation } from "@nestjs/graphql";
 import { PostsService } from "./posts.service";
 import { CreatePostDto, PostsByTitleDto, SwicthLikeOrSaveDto, UpdatePostDto } from "./dto";
+import { ParseIntPipe } from "@nestjs/common";
 
 
 @Resolver('Post')
@@ -14,8 +15,8 @@ export class PostsResolver {
 
     @Query()
     async posts(
-        @Args('offset') offset: number,
-        @Args('limit') limit: number
+        @Args('offset', ParseIntPipe) offset: number,
+        @Args('limit', ParseIntPipe) limit: number
     ) {
         return {
             posts: await this.postsService.getAllPosts({ offset, limit }),
@@ -26,8 +27,8 @@ export class PostsResolver {
     @Query()
     async postsByOwner(
         @Args('owner') owner: string,
-        @Args('offset') offset: number,
-        @Args('limit') limit: number
+        @Args('offset', ParseIntPipe) offset: number,
+        @Args('limit', ParseIntPipe) limit: number
     ) {
         return {
             posts: await this.postsService.getAllWithOwnerId(owner,{ offset, limit }),
@@ -38,8 +39,8 @@ export class PostsResolver {
     @Query()
     async postsSavedByUser(
         @Args('user') user: string,
-        @Args('offset') offset: number,
-        @Args('limit') limit: number
+        @Args('offset', ParseIntPipe) offset: number,
+        @Args('limit', ParseIntPipe) limit: number
     ) {
         return {
             posts: await this.postsService.getSavedPostsByUserId(user, { offset, limit }),
@@ -71,8 +72,8 @@ export class PostsResolver {
     @Query()
     async postsByCategory(
         @Args('category') category: string,
-        @Args('offset') offset: number,
-        @Args('limit') limit: number,
+        @Args('offset', ParseIntPipe) offset: number,
+        @Args('limit', ParseIntPipe) limit: number,
     ) {
         return {
             posts: await this.postsService.getPostsByCategory(category, { offset, limit }),
