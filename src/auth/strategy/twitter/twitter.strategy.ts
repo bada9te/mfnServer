@@ -4,7 +4,7 @@ import { PassportStrategy } from "@nestjs/passport";
 import { Strategy } from "passport-twitter";
 
 @Injectable()
-export class TwitterStrategy extends PassportStrategy(Strategy, 'twitter') {
+export class TwitterOauthStrategy extends PassportStrategy(Strategy, 'twitter') {
     constructor(private configService: ConfigService) {
         super({
             consumerKey      : configService.get('PASSPORT_TWITTER_KEY'),

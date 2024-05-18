@@ -1,13 +1,25 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
+import { User } from 'src/entities/users/users.schema';
+import { JwtPayload } from './jwt.strategy';
+import * as argon from "argon2";
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { User } from 'src/entities/users/users.schema';
-import * as argon from "argon2";
 
 @Injectable()
-export class AuthService {
-    constructor(@InjectModel(User.name) private usersModel: Model<User>) {}
+export class JwtAuthService {
+    constructor(
+        @InjectModel(User.name) private usersModel: Model<User>,
+        private jwtService: JwtService
+    ) {}
 
+    login(user: any) {
+        const payload: JwtPayload = { nickname: user.nick, _id: user._id.toString() };
+        return {
+            accessToken: this.jwtService.sign(payload),
+            userId: payload._id,
+        };
+    }
 
     async validateLocal(email: string, password: string) {
         const user = await this.usersModel.findOne({ 'local.email': email });
@@ -27,28 +39,4 @@ export class AuthService {
         return user;
     }
 
-
-    async processGoogle(req: Express.Request) {
-        if (!req.user) {
-            // if user NOT logged in
-        } else {
-            // if user logged in
-        }
-    }
-
-    async processFacebook(req: Express.Request) {
-        if (!req.user) {
-            // if user NOT logged in
-        } else {
-            // if user logged in
-        }
-    }
-
-    async processTwitter(req: Express.Request) {
-        if (!req.user) {
-            // if user NOT logged in
-        } else {
-            // if user logged in
-        }
-    }
 }

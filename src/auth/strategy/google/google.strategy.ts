@@ -5,7 +5,7 @@ import { OAuth2Strategy, Profile } from "passport-google-oauth";
 
 
 @Injectable()
-export class GoogleStrategy extends PassportStrategy(OAuth2Strategy, 'google') {
+export class GoogleOauthStrategy extends PassportStrategy(OAuth2Strategy, 'google') {
     constructor(private configService: ConfigService) {
         super({
             clientID     : configService.get('PASSPORT_GOOGLE_ID'),

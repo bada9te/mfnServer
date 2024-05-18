@@ -5,7 +5,7 @@ import { ConfigService } from "@nestjs/config";
 
 
 @Injectable()
-export class FacebookStrategy extends PassportStrategy(Strategy, 'facebook') {
+export class FacebookOauthStrategy extends PassportStrategy(Strategy, 'facebook') {
     constructor(private configService: ConfigService) {
         super({
             clientID     : configService.get('PASSPORT_FACEBOOK_ID'),

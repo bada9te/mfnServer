@@ -1,15 +1,24 @@
 import { Module } from '@nestjs/common';
-import { AuthService } from './auth.service';
-import { MongooseModule } from '@nestjs/mongoose';
-import { User, UserSchema } from 'src/entities/users/users.schema';
+import { PassportModule } from '@nestjs/passport';
 import { AuthController } from './auth.controller';
+import { UsersModule } from 'src/entities/users/users.module';
+import { GoogleOauthModule } from './strategy/google/google.module';
+import { JwtAuthModule } from './strategy/jwt/jwt.module';
+import { FacebookOauthModule } from './strategy/facebook/facebook.module';
+import { TwitterOauthModule } from './strategy/twitter/twitter.module';
+import { LocalOauthModule } from './strategy/local/local.module';
 
 
 @Module({
-  imports: [
-    MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
-  ],
   controllers: [AuthController],
-  providers: [AuthService]
+  imports: [
+    UsersModule,
+    PassportModule,
+    JwtAuthModule,
+    LocalOauthModule,
+    GoogleOauthModule,
+    FacebookOauthModule,
+    TwitterOauthModule
+  ],
 })
 export class AuthModule {}
