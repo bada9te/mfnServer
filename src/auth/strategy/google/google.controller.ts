@@ -28,6 +28,6 @@ export class GoogleOauthController {
             sameSite: 'lax',
         });
 
-        return res.redirect(`/profile/${userId}`);
+        return res.redirect('/auth/profile');
     }
 }

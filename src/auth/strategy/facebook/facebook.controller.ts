@@ -28,6 +28,6 @@ export class FacebookOauthController {
             sameSite: 'lax',
         });
         
-        return res.redirect(`/profile/${userId}`);
+        return res.redirect('/auth/profile');
     }
 }

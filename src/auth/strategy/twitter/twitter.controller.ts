@@ -3,7 +3,6 @@ import { Request, Response } from 'express';
 import { JwtAuthService } from '../jwt/jwt.service';
 import { ConfigService } from '@nestjs/config';
 import { TwitterOauthGuard } from './twitter.guard';
-import { UserDocument } from 'src/entities/users/users.schema';
 
 
 @Controller('auth/twitter')
@@ -29,6 +28,6 @@ export class TwitterOauthController {
             sameSite: 'lax',
         });
         
-        return res.redirect(`/profile/${userId}`);
+        return res.redirect('/auth/profile');
     }
 }
