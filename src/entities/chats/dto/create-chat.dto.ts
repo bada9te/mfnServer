@@ -1,6 +1,7 @@
 import { IsArray, IsNotEmpty, IsString } from "class-validator";
+import { ChatCreateInput } from "src/graphql/graphql.schema";
 
-export class ChatCreationDto {
+export class CreateChatDto extends ChatCreateInput {
     @IsNotEmpty()
     @IsString()
     title: string;
