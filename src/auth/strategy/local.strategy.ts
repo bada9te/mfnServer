@@ -4,12 +4,16 @@ import { Strategy } from "passport-local";
 import { AuthService } from "../auth.service";
 
 @Injectable()
-export class LocalStrategy extends PassportStrategy(Strategy) {
+export class LocalStrategy extends PassportStrategy(Strategy, 'local') {
     constructor(private authService: AuthService) {
-        super();
+        super({ 
+            usernameField: 'email',
+            passwordField : 'password',
+            passReqToCallback : true,
+        });
     }
 
     async validate(email: string, password: string) {
-        //const user = await this.authService
+        return await this.authService.validateLocal(email, password);
     }
 }
