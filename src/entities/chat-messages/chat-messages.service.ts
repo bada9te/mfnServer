@@ -10,7 +10,7 @@ export class ChatMessagesService {
     constructor(@InjectModel(ChatMessage.name) private chatMessagesModel: Model<ChatMessage>) {}
     
     async createMessage(message: CreateChatMessageDto) {
-        const inserted = await this.chatMessagesModel.insertMany(message);
+        const inserted = await this.chatMessagesModel.insertMany([message]);
         return inserted[0];
     }
 

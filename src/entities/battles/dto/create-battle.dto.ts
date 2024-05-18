@@ -1,6 +1,7 @@
 import { IsNotEmpty, IsString } from "class-validator";
+import { AddNewBattleByPostsIdsInput } from "src/graphql/graphql.schema";
 
-export class BattleCreationDto {
+export class CreateBattleDto extends AddNewBattleByPostsIdsInput {
     @IsNotEmpty()
     @IsString()
     title: string;
