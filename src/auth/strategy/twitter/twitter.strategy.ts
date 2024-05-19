@@ -1,11 +1,12 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, UnauthorizedException } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { PassportStrategy } from "@nestjs/passport";
 import { Strategy } from "passport-twitter";
+import { JwtAuthService } from "../jwt/jwt.service";
 
 @Injectable()
 export class TwitterOauthStrategy extends PassportStrategy(Strategy, 'twitter') {
-    constructor(private configService: ConfigService) {
+    constructor(private configService: ConfigService, private jwtAuthService: JwtAuthService) {
         super({
             consumerKey      : configService.get('PASSPORT_TWITTER_KEY'),
             consumerSecret   : configService.get('PASSPORT_TWITTER_SECRET'),
@@ -15,11 +16,11 @@ export class TwitterOauthStrategy extends PassportStrategy(Strategy, 'twitter') 
         });
     }
 
-    async verify(
-        token: string, 
-        tokenSecret: string, 
-        profile: any
-    ) {
-        
+    async verify(token: string, tokenSecret: string, profile: any) {
+        const user = await this.jwtAuthService.processTwitter(profile, token);
+        if (!user) {
+            throw new UnauthorizedException();
+        }
+        return user;
     }
 }

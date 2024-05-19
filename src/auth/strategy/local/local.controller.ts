@@ -12,7 +12,7 @@ export class LocalOauthController {
     ) {}
     
     
-    @Post('login')
+    @Post()
     @UseGuards(LocalOauthGuard)
     async localAuth(@Req() req: Request, @Res() res: Response) {
         const { userId, accessToken } = this.jwtAuthService.login(req.user);
