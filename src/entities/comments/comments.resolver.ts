@@ -1,6 +1,8 @@
 import { Args, Resolver, Query, Mutation } from "@nestjs/graphql";
 import { CommentsService } from "./comments.service";
 import { CreateCommentDto } from "./dto";
+import { UseGuards } from "@nestjs/common";
+import { GqlAuthGuard } from "src/auth/strategy/graphql/gql.guard";
 
 
 @Resolver('Comment')
@@ -29,11 +31,13 @@ export class CommentsResolver {
     }
 
     @Mutation()
+    @UseGuards(GqlAuthGuard)
     async commentCreate(@Args('input') dto: CreateCommentDto) {
         await this.commentsService.addComment(dto);
     }
 
     @Mutation()
+    @UseGuards(GqlAuthGuard)
     async commentDeleteById(@Args('_id') _id: string) {
         await this.commentsService.removeById(_id);
     }

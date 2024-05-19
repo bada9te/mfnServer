@@ -1,7 +1,8 @@
 import { Args, Mutation, Query, Resolver } from "@nestjs/graphql";
 import { BattlesService } from "./battles.service";
-import { ParseBoolPipe, ParseIntPipe } from "@nestjs/common";
+import { ParseBoolPipe, ParseIntPipe, UseGuards } from "@nestjs/common";
 import { MakeBattleVoteDto } from "./dto";
+import { GqlAuthGuard } from "src/auth/strategy/graphql/gql.guard";
 
 @Resolver('Battle')
 export class BattlesResolver {
@@ -22,11 +23,13 @@ export class BattlesResolver {
     // battleCreate
 
     @Mutation()
+    @UseGuards(GqlAuthGuard)
     async battleDeleteById(@Args('_id') _id: string) {
         return await this.battlesService.deleteBattle(_id);
     }
 
     @Mutation()
+    @UseGuards(GqlAuthGuard)
     async battleMakeVote(@Args('input') dto: MakeBattleVoteDto) {
         return await this.battlesService.updateScore(dto);
     }

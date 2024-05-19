@@ -4,6 +4,7 @@ type Query {
     userByEmail(email: String!): User!
     usersByIds(ids: [ID!]!): [User!]!
     usersByNickname(nick: String!): [User!]!
+    whoAmI: User
 }
 
 type User {

@@ -10,7 +10,17 @@ export class BattlesService {
     constructor(@InjectModel(Battle.name) private battlesModel: Model<Battle>) {}
     
     async addBattleByIds(battle: CreateBattleDto) {
-        const inserted = await this.battlesModel.insertMany([battle]);
+        const dateEnd = new Date();
+        dateEnd.setDate(dateEnd.getDate() + 1);
+
+        const battleToInsert = {
+            ...battle,
+            willFinishAt: dateEnd.toISOString(),
+        };
+        const inserted = await this.battlesModel.insertMany([battleToInsert]);
+        
+        // TODO: create PLANNED TASK TO FINISH BATTLE
+
         return inserted[0];
     }
 

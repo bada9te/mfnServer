@@ -1,4 +1,4 @@
-import { Prop, Schema, SchemaFactory, raw } from "@nestjs/mongoose";
+import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import mongoose, { HydratedDocument } from "mongoose";
 import { UserDocument } from "src/entities/users/users.schema";
 
@@ -15,17 +15,14 @@ export class Chat {
     @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }] })
     participants: UserDocument[];
 
-    @Prop(raw({
+    @Prop({
         type: [{
-            count: Number,
-            user: {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: 'User'
-            }
+            count: { type: Number },
+            user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
         }],
         default: []
-    }))
-    messagesUnreadCount: Record<number, UserDocument>;
+    })
+    messagesUnreadCount: { count: number, user: UserDocument }[];
 }
 
 export const ChatSchema = SchemaFactory.createForClass(Chat);

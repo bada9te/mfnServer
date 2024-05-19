@@ -1,7 +1,8 @@
 import { Args, Resolver, Query, Mutation } from "@nestjs/graphql";
 import { PostsService } from "./posts.service";
 import { CreatePostDto, PostsByTitleDto, SwicthLikeOrSaveDto, UpdatePostDto } from "./dto";
-import { ParseIntPipe } from "@nestjs/common";
+import { ParseIntPipe, UseGuards } from "@nestjs/common";
+import { GqlAuthGuard } from "src/auth/strategy/graphql/gql.guard";
 
 
 @Resolver('Post')
@@ -82,26 +83,31 @@ export class PostsResolver {
     }
 
     @Mutation()
+    @UseGuards(GqlAuthGuard)
     async postCreate(@Args('input') dto: CreatePostDto) {
         return await this.postsService.addPost(dto);
     }
 
     @Mutation()
+    @UseGuards(GqlAuthGuard)
     async postUpdate(@Args('input') { post, value, what }: UpdatePostDto) {
         return await this.postsService.updatePost(post, value, what);
     }
 
     @Mutation()
+    @UseGuards(GqlAuthGuard)
     async postDeleteById(@Args('_id') _id: string) {
         return await this.postsService.deletePostById(_id);
     }
 
     @Mutation()
+    @UseGuards(GqlAuthGuard)
     async postSwitchLike(@Args('input') dto: SwicthLikeOrSaveDto) {
         return await this.postsService.switchIsLiked(dto.postId, dto.userId);
     }
 
     @Mutation()
+    @UseGuards(GqlAuthGuard)
     async postSwicthInSaved(@Args('input') dto: SwicthLikeOrSaveDto) {
         return await this.postsService.switchInSaved(dto.postId, dto.userId);
     }

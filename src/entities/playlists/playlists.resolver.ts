@@ -1,7 +1,8 @@
 import { Args, Mutation, Query, Resolver } from "@nestjs/graphql";
 import { PlaylistsService } from "./playlists.service";
 import { CreatePlaylistDto, SwitchTrackDto } from "./dto";
-import { ParseIntPipe } from "@nestjs/common";
+import { ParseIntPipe, UseGuards } from "@nestjs/common";
+import { GqlAuthGuard } from "src/auth/strategy/graphql/gql.guard";
 
 @Resolver('Playlist')
 export class PlaylistResolver {
@@ -36,16 +37,19 @@ export class PlaylistResolver {
     }
 
     @Mutation()
+    @UseGuards(GqlAuthGuard)
     async playlistCreate(@Args('input') dto: CreatePlaylistDto) {
         return await this.playlistsService.createPlaylist(dto);
     }
 
     @Mutation()
+    @UseGuards(GqlAuthGuard)
     async playlistDeleteById(@Args('_id') _id: string) {
         return await this.playlistsService.deletePlaylistById(_id);
     }
 
     @Mutation()
+    @UseGuards(GqlAuthGuard)
     async playlistSwicthTrack(@Args('input') dto: SwitchTrackDto) {
         return await this.playlistsService.swicthTrackInPlaylist(dto.playlistId, dto.trackId);
     }

@@ -1,11 +1,20 @@
 import { Args, Mutation, Query, Resolver } from "@nestjs/graphql";
 import { UsersService } from "./users.service";
 import { SwicthSubscriptionDto, UpdateUserDto, CreateUserDto, ConfirmAccountDto, RestoreAccountDto, PrepareToRestoreDto } from "./dto";
+import { UseGuards } from "@nestjs/common";
+import { GqlAuthGuard } from "src/auth/strategy/graphql/gql.guard";
+import { CurrentUser } from "src/auth/strategy/graphql/gql.decorator";
+import { UserDocument } from "./users.schema";
 
 
 @Resolver('User')
 export class UsersResolver {
     constructor(private usersService: UsersService) {}
+
+    @UseGuards(GqlAuthGuard)
+    async whoAmI(@CurrentUser() user: UserDocument) {
+        return this.usersService.getUserById(user._id.toString());
+    }
 
     @Query()
     async user(@Args('_id') _id: string) {
@@ -33,11 +42,13 @@ export class UsersResolver {
     }
 
     @Mutation()
+    @UseGuards(GqlAuthGuard)
     async userUpdate(@Args('input') { _id, what, value }: UpdateUserDto) {
         return await this.usersService.updateUser(_id, value, what);
     }
 
     @Mutation()
+    @UseGuards(GqlAuthGuard)
     async userSwitchSubscription(@Args('input') { subscriberId, userId }: SwicthSubscriptionDto) {
         return await this.usersService.swicthUserSubscription(subscriberId, userId);
     }

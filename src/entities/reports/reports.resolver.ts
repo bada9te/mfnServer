@@ -1,7 +1,8 @@
 import { Args, Resolver, Query, Mutation } from "@nestjs/graphql";
 import { ReportsService } from "./reports.service";
 import { CreateReportDto } from "./dto";
-import { ParseIntPipe } from "@nestjs/common";
+import { ParseIntPipe, UseGuards } from "@nestjs/common";
+import { GqlAuthGuard } from "src/auth/strategy/graphql/gql.guard";
 
 
 @Resolver('Report')
@@ -9,6 +10,7 @@ export class ReportsResolver {
     constructor(private reportsService: ReportsService) {}
 
     @Query()
+    @UseGuards(GqlAuthGuard)
     async reports(
         @Args('offset', ParseIntPipe) offset: number,
         @Args('limit', ParseIntPipe) limit: number,
@@ -17,6 +19,7 @@ export class ReportsResolver {
     }
 
     @Query()
+    @UseGuards(GqlAuthGuard)
     async report(@Args('_id') _id: string) {
         return await this.reportsService.getReportById(_id);
     }
@@ -27,6 +30,7 @@ export class ReportsResolver {
     }
 
     @Mutation()
+    @UseGuards(GqlAuthGuard)
     async reportClose(@Args('_id') _id: string) {
         return await this.reportsService.closeReport(_id);
     }
