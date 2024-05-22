@@ -16,6 +16,9 @@ import { BattlesModule } from './entities/battles/battles.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
+import { EmailModule } from './utils/email/email.module';
+import { SocketModule } from './utils/socket/socket.module';
+import { MailerModule } from '@nestjs-modules/mailer';
 
 @Module({
   imports: [
@@ -30,6 +33,15 @@ import { ConfigModule } from '@nestjs/config';
       installSubscriptionHandlers: true,
       playground: true,
     }),
+    MailerModule.forRoot({
+      transport: {
+        host: process.env.EMAIL_HOST,
+        auth: {
+          user: process.env.EMAIL_USERNAME,
+          pass: process.env.EMAIL_PASSWORD,
+        },
+      },
+    }),
     UsersModule,
     ModerationsModule,
     SupportRequestsModule,
@@ -41,7 +53,9 @@ import { ConfigModule } from '@nestjs/config';
     ChatsModule,
     ChatMessagesModule,
     BattlesModule,
-    AuthModule, 
+    AuthModule,
+    EmailModule, 
+    SocketModule,
   ],
 })
 export class AppModule {}

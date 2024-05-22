@@ -243,6 +243,8 @@ export abstract class IQuery {
     abstract usersByIds(ids: string[]): User[] | Promise<User[]>;
 
     abstract usersByNickname(nick: string): User[] | Promise<User[]>;
+
+    abstract whoAmI(): Nullable<User> | Promise<Nullable<User>>;
 }
 
 export class Battle {
