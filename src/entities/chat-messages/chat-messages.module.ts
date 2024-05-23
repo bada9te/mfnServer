@@ -11,6 +11,10 @@ import { User, UserSchema } from '../users/users.schema';
 import { Chat, ChatSchema } from '../chats/chats.schema';
 import { ModerationsService } from '../moderations/moderations.service';
 import { Moderation, ModerationSchema } from '../moderations/moderations.schema';
+import { PostsModule } from '../posts/posts.module';
+import { UsersModule } from '../users/users.module';
+import { ChatsModule } from '../chats/chats.module';
+import { ModerationsModule } from '../moderations/moderations.module';
 
 @Module({
   imports: [
@@ -19,7 +23,12 @@ import { Moderation, ModerationSchema } from '../moderations/moderations.schema'
     MongooseModule.forFeature([{ name: ChatMessage.name, schema: ChatMessageSchema }]),
     MongooseModule.forFeature([{ name: Post.name, schema: PostSchema }]),
     MongooseModule.forFeature([{ name: Moderation.name, schema: ModerationSchema }]),
+    PostsModule,
+    UsersModule,
+    ChatsModule,
+    ModerationsModule,
   ],
-  providers: [ChatMessagesService, ChatMessagesResolver, PostsService, UsersService, ChatsService, ModerationsService]
+  providers: [ChatMessagesService, ChatMessagesResolver],
+  exports: [ChatMessagesService],
 })
 export class ChatMessagesModule {}

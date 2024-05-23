@@ -8,6 +8,7 @@ import { ReportsResolver } from './reports.resolver';
   imports: [
     MongooseModule.forFeature([{ name: Report.name, schema: ReportSchema }])
   ],
-  providers: [ReportsService, ReportsResolver]
+  providers: [ReportsService, ReportsResolver],
+  exports: [ReportsService],
 })
 export class ReportsModule {}

@@ -1,8 +1,8 @@
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { User, UserDocument } from 'src/entities/users/users.schema';
+import { User } from 'src/entities/users/users.schema';
 import { JwtPayload } from './jwt.strategy';
-import * as argon from "argon2";
+import * as bcrypt from "bcrypt";
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 
@@ -27,7 +27,8 @@ export class JwtAuthService {
             return null;
         }
 
-        const passwdMatches = argon.verify(user.local.password, password);
+        const passwdMatches = await bcrypt.compare(user.local.password, password);
+
         if (!passwdMatches) {
             return null;
         }

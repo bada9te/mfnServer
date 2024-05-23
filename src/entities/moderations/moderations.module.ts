@@ -8,6 +8,7 @@ import { ModerationsResolver } from './moderations.resolver';
   imports: [
     MongooseModule.forFeature([{ name: Moderation.name, schema: ModerationSchema }])
   ],
-  providers: [ModerationsService, ModerationsResolver]
+  providers: [ModerationsService, ModerationsResolver],
+  exports: [ModerationsService],
 })
 export class ModerationsModule {}

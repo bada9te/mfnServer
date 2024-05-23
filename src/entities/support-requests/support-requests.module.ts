@@ -8,6 +8,7 @@ import { SupportRequestsResolver } from './support-requests.resolver';
   imports: [
     MongooseModule.forFeature([{ name: SupportRequest.name, schema: SupportRequestSchema }])
   ],
-  providers: [SupportRequestsService, SupportRequestsResolver]
+  providers: [SupportRequestsService, SupportRequestsResolver],
+  exports: [SupportRequestsService],
 })
 export class SupportRequestsModule {}

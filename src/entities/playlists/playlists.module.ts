@@ -8,6 +8,7 @@ import { PlaylistResolver } from './playlists.resolver';
   imports: [
     MongooseModule.forFeature([{ name: Playlist.name, schema: PlaylistSchema }])
   ],
-  providers: [PlaylistsService, PlaylistResolver]
+  providers: [PlaylistsService, PlaylistResolver],
+  exports: [PlaylistsService],
 })
 export class PlaylistsModule {}

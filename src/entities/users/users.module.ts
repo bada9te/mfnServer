@@ -20,6 +20,7 @@ import { Moderation, ModerationSchema } from '../moderations/moderations.schema'
       name: Moderation.name, schema: ModerationSchema
     }])
   ],
-  providers: [UsersService, ModerationsService, UsersResolver]
+  providers: [UsersService, ModerationsService, UsersResolver],
+  exports: [UsersService],
 })
 export class UsersModule {}

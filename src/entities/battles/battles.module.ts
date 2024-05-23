@@ -8,6 +8,7 @@ import { BattlesResolver } from './battles.resolver';
   imports: [
     MongooseModule.forFeature([{ name: Battle.name, schema: BattleSchema }])
   ],
-  providers: [BattlesService, BattlesResolver]
+  providers: [BattlesService, BattlesResolver],
+  exports: [BattlesService],
 })
 export class BattlesModule {}

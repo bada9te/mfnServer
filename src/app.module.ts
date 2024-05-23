@@ -19,13 +19,23 @@ import { ConfigModule } from '@nestjs/config';
 import { EmailModule } from './utils/email/email.module';
 import { SocketModule } from './utils/socket/socket.module';
 import { MailerModule } from '@nestjs-modules/mailer';
+import { ScheduleModule } from '@nestjs/schedule';
+import { TasksModule } from './utils/tasks/tasks.module';
+import { PlannedTasksModule } from './entities/planned-tasks/planned-tasks.module';
 
 @Module({
   imports: [
+    // ENV
     ConfigModule.forRoot({
       isGlobal: true,
     }),
+    // MONGODB
     MongooseModule.forRoot(process.env.MONGO_URL),
+    // SCHEDULE
+    ScheduleModule.forRoot(),
+    TasksModule,
+    PlannedTasksModule,
+    // GQL
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       typePaths: ['./**/*.graphql'],
@@ -33,6 +43,7 @@ import { MailerModule } from '@nestjs-modules/mailer';
       installSubscriptionHandlers: true,
       playground: true,
     }),
+    // EMAILS
     MailerModule.forRoot({
       transport: {
         host: process.env.EMAIL_HOST,
@@ -42,6 +53,7 @@ import { MailerModule } from '@nestjs-modules/mailer';
         },
       },
     }),
+    // ENTITIES
     UsersModule,
     ModerationsModule,
     SupportRequestsModule,

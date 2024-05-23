@@ -4,7 +4,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { ConfirmAccountDto, CreateUserDto, PrepareToRestoreDto, RestoreAccountDto } from './dto';
 import { ModerationsService } from '../moderations/moderations.service';
-import bcrypt from "bcrypt-nodejs";
+import * as bcrypt from 'bcrypt';
 
 
 @Injectable()
@@ -135,7 +135,7 @@ export class UsersService {
         
         if (type === "password") {
             type = "local.password";
-            newValue = bcrypt.hashSync(newValue, bcrypt.genSaltSync(8));
+            newValue = await bcrypt.hash(newValue, await bcrypt.genSalt(8));
         } else if (type === "email") {
             type = "local.email";
             // try to find a user with the same email

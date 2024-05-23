@@ -8,6 +8,7 @@ import { ChatsResolver } from './chats.resolver';
   imports: [
     MongooseModule.forFeature([{ name: Chat.name, schema: ChatSchema }])
   ],
-  providers: [ChatsService, ChatsResolver]
+  providers: [ChatsService, ChatsResolver],
+  exports: [ChatsService],
 })
 export class ChatsModule {}
