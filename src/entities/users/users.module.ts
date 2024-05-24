@@ -5,9 +5,11 @@ import { User, UserSchema } from './users.schema';
 import { UsersResolver } from './users.resolver';
 import { ModerationsService } from '../moderations/moderations.service';
 import { Moderation, ModerationSchema } from '../moderations/moderations.schema';
+import { EmailModule } from 'src/utils/email/email.module';
 
 @Module({
   imports: [
+    EmailModule,
     MongooseModule.forFeatureAsync([{ 
       name: User.name, 
       useFactory: () => {

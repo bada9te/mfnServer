@@ -5,18 +5,33 @@ import { Model } from 'mongoose';
 import { ConfirmAccountDto, CreateUserDto, PrepareToRestoreDto, RestoreAccountDto } from './dto';
 import { ModerationsService } from '../moderations/moderations.service';
 import * as bcrypt from 'bcrypt';
+import { EmailService } from 'src/utils/email/email.service';
+import generateRandomString from 'src/utils/functions/generateRandomString';
 
 
 @Injectable()
 export class UsersService {
     constructor(
         @InjectModel(User.name) private userModel: Model<User>,
-        private moderationsService: ModerationsService
+        private moderationsService: ModerationsService,
+        private emailService: EmailService,
     ) {}
 
     // add new user
     async addUser(user: CreateUserDto) {
         const inserted = await this.userModel.insertMany([user]);
+
+        const moderation = await this.moderationsService.createModeration({
+            user: inserted[0]._id.toString(),
+            type: "verify",
+        });
+
+        this.emailService.sendVerificationEmail(
+            inserted[0].local.email,
+            inserted[0].nick,
+            `${process.env.CLIENT_BASE}/app/account-verify/${inserted[0]._id}/${moderation._id}`,
+            moderation.verifyToken
+        );
         return inserted[0];
     }
 
@@ -149,7 +164,6 @@ export class UsersService {
         const affectedUser = await this.userModel.findByIdAndUpdate(
             userId,
             { [type]: newValue },
-            { new: true }
         );
 
         if (!affectedUser) {
@@ -163,7 +177,12 @@ export class UsersService {
             verifyToken,
         });
 
-        // TODO: send email to affected user email
+        // TODO: send email to affected user
+        this.emailService.sendInformationEmail(
+            affectedUser.local.email, 
+            affectedUser.nick, 
+            `Your account ${type} was successfully updated.` 
+        );
 
         return { action, user: affectedUser };
     }
@@ -180,7 +199,11 @@ export class UsersService {
             type,
         });
 
-        // TODO: send email to affected user email
+        this.emailService.sendRestorationEmail(
+            user.local.email,
+            user.nick,
+            `${process.env.CLIENT_BASE}/app/account-restore/${user._id}/${moderation._id}/${moderation.verifyToken}/${type}`,
+        );
 
         return { action: moderation, user };
     }

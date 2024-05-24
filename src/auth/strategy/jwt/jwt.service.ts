@@ -68,6 +68,7 @@ export class JwtAuthService {
                         displayName: profile.displayName,
                         email: profile.emails[0].value,
                     },
+                    verified: true,
                 });
           
                 const createdUser = await newUser.save();
@@ -102,7 +103,8 @@ export class JwtAuthService {
                         token: token,
                         name: profile.displayName,
                         email: profile.emails[0].value
-                    }
+                    },
+                    verified: true,
                 });
 
                 const createdUser = await newUser.save();
@@ -138,7 +140,8 @@ export class JwtAuthService {
                         token: token,
                         name: profile.name.givenName + ' ' + profile.name.familyName,
                         email: profile.emails[0].value,
-                    }
+                    },
+                    verified: true,
                 });
 
                 const createdUser = await newUser.save();
