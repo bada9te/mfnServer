@@ -21,13 +21,13 @@ export class TwitterOauthController {
     @Get('callback')
     @UseGuards(TwitterOauthGuard)
     async twitterAuthRedirect(@Req() req: Request, @Res() res: Response) {
-
-        const { accessToken, userId } = this.jwtAuthService.login(req.user);
-            res.cookie(this.configService.get('SESSION_COOKIE_KEY'), accessToken, {
+        const { accessToken, userId } = await this.jwtAuthService.login(req.user);
+        
+        res.cookie(this.configService.get('SESSION_COOKIE_KEY'), accessToken, {
             httpOnly: true,
             sameSite: 'lax',
         });
         
-        return res.redirect('/auth/profile');
+        return res.redirect('me');
     }
 }

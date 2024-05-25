@@ -15,13 +15,13 @@ export class LocalOauthController {
     @Post()
     @UseGuards(LocalOauthGuard)
     async localAuth(@Req() req: Request, @Res() res: Response) {
-        const { userId, accessToken } = this.jwtAuthService.login(req.user);
+        const { userId, accessToken } = await this.jwtAuthService.login(req.user);
 
         res.cookie(this.configService.get('SESSION_COOKIE_KEY'), accessToken, {
             httpOnly: true,
             sameSite: 'lax',
         });
 
-        return res.redirect('/auth/profile');
+        return res.redirect('me');
     }
 }

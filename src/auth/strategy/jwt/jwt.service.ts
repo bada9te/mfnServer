@@ -13,7 +13,7 @@ export class JwtAuthService {
         private jwtService: JwtService
     ) {}
 
-    login(user: any) {
+    async login(user: any) {
         const payload: JwtPayload = { nickname: user.nick, _id: user._id.toString() };
         return {
             accessToken: this.jwtService.sign(payload),
@@ -22,12 +22,12 @@ export class JwtAuthService {
     }
 
     async processLocal(email: string, password: string) {
-        const user = await this.usersModel.findOne({ 'local.email': email });
+        const user = await this.usersModel.findOne({ "local.email": email });
         if (!user) {
             return null;
         }
 
-        const passwdMatches = await bcrypt.compare(user.local.password, password);
+        const passwdMatches = await bcrypt.compare(password, user.local.password);
 
         if (!passwdMatches) {
             return null;

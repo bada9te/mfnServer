@@ -1,7 +1,8 @@
-import { Injectable, UnauthorizedException } from "@nestjs/common";
+import { Injectable, Req, UnauthorizedException } from "@nestjs/common";
 import { PassportStrategy } from "@nestjs/passport";
 import { Strategy } from "passport-local";
 import { JwtAuthService } from "../jwt/jwt.service";
+import { Request } from "express";
 
 
 @Injectable()
@@ -14,7 +15,7 @@ export class LocalOauthStrategy extends PassportStrategy(Strategy, 'local') {
         });
     }
 
-    async validate(email: string, password: string) {
+    async validate(@Req() _req: Request, email: string, password: string) {
         const user = await this.jwtAuthService.processLocal(email, password);
         if (!user) {
             throw new UnauthorizedException();
