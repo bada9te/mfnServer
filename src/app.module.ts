@@ -66,7 +66,8 @@ import { PlannedTasksModule } from './entities/planned-tasks/planned-tasks.modul
     ChatMessagesModule,
     BattlesModule,
     AuthModule,
-    EmailModule, 
+    EmailModule,
+    // SOCKET IO 
     SocketModule,
   ],
 })

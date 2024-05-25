@@ -1,4 +1,7 @@
 import { Module } from '@nestjs/common';
+import { SocketService } from './socket.service';
 
-@Module({})
+@Module({
+  providers: [SocketService]
+})
 export class SocketModule {}
