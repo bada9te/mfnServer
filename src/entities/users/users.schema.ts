@@ -5,59 +5,50 @@ export type UserDocument = HydratedDocument<User>;
 
 @Schema({ timestamps: true })
 export class User {
-    @Prop(raw({
-        local: {
-            email: String,
-            password: String,
-        }
-    }))
-    local: Record<string, any>;
+    @Prop({
+        _id: false,
+        type: {
+            email: { type: String },
+            password: { type: String }
+        },
+    })
+    local: { email: string, password: string }
     
-
     @Prop(raw({
-        facebook: {
-            id: String,
-            token: String,
-            email: String,
-            name: String,
-        }
+        id: String,
+        token: String,
+        email: String,
+        name: String,
     }))
     facebook: Record<string, any>;
     
-
     @Prop(raw({
-        twitter: {
-            id: String,
-            token: String,
-            email: String,
-            displayName: String,
-            username: String,
-        }
+        id: String,
+        token: String,
+        email: String,
+        displayName: String,
+        username: String,
     }))
     twitter: Record<string, any>;
     
-
     @Prop(raw({
-        google: {
-            id: String,
-            token: String,
-            email: String,
-            name: String,
-        }
+        id: String,
+        token: String,
+        email: String,
+        name: String,
     }))
     google: Record<string, any>;
     
-
     @Prop()
     nick: string;
 
-    @Prop()
+    @Prop({ default: "Hello there, I am a newbie!" })
     description: string;
 
-    @Prop()
+    @Prop({ default: "" })
     avatar: string;
 
-    @Prop()
+    @Prop({ default: "" })
     background: string;
 
     @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }] })

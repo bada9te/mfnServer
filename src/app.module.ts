@@ -47,6 +47,14 @@ import { PlannedTasksModule } from './entities/planned-tasks/planned-tasks.modul
     MailerModule.forRoot({
       transport: {
         host: process.env.EMAIL_HOST,
+        secure: true, 
+        tls: {
+          ciphers: "SSLv3",
+        },
+        requireTLS: true,
+        port: 465,
+        debug: true,
+        connectionTimeout: 10000,
         auth: {
           user: process.env.EMAIL_USERNAME,
           pass: process.env.EMAIL_PASSWORD,

@@ -1,4 +1,4 @@
-import { Prop, Schema, SchemaFactory, raw } from "@nestjs/mongoose";
+import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import mongoose, { HydratedDocument } from "mongoose";
 import { PostDocument } from "src/entities/posts/posts.schema";
 import { UserDocument } from "src/entities/users/users.schema";

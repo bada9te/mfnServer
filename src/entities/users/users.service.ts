@@ -19,7 +19,20 @@ export class UsersService {
 
     // add new user
     async addUser(user: CreateUserDto) {
-        const inserted = await this.userModel.insertMany([user]);
+        const userInDB = await this.userModel.findOne({ "local.email": user.email });
+
+        if (userInDB) {
+            throw new BadRequestException("User already exists");
+        }
+
+        const toInsert = {
+            ...user,
+            local: {
+                email: user.email,
+                password: await bcrypt.hash(user.password, await bcrypt.genSalt(8))
+            }
+        }
+        const inserted = await this.userModel.insertMany([toInsert]);
 
         const moderation = await this.moderationsService.createModeration({
             user: inserted[0]._id.toString(),
@@ -32,7 +45,10 @@ export class UsersService {
             `${process.env.CLIENT_BASE}/app/account-verify/${inserted[0]._id}/${moderation._id}`,
             moderation.verifyToken
         );
-        return inserted[0];
+        return {
+            user: inserted[0],
+            action: moderation,
+        };
     }
 
     // remove user by id

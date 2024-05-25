@@ -1,14 +1,20 @@
 import { MailerService } from "@nestjs-modules/mailer";
 import { Injectable } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
 import { join } from "path";
 
 @Injectable()
 export class EmailService {
-    constructor(private nodemailerService: MailerService) {}
+    constructor(
+        private nodemailerService: MailerService,
+        private configService: ConfigService,
+    ) {}
 
     async sendVerificationEmail(to: string, userName: string, link: string, passcode: string) {
+        console.log(to, userName)
         this.nodemailerService.sendMail({
             to,
+            from: this.configService.get("EMAIL_USERNAME"),
             subject: `Account verification`,
             template: join(__dirname, 'templates', 'verificationTemplate'),
             context: {
@@ -16,7 +22,7 @@ export class EmailService {
                 userName, 
                 passcode,
             },
-        });
+        }).then(console.log);
     }
 
     async sendRestorationEmail(to: string, userName: string, linkRestore: string) {
