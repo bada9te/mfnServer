@@ -22,6 +22,8 @@ import { MailerModule } from '@nestjs-modules/mailer';
 import { ScheduleModule } from '@nestjs/schedule';
 import { TasksModule } from './utils/tasks/tasks.module';
 import { PlannedTasksModule } from './entities/planned-tasks/planned-tasks.module';
+import { join } from 'path';
+import { EjsAdapter } from '@nestjs-modules/mailer/dist/adapters/ejs.adapter';
 
 @Module({
   imports: [
@@ -58,6 +60,13 @@ import { PlannedTasksModule } from './entities/planned-tasks/planned-tasks.modul
         auth: {
           user: process.env.EMAIL_USERNAME,
           pass: process.env.EMAIL_PASSWORD,
+        },
+      },
+      template: {
+        dir: join(__dirname, 'utils', 'email', 'templates'),
+        adapter: new EjsAdapter(),
+        options: {
+          strict: false,
         },
       },
     }),

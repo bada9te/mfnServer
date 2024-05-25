@@ -2,6 +2,8 @@ import { MailerService } from "@nestjs-modules/mailer";
 import { Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { join } from "path";
+import ejs from "ejs";
+
 
 @Injectable()
 export class EmailService {
@@ -11,12 +13,12 @@ export class EmailService {
     ) {}
 
     async sendVerificationEmail(to: string, userName: string, link: string, passcode: string) {
-        console.log(to, userName)
+
         this.nodemailerService.sendMail({
             to,
             from: this.configService.get("EMAIL_USERNAME"),
             subject: `Account verification`,
-            template: join(__dirname, 'templates', 'verificationTemplate'),
+            template: "./verificationTemplate",
             context: {
                 link, 
                 userName, 

@@ -42,7 +42,7 @@ export class UsersService {
         this.emailService.sendVerificationEmail(
             inserted[0].local.email,
             inserted[0].nick,
-            `${process.env.CLIENT_BASE}/app/account-verify/${inserted[0]._id}/${moderation._id}`,
+            `${process.env.CLIENT_BASE}/app/account-verify/${inserted[0]._id}/${moderation._id}/${moderation.verifyToken}/${moderation.type}`,
             moderation.verifyToken
         );
         return {
