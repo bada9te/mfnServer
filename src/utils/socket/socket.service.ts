@@ -2,16 +2,24 @@
 import { Injectable } from '@nestjs/common';
 import { OnGatewayConnection, OnGatewayDisconnect, OnGatewayInit, WebSocketGateway, WebSocketServer, SubscribeMessage, MessageBody, ConnectedSocket } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
-import { TUser, ISocketData, ICustomSocket, TSocketUserBody, TSocketChatBody } from './types';
+import { TUser, ICustomSocket, TSocketUserBody, TSocketChatBody } from './types';
 import { TSocketMessageBody } from './types/messageType';
 
 @Injectable()
-@WebSocketGateway()
+@WebSocketGateway({ cors: true })
 export class SocketService implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
 
     @WebSocketServer() server: Server;
 
     afterInit(server: Server) {
+        server.use((socket: ICustomSocket, next) => {
+            const userId = socket.handshake.auth.userId;
+            if (!userId) {
+                return next(new Error("Invalid UID."));
+            }
+            socket.userId = userId;
+            next();
+        });
         console.log('[SOCKET] [*] Initialized.');
     }
 
