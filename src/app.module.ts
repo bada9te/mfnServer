@@ -15,7 +15,7 @@ import { ChatMessagesModule } from './entities/chat-messages/chat-messages.modul
 import { BattlesModule } from './entities/battles/battles.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AuthModule } from './auth/auth.module';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { EmailModule } from './utils/email/email.module';
 import { SocketModule } from './utils/socket/socket.module';
 import { MailerModule } from '@nestjs-modules/mailer';
@@ -24,6 +24,8 @@ import { TasksModule } from './utils/tasks/tasks.module';
 import { PlannedTasksModule } from './entities/planned-tasks/planned-tasks.module';
 import { join } from 'path';
 import { EjsAdapter } from '@nestjs-modules/mailer/dist/adapters/ejs.adapter';
+import { UploadModule } from './utils/upload/upload.module';
+import { MulterModule } from '@nestjs/platform-express';
 
 @Module({
   imports: [
@@ -32,7 +34,13 @@ import { EjsAdapter } from '@nestjs-modules/mailer/dist/adapters/ejs.adapter';
       isGlobal: true,
     }),
     // MONGODB
-    MongooseModule.forRoot(process.env.MONGO_URL),
+    MongooseModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: async(configService: ConfigService) => ({
+        uri: configService.get('MONGO_URL')
+      }),
+      inject: [ConfigService]
+    }),
     // SCHEDULE
     ScheduleModule.forRoot(),
     TasksModule,
@@ -45,30 +53,42 @@ import { EjsAdapter } from '@nestjs-modules/mailer/dist/adapters/ejs.adapter';
       installSubscriptionHandlers: true,
       playground: true,
     }),
+    // FILE UPLOAD
+    MulterModule.registerAsync({
+      imports: [ConfigModule],
+      useFactory: async(configService: ConfigService) => ({
+        dest: configService.get('MULTER_DEST'),
+      }),
+      inject: [ConfigService]
+    }),
     // EMAILS
-    MailerModule.forRoot({
-      transport: {
-        host: process.env.EMAIL_HOST,
-        secure: true, 
-        tls: {
-          ciphers: "SSLv3",
+    MailerModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: async(configService: ConfigService) => ({
+        transport: {
+          host: configService.get('EMAIL_HOST'),
+          secure: true, 
+          tls: {
+            ciphers: "SSLv3",
+          },
+          requireTLS: true,
+          port: 465,
+          debug: true,
+          connectionTimeout: 10000,
+          auth: {
+            user: configService.get('EMAIL_USERNAME'),
+            pass: configService.get('EMAIL_PASSWORD'),
+          },
         },
-        requireTLS: true,
-        port: 465,
-        debug: true,
-        connectionTimeout: 10000,
-        auth: {
-          user: process.env.EMAIL_USERNAME,
-          pass: process.env.EMAIL_PASSWORD,
+        template: {
+          dir: join(__dirname, 'utils', 'email', 'templates'),
+          adapter: new EjsAdapter(),
+          options: {
+            strict: false,
+          },
         },
-      },
-      template: {
-        dir: join(__dirname, 'utils', 'email', 'templates'),
-        adapter: new EjsAdapter(),
-        options: {
-          strict: false,
-        },
-      },
+      }),
+      inject: [ConfigService]
     }),
     // ENTITIES
     UsersModule,
@@ -86,6 +106,7 @@ import { EjsAdapter } from '@nestjs-modules/mailer/dist/adapters/ejs.adapter';
     EmailModule,
     // SOCKET IO 
     SocketModule,
+    UploadModule,
   ],
 })
 export class AppModule {}
