@@ -105,13 +105,14 @@ export class PostsService {
     }
 
     async addOrRemoveComment(postId: string, commentId: string) {
+        const commentIdMongo = new mongoose.Types.ObjectId(commentId);
         return await this.postsModel.findOneAndUpdate({ _id: postId }, [{
                 $set: {
                     comments: {
                         $cond: [
-                            { $in: [commentId, "$comments"] },
-                            { $setDifference: ["$comments", [commentId]] },
-                            { $concatArrays: ["$comments", [commentId]] },
+                            { $in: [commentIdMongo, "$comments"] },
+                            { $setDifference: ["$comments", [commentIdMongo]] },
+                            { $concatArrays: ["$comments", [commentIdMongo]] },
                         ]
                     }
                 }

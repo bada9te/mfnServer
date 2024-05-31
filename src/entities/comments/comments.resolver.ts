@@ -27,18 +27,18 @@ export class CommentsResolver {
 
     @Query()
     async commentsByPostId(@Args('_id') _id: string) {
-        await this.commentsService.getCommentsByPostId(_id);
+        return await this.commentsService.getCommentsByPostId(_id);
     }
 
     @Mutation()
     @UseGuards(GqlAuthGuard)
     async commentCreate(@Args('input') dto: CreateCommentDto) {
-        await this.commentsService.addComment(dto);
+        return await this.commentsService.addComment(dto);
     }
 
     @Mutation()
     @UseGuards(GqlAuthGuard)
     async commentDeleteById(@Args('_id') _id: string) {
-        await this.commentsService.removeById(_id);
+        return await this.commentsService.removeById(_id);
     }
 }

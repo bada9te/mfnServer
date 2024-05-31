@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Comment } from './comments.schema';
-import { Model } from 'mongoose';
+import mongoose, { Model } from 'mongoose';
 import { CreateCommentDto } from './dto';
 import { PostsService } from '../posts/posts.service';
 
@@ -21,7 +21,6 @@ export class CommentsService {
         } else {
             await this.postsService.addOrRemoveComment(createdComment.post, createdComment._id.toString());
         }
-        
         return createdComment;
     }
 

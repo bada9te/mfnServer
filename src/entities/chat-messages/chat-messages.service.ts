@@ -7,7 +7,6 @@ import { RangeDto } from 'src/common/dto';
 import { UsersService } from '../users/users.service';
 import { ChatsService } from '../chats/chats.service';
 import { ChatDocument } from '../chats/chats.schema';
-import { Chat } from 'src/graphql/graphql.schema';
 
 @Injectable()
 export class ChatMessagesService {
