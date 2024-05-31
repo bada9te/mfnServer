@@ -9,10 +9,10 @@ export class Chat {
     @Prop({ required: true })
     title: string;
 
-    @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true })
+    @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true, autopopulate: true })
     owner: UserDocument;
 
-    @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }] })
+    @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User', autopopulate: true }] })
     participants: UserDocument[];
 
     @Prop({

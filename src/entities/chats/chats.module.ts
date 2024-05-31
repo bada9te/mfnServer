@@ -6,7 +6,16 @@ import { ChatsResolver } from './chats.resolver';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{ name: Chat.name, schema: ChatSchema }])
+    MongooseModule.forFeatureAsync([
+      {
+        name: Chat.name,
+        useFactory: () => {
+          const schema = ChatSchema;
+          schema.plugin(require("mongoose-autopopulate"));
+          return schema;
+        }
+      },
+    ])
   ],
   providers: [ChatsService, ChatsResolver],
   exports: [ChatsService],

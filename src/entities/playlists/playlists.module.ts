@@ -6,7 +6,16 @@ import { PlaylistResolver } from './playlists.resolver';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{ name: Playlist.name, schema: PlaylistSchema }])
+    MongooseModule.forFeatureAsync([
+      {
+        name: Playlist.name,
+        useFactory: () => {
+          const schema = PlaylistSchema;
+          schema.plugin(require("mongoose-autopopulate"));
+          return schema;
+        }
+      }
+    ]),
   ],
   providers: [PlaylistsService, PlaylistResolver],
   exports: [PlaylistsService],

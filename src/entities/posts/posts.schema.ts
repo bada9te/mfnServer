@@ -9,7 +9,7 @@ export type PostDocument = HydratedDocument<Post>;
 
 @Schema({ timestamps: true })
 export class Post {
-    @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true })
+    @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true, autopopulate: true })
     owner: UserDocument;
 
     @Prop({ required: true })
@@ -24,13 +24,13 @@ export class Post {
     @Prop({ required: true })
     image: string;
 
-    @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }] })
+    @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User', autopopulate: true }] })
     likedBy: UserDocument[];
 
-    @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }] })
+    @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User', autopopulate: true }] })
     savedBy: UserDocument[];
 
-    @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Comment' }] })
+    @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Comment', autopopulate: true }] })
     comments: CommentDocument[];
 
     @Prop({ required: true })

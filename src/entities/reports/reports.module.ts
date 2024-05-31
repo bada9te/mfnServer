@@ -6,7 +6,16 @@ import { ReportsResolver } from './reports.resolver';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{ name: Report.name, schema: ReportSchema }])
+    MongooseModule.forFeatureAsync([
+      { 
+        name: Report.name,  
+        useFactory: () => {
+          const schema = ReportSchema
+          schema.plugin(require("mongoose-autopopulate"));
+          return schema;
+        }
+      }
+    ])
   ],
   providers: [ReportsService, ReportsResolver],
   exports: [ReportsService],

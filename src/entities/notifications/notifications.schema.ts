@@ -8,16 +8,16 @@ export type NotificationDocument = HydratedDocument<Notification>;
 
 @Schema({ timestamps: true })
 export class Notification {
-    @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true })
+    @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true, autopopulate: true })
     receiver: UserDocument;
 
-    @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true })
+    @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true, autopopulate: true })
     sender: UserDocument;
 
-    @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Post'})
+    @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Post', autopopulate: true})
     post: PostDocument;
 
-    @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Comment' })
+    @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Comment', autopopulate: true })
     comment: CommentDocument;
 
     @Prop({ required: true })

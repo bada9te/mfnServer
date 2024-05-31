@@ -15,7 +15,7 @@ export class Playlist {
     @Prop({ required: true })
     title: string;
 
-    @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Post' }] })
+    @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Post', autopopulate: true }] })
     tracks: PostDocument[];
 
     @Prop({ default: false })

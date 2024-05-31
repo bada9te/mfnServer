@@ -13,7 +13,7 @@ export class EmailService {
     ) {}
 
     async sendVerificationEmail(to: string, userName: string, link: string, passcode: string) {
-
+        console.log(1234)
         this.nodemailerService.sendMail({
             to,
             from: this.configService.get("EMAIL_USERNAME"),
@@ -24,7 +24,8 @@ export class EmailService {
                 userName, 
                 passcode,
             },
-        }).then(console.log);
+        }).then(console.log).catch(console.log);
+
     }
 
     async sendRestorationEmail(to: string, userName: string, linkRestore: string) {
@@ -36,7 +37,7 @@ export class EmailService {
                 userName,
                 linkRestore,
             },
-        });
+        }).then(console.log).catch(console.log);;
     }
 
     async sendInformationEmail(to: string, userName: string, text: string) {
@@ -48,7 +49,7 @@ export class EmailService {
                 userName, 
                 text,
             },
-        });
+        }).then(console.log).catch(console.log);;
     }
 
     // chnage email
@@ -63,6 +64,6 @@ export class EmailService {
                 passcode,
                 newEmail,
             },
-        });
+        }).then(console.log).catch(console.log);;
     }
 }

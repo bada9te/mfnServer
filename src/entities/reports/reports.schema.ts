@@ -17,13 +17,13 @@ export class Report {
     @Prop({ required: true })
     message: string;
 
-    @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
+    @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User', autopopulate: true })
     reportOwner: UserDocument;
 
-    @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Post' })
+    @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Post', autopopulate: true })
     reportedPost: PostDocument;
 
-    @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Comment' })
+    @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Comment', autopopulate: true })
     reportedComment: CommentDocument;
 
     @Prop({ default: false })

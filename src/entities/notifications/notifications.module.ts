@@ -5,7 +5,16 @@ import { Notification, NotificationSchema } from './notifications.schema';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{ name: Notification.name, schema: NotificationSchema }])
+    MongooseModule.forFeatureAsync([
+      {
+        name: Notification.name,
+        useFactory: () => {
+          const schema = NotificationSchema;
+          schema.plugin(require("mongoose-autopopulate"));
+          return schema;
+        }
+      }
+    ])
   ],
   providers: [NotificationsService],
   exports: [NotificationsService],

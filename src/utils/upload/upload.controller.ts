@@ -16,14 +16,7 @@ export class UploadController {
         fileFilter: uploadFileFilter,
     }))
     uploadFile(
-        @UploadedFile(
-            new ParseFilePipeBuilder()
-                .addFileTypeValidator({ fileType: 'jpeg' })
-                .addMaxSizeValidator({ maxSize: 4000 })
-                .build({
-                    errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY
-                })
-        ) 
+        @UploadedFile() 
         file: Express.Multer.File
     ) {
         const response = {

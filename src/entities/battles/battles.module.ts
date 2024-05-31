@@ -6,7 +6,16 @@ import { BattlesResolver } from './battles.resolver';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{ name: Battle.name, schema: BattleSchema }])
+    MongooseModule.forFeatureAsync([
+      {
+        name: Battle.name,
+        useFactory: () => {
+          const schema = BattleSchema;
+          schema.plugin(require("mongoose-autopopulate"));
+          return schema;
+        }
+      }
+    ])
   ],
   providers: [BattlesService, BattlesResolver],
   exports: [BattlesService],

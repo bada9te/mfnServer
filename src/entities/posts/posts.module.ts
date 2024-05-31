@@ -6,7 +6,16 @@ import { PostsResolver } from './posts.resolver';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{ name: Post.name, schema: PostSchema }])
+    MongooseModule.forFeatureAsync([
+      { 
+        name: Post.name,  
+        useFactory: () => {
+          const schema = PostSchema;
+          schema.plugin(require("mongoose-autopopulate"));
+          return schema;
+        }
+      }
+    ])
   ],
   providers: [PostsService, PostsResolver],
   exports: [PostsService],

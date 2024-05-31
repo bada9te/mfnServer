@@ -9,10 +9,10 @@ export type CommentDocument = HydratedDocument<Comment>;
 
 @Schema({ timestamps: true })
 export class Comment {
-    @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
+    @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User', autopopulate: true })
     owner: UserDocument;
 
-    @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
+    @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User', autopopulate: true })
     receiver: UserDocument;
 
     @Prop({ required: true })
@@ -21,7 +21,7 @@ export class Comment {
     @Prop({ default: false })
     isReply: boolean;
 
-    @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Comment' }] })
+    @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Comment', autopopulate: true }] })
     replies: CommentDocument[];
 
     @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Post' })
