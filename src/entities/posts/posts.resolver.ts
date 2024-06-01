@@ -82,6 +82,11 @@ export class PostsResolver {
         }
     }
 
+    @Query()
+    async postsByCategoryCount() {
+        return await this.postsService.getDocsCountByCategories();
+    }
+
     @Mutation()
     @UseGuards(GqlAuthGuard)
     async postCreate(@Args('input') dto: CreatePostDto) {

@@ -9,6 +9,7 @@ type Query {
     postsByIds(ids: [ID!]!): [Post!]
     postsMostPopular(date: Date!): [Post!]
     postsByCategory(category: String!, offset: Int!, limit: Int!): PostsWithCount!
+    postsByCategoryCount: PostsByCategoryCount!
 }
 
 input PostsByTitleInput {
@@ -20,6 +21,22 @@ input PostsByTitleInput {
 type PostsWithCount {
     posts: [Post!]
     count: Int!
+}
+
+type PostsByCategoryCount {
+    country: Int!
+    pop: Int!
+    classical: Int!
+    funk: Int!
+    soulMusic: Int!
+    hipHop: Int!
+    rock: Int!
+    electronicMusic: Int!
+    latin: Int!
+    jazz: Int!
+    blues: Int!
+    folk: Int!
+    metal: Int!
 }
 
 type Post {
