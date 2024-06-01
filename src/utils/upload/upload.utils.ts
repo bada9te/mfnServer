@@ -3,7 +3,7 @@ import { extname } from "path";
 
 
 export const uploadFileFilter = (req, file, callback) => {
-    if (!file.originalname.match(/\.(jpg|jpeg|png|gif|mp3|wav)$/)) {
+    if (!file.originalname.match(/\.(jpg|jpeg|png|mp3|wav)$/)) {
         return callback(
             new BadRequestException("File filter not passed."),
             false,
