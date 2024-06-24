@@ -1,5 +1,5 @@
 type Query {
-    notifications(receiverId: ID!, checked: Boolean!): [Notification!]
+    notifications(receiverId: ID!, checked: Boolean!, offset: Int!, limit: Int!): NotificationsWithCount!
     notificationsByIds(ids: [ID!]!): [Notification!]
 }
 
@@ -12,6 +12,11 @@ type Notification {
     text: String!
     checked: Boolean!
     createdAt: String!
+}
+
+type NotificationsWithCount {
+    notifications: [Notification!]
+    count: Int!
 }
 
 type NotificationCount {

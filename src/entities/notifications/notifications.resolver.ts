@@ -1,7 +1,7 @@
 import { Args, Mutation, Query, Resolver } from "@nestjs/graphql";
 import { NotificationsService } from "./notifications.service";
 import { CreateNotificationDto } from "./dto";
-import { UseGuards } from "@nestjs/common";
+import { ParseIntPipe, UseGuards } from '@nestjs/common';
 import { GqlAuthGuard } from "src/auth/strategy/graphql/gql.guard";
 
 @Resolver('Notification') 
@@ -12,12 +12,20 @@ export class NotificationsResolver {
     @UseGuards(GqlAuthGuard)
     async notifications(
         @Args('receiverId') receiverId: string,
-        @Args('checked') checked: boolean
+        @Args('checked') checked: boolean,
+        @Args('offset', ParseIntPipe) offset: number,
+        @Args('limit', ParseIntPipe) limit: number
     ) {
         if (checked) {
-            return await this.notificationsService.getAllReadNotifications(receiverId);
+            return {
+                notifications: await this.notificationsService.getAllReadNotifications(receiverId, offset, limit),
+                count: await this.notificationsService.getDocsCount({receiverId, checked})
+            }
         } else {
-            return await this.notificationsService.getAllUnreadNotifications(receiverId);
+            return {
+                notifications: await this.notificationsService.getAllUnreadNotifications(receiverId, offset, limit),
+                count: await this.notificationsService.getDocsCount({receiverId, checked: false})
+            }
         }
     }
 

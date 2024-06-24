@@ -226,6 +226,8 @@ export abstract class IQuery {
 
     abstract postsByCategory(category: string, offset: number, limit: number): PostsWithCount | Promise<PostsWithCount>;
 
+    abstract postsByCategoryCount(): PostsByCategoryCount | Promise<PostsByCategoryCount>;
+
     abstract report(_id: string): Nullable<Report> | Promise<Nullable<Report>>;
 
     abstract reports(offset: number, limit: number): Nullable<Report[]> | Promise<Nullable<Report[]>>;
@@ -428,6 +430,22 @@ export class PlaylistsWithCount {
 export class PostsWithCount {
     posts?: Nullable<Post[]>;
     count: number;
+}
+
+export class PostsByCategoryCount {
+    country: number;
+    pop: number;
+    classical: number;
+    funk: number;
+    soulMusic: number;
+    hipHop: number;
+    rock: number;
+    electronicMusic: number;
+    latin: number;
+    jazz: number;
+    blues: number;
+    folk: number;
+    metal: number;
 }
 
 export class Post {

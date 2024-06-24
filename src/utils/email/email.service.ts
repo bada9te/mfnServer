@@ -13,7 +13,6 @@ export class EmailService {
     ) {}
 
     async sendVerificationEmail(to: string, userName: string, link: string, passcode: string) {
-        console.log(1234)
         this.nodemailerService.sendMail({
             to,
             from: this.configService.get("EMAIL_USERNAME"),

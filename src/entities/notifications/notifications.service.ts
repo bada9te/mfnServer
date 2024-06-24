@@ -14,15 +14,15 @@ export class NotificationsService {
     }
 
     async deleteNotificationById(_id: string) {
-        return await this.notificationsModel.findByIdAndDelete(_id);
+        return this.notificationsModel.findByIdAndDelete(_id);
     }
 
     async deleteNotificationsByIds(ids: string[]) {
-        return await this.notificationsModel.deleteMany({ _id: ids });
+        return this.notificationsModel.deleteMany({ _id: ids });
     }
 
     async markNotificationAsRead(_id: string) {
-        return await this.notificationsModel.findByIdAndUpdate(
+        return this.notificationsModel.findByIdAndUpdate(
             _id,
             { checked: true },
             { new: true, upsert: true }
@@ -30,28 +30,32 @@ export class NotificationsService {
     }
 
     async markNotificationsAsRead(ids: string[]) {
-        return await this.notificationsModel.updateMany(
+        return this.notificationsModel.updateMany(
             { _id: ids },
             { checked: true },
             { upsert: true }
         );
     }
 
-    async getAllUnreadNotifications(receiverId: string) {
-        return await this.notificationsModel.find({
+    async getAllUnreadNotifications(receiverId: string, offset: number, limit: number) {
+        return this.notificationsModel.find({
             receiver: receiverId,
             checked: false,
-        });
+        }).skip(offset).limit(limit);
     }
 
-    async getAllReadNotifications(receiverId: string) {
-        return await this.notificationsModel.find({
+    async getAllReadNotifications(receiverId: string, offset: number, limit: number) {
+        return this.notificationsModel.find({
             receiver: receiverId,
             checked: true,
-        });
+        }).skip(offset).limit(limit);
     }
 
     async getAllNotificationsByIds(ids: string[]) {
-        return await this.notificationsModel.find({ _id: ids });
+        return this.notificationsModel.find({ _id: ids });
+    }
+
+    async getDocsCount(filter: any) {
+        return this.notificationsModel.countDocuments(filter).exec();
     }
 }
