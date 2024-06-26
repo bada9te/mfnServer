@@ -9,7 +9,7 @@ export class NotificationsResolver {
     constructor(private notificationsService: NotificationsService) {}
 
     @Query()
-    
+    @UseGuards(GqlAuthGuard)
     async notifications(
         @Args('receiverId') receiverId: string,
         @Args('checked') checked: boolean,
