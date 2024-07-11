@@ -48,10 +48,8 @@ type Post {
     image: String!
     likedBy: [User!]
     savedBy: [User!]
-    comments: [Comment!]
     category: String!
     downloadsAllowed: Boolean!
-    commentsAllowed: Boolean!
     createdAt: String!
 }
 
@@ -71,7 +69,6 @@ input AddPostInput {
     audio: String!
     image: String!
     category: String!
-    commentsAllowed: Boolean!
     downloadsAllowed: Boolean!
 }
 

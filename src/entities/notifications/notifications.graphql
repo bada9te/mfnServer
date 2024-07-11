@@ -8,7 +8,6 @@ type Notification {
     receiver: User!
     sender: User!
     post: Post
-    comment: Comment
     text: String!
     checked: Boolean!
     createdAt: String!
@@ -35,6 +34,5 @@ input CreateNotificationInput {
     receiver: ID!
     sender: ID!
     post: ID
-    comment: ID
     text: String!
 }

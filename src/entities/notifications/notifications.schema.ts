@@ -1,6 +1,5 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import mongoose, { HydratedDocument } from "mongoose";
-import { CommentDocument } from "src/entities/comments/comments.schema";
 import { PostDocument } from "src/entities/posts/posts.schema";
 import { UserDocument } from "src/entities/users/users.schema";
 
@@ -16,9 +15,6 @@ export class Notification {
 
     @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Post', autopopulate: true})
     post: PostDocument;
-
-    @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Comment', autopopulate: true })
-    comment: CommentDocument;
 
     @Prop({ required: true })
     text: string;

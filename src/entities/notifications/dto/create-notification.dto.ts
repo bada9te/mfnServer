@@ -12,9 +12,6 @@ export class CreateNotificationDto extends CreateNotificationInput {
 
     @IsString()
     post?: string;
-
-    @IsString()
-    comment?: string;
     
     @IsString()
     text: string;

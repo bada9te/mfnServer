@@ -18,7 +18,4 @@ export class CreateReportDto extends CreateReportInput {
 
     @IsString()
     reportedPost?: string;
-
-    @IsString()
-    reportedComment?: string;
 }

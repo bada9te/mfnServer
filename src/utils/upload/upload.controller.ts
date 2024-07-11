@@ -20,7 +20,7 @@ export class UploadController {
     uploadFile(
         @UploadedFile(
             new ParseFilePipeBuilder()
-                .addMaxSizeValidator({ maxSize: 4096, message: "File size must be less then 4MB" })
+                .addMaxSizeValidator({ maxSize: 500000, message: "File size must be less then 4MB" })
                 .build()
         ) 
         file: Express.Multer.File
@@ -39,7 +39,7 @@ export class UploadController {
     @Post('upload-multiple')
     @UseInterceptors(FilesInterceptor('files', 10, {
         storage: diskStorage({
-            destination: './uplaods',
+            destination: './uploads',
             filename: editFileName,
         }),
         fileFilter: uploadFileFilter,
@@ -63,9 +63,13 @@ export class UploadController {
 
     @Get(':filename')
     getImage(@Param('filename') fileName, @Res() res: Response) {
-        const filePath = join(process.cwd(), 'uploads', fileName);
-        const file = createReadStream(filePath);
-        file.pipe(res);
+        try {
+            const filePath = join(process.cwd(), 'uploads', fileName);
+            const file = createReadStream(filePath);
+            file.pipe(res);
+        } catch (error) {
+            return res.status(404);
+        }
     }
 
 }

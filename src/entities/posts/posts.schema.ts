@@ -1,6 +1,5 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import mongoose, { HydratedDocument } from "mongoose";
-import { CommentDocument } from "src/entities/comments/comments.schema";
 import { UserDocument } from "src/entities/users/users.schema";
 
 
@@ -30,17 +29,11 @@ export class Post {
     @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User', autopopulate: true }] })
     savedBy: UserDocument[];
 
-    @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Comment', autopopulate: true }] })
-    comments: CommentDocument[];
-
     @Prop({ required: true })
     category: string;
 
     @Prop({ required: true })
     downloadsAllowed: boolean;
-
-    @Prop({ required: true })
-    commentsAllowed: boolean;
 }
 
 export const PostSchema = SchemaFactory.createForClass(Post);

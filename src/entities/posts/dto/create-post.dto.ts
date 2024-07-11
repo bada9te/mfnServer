@@ -28,9 +28,5 @@ export class CreatePostDto extends AddPostInput {
 
     @IsNotEmpty()
     @IsBoolean()
-    commentsAllowed: boolean;
-
-    @IsNotEmpty()
-    @IsBoolean()
     downloadsAllowed: boolean;
 }
