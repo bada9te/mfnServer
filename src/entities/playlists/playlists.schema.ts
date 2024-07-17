@@ -9,7 +9,7 @@ export type PlaylistDocument = HydratedDocument<Playlist>;
 
 @Schema({ timestamps: true })
 export class Playlist {
-    @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true })
+    @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true, autopopulate: true })
     owner: UserDocument;
 
     @Prop({ required: true })
