@@ -19,8 +19,8 @@ type User {
 }
 
 type TwoUsers {
-    user1: User!
-    user2: User!
+    subscriber: User!
+    subscribeOn: User!
 }
 
 type UserWithAction {
