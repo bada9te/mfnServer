@@ -8,6 +8,10 @@ import { RangeDto } from 'src/common/dto';
 @Injectable()
 export class PlaylistsService {
     constructor(@InjectModel(Playlist.name) private playlistsModel: Model<Playlist>) {}
+
+    async getPlaylistById(_id: string) {
+        return await this.playlistsModel.findById(_id);
+    }
     
     async createPlaylist(playlist: CreatePlaylistDto) {
         const inserted = await this.playlistsModel.insertMany([playlist]);

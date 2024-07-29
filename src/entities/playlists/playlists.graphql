@@ -1,4 +1,5 @@
 type Query {
+    playlist(_id: ID!): Playlist!
     playlistsByTitle(title: String!): [Playlist!]
     playlistsByOwnerId(owner: ID!, offset: Int!, limit: Int!): PlaylistsWithCount!
     playlistsPublicAvailable(offset: Int!, limit: Int!): PlaylistsWithCount!

@@ -9,6 +9,11 @@ export class PlaylistResolver {
     constructor(private playlistsService: PlaylistsService) {}
 
     @Query()
+    async playlist(@Args('_id') _id: string) {
+        return await this.playlistsService.getPlaylistById(_id);
+    }
+
+    @Query()
     async playlistsByTitle(@Args('title') title: string) {
         return await this.playlistsService.getPlaylistByTitle(title);
     }
