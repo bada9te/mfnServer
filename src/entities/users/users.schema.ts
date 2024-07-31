@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory, raw } from "@nestjs/mongoose";
 import mongoose, { HydratedDocument } from "mongoose";
+import { AchievementDocument } from "../achievement/achievements.schema";
 
 export type UserDocument = HydratedDocument<User>;
 
@@ -59,6 +60,12 @@ export class User {
 
     @Prop({ default: false })
     verified: boolean;
+
+    @Prop({ default: 0 })
+    level: number;
+
+    @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Achievement' }] })
+    achievements: AchievementDocument[];
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
