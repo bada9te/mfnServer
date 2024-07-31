@@ -9,22 +9,21 @@ export class Achievement {
     title: string;
 
     @Prop({ required: true })
-    likesRequired: number;
+    achievement: string;
 
     @Prop({ required: true })
-    savesRequired: number;
+    description: string;
 
     @Prop({ required: true })
-    postsRequired: number;
+    type: "basic" | "likes-total" | 
+        "saves-total" | "likes" | "saves" |
+        "likes-and-saves" | "tracks" | "likes-and-saves-equals"
+    
+    @Prop({ required: true })
+    count: number;
 
     @Prop({ required: true })
-    subscribersRequired: number;
-
-    @Prop({ required: true })
-    subscriptionsRequired: number;
-
-    @Prop({required: true})
-    winsInBattlesRequired: number;
+    rarity: "legendary" | "uncommon" | "rare" | "common";
 }
 
 export const AchievementSchema = SchemaFactory.createForClass(Achievement);

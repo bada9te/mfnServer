@@ -1,0 +1,15 @@
+type Achievement {
+    _id: ID!
+    title: String!
+    achievement: String!
+    description: String!
+    type: String!
+    count: Int!
+    rarity: String!
+}
+
+type Query {
+    allAchievements: [Achievement!]
+    achievementsByIds(ids: [ID!]!): [Achievement!]
+}
+

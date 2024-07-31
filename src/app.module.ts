@@ -23,6 +23,7 @@ import { join } from 'path';
 import { EjsAdapter } from '@nestjs-modules/mailer/dist/adapters/ejs.adapter';
 import { UploadModule } from './utils/upload/upload.module';
 import { MulterModule } from '@nestjs/platform-express';
+import { AchievementsModule } from './entities/achievement/achievements.module';
 
 @Module({
   imports: [
@@ -98,6 +99,7 @@ import { MulterModule } from '@nestjs/platform-express';
     BattlesModule,
     AuthModule,
     EmailModule,
+    AchievementsModule,
     // SOCKET IO 
     SocketModule,
     UploadModule,
