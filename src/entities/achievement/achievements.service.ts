@@ -14,4 +14,8 @@ export class AchievementsService {
     async achievementsByIds(ids: string[]) {
         return await this.achievementsModel.find({ _id: ids });
     }
+
+    async achievementsByPos(pos: number[]) {
+        return await this.achievementsModel.find({ posNumber: pos });
+    }
 }

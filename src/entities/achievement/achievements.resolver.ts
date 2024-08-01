@@ -14,4 +14,9 @@ export class AchievementResolver {
     async achievementsByIds(@Args('ids') ids: string[]) {
         return await this.achievementsService.achievementsByIds(ids);
     }
+
+    @Query()
+    async achievementsByPos(@Args('pos') pos: number[]) {
+        return await this.achievementsService.achievementsByPos(pos);
+    }
 }

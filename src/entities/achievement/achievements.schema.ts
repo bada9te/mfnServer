@@ -24,6 +24,9 @@ export class Achievement {
 
     @Prop({ required: true })
     rarity: "legendary" | "uncommon" | "rare" | "common";
+
+    @Prop({ required: true })
+    posNumber: number;
 }
 
 export const AchievementSchema = SchemaFactory.createForClass(Achievement);

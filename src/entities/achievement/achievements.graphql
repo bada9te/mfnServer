@@ -6,10 +6,12 @@ type Achievement {
     type: String!
     count: Int!
     rarity: String!
+    posNumber: Int!
 }
 
 type Query {
     allAchievements: [Achievement!]
     achievementsByIds(ids: [ID!]!): [Achievement!]
+    achievementsByPos(pos: [Int!]!): [Achievement!]
 }
 

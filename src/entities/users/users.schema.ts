@@ -64,8 +64,8 @@ export class User {
     @Prop({ default: 0 })
     level: number;
 
-    @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Achievement' }] })
-    achievements: AchievementDocument[];
+    @Prop({ default: [] })
+    achievements: number[];
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

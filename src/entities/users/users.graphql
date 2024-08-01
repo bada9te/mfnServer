@@ -16,6 +16,7 @@ type User {
     background: String!
     subscribers: [User!]
     subscribedOn: [User!]
+    achievements: [Int!]
 }
 
 type TwoUsers {
