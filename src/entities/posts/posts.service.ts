@@ -41,11 +41,15 @@ export class PostsService {
             .sort({ createdAt: -1 });
     }
 
-    async getAllWithOwnerId(_id: string, range: RangeDto) {
+    async getAllWithOwnerId(_id: string, range: RangeDto | null) {
+        if (range) {
+            return await this.postsModel.find({owner: _id})
+                .skip(range.offset)
+                .limit(range.limit)
+                .sort({ createdAt: -1 });
+        }
         return await this.postsModel.find({owner: _id})
-            .skip(range.offset)
-            .limit(range.limit)
-            .sort({ createdAt: -1 });
+                .sort({ createdAt: -1 });
     }
 
     async getSavedPostsByUserId(userId: string, range: RangeDto) {

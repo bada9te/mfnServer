@@ -6,7 +6,8 @@ import { ConfirmAccountDto, CreateUserDto, PrepareToRestoreDto, RestoreAccountDt
 import { ModerationsService } from '../moderations/moderations.service';
 import * as bcrypt from 'bcrypt';
 import { EmailService } from 'src/utils/email/email.service';
-import generateRandomString from 'src/utils/functions/generateRandomString';
+import { PostsService } from '../posts/posts.service';
+import { AchievementDocument } from '../achievement/achievements.schema';
 
 
 @Injectable()
@@ -15,6 +16,7 @@ export class UsersService {
         @InjectModel(User.name) private userModel: Model<User>,
         private moderationsService: ModerationsService,
         private emailService: EmailService,
+        private postsService: PostsService,
     ) {}
 
     // add new user
@@ -222,5 +224,29 @@ export class UsersService {
         );
 
         return { action: moderation, user };
+    }
+
+
+    // achievements calculation
+    async calculateAchievements(userId: string, achievementType: AchievementDocument["type"]) {
+        const user = await this.getUserById(userId);
+
+        if (!user) {
+            throw new BadRequestException("User not found");
+        }
+
+        const userPosts = await this.postsService.getAllWithOwnerId(user._id.toString(), null);
+
+        switch (achievementType) {
+            case "basic":                  break;
+            case "likes":                  break;
+            case "saves":                  break;
+            case "tracks":                 break;
+            case "likes-and-saves":        break;
+            case "likes-and-saves-equals": break;
+            case "likes-total":            break;
+            case "saves-total":            break;
+            default:                       break;
+        }
     }
 }
