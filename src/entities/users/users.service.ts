@@ -242,6 +242,9 @@ export class UsersService {
         const singlePostMaxLikes = 0;
         const singlePostmaxSaves = 0;
 
+        const data = await this.postsService.getPostsLikesAndSavesByOwner(user._id.toString());
+        console.log("POSTS DATA:", data);
+
         const achievements: number[] = [];
 
         if (userPosts.length > 0) {

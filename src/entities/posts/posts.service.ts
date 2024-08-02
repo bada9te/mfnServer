@@ -183,4 +183,41 @@ export class PostsService {
             metal: await this.postsModel.countDocuments({ category: "Metal" }).exec(),
         }
     }
+
+    async getPostsLikesAndSavesByOwner (userId: string) {
+        return await this.postsModel.aggregate([
+            { $match: { owner: userId } },
+            {
+                $project: {
+                    likesCount: { $size: "$likedBy" },
+                    savesCount: { $size: "$savedBy" },
+                }
+            },
+            {
+                $group: {
+                    _id: "$_id",
+                    likes: { $first: "$likedBy" },
+                    saves: { $first: "$savedBy" },
+                }
+            },
+            {
+                $group: {
+                    _id: "$owner",
+                    totalLikes: { $sum: "$likes" },
+                    totalSaves: { $sum: "$saves" },
+                    maxLikesByPost: { $max: "$likes" },
+                    maxSavesByPost: { $max: "$saves" },
+                }
+            },
+            {
+                $project: {
+                    _id: 0,
+                    totalLikes: 1,
+                    totalSaves: 1,
+                    maxLikesByPost: 1,
+                    maxSavesByPost: 1,
+                }
+            }
+        ]);
+    }
 }
