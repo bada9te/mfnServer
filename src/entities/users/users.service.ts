@@ -228,25 +228,60 @@ export class UsersService {
 
 
     // achievements calculation
-    async calculateAchievements(userId: string, achievementType: AchievementDocument["type"]) {
+    async calculateAchievements(userId: string) {
         const user = await this.getUserById(userId);
 
         if (!user) {
             throw new BadRequestException("User not found");
         }
 
-        const userPosts = await this.postsService.getAllWithOwnerId(user._id.toString(), null);
+        const userPosts = []
+        const totalLikes = 0;
+        const totalSaves = 0;
+        
+        const singlePostMaxLikes = 0;
+        const singlePostmaxSaves = 0;
 
-        switch (achievementType) {
-            case "basic":                  break;
-            case "likes":                  break;
-            case "saves":                  break;
-            case "tracks":                 break;
-            case "likes-and-saves":        break;
-            case "likes-and-saves-equals": break;
-            case "likes-total":            break;
-            case "saves-total":            break;
-            default:                       break;
+        const achievements: number[] = [];
+
+        if (userPosts.length > 0) {
+            achievements.push(1);
+
+            // tarcks
+            if (userPosts.length >= 100) {
+                achievements.push(8);
+
+                userPosts.length >= 250 && achievements.push(12);
+            }
+
+            // likes
+            if (totalLikes > 0) {
+                achievements.push(2);
+                totalLikes >= 1000 && achievements.push(4);
+                singlePostMaxLikes >= 2500 && achievements.push(5);
+                totalLikes >= 5000 && achievements.push(7);
+                totalLikes >= 10000 && achievements.push(9);
+                singlePostMaxLikes >= 10000 && achievements.push(13);
+            }
+
+            // saves
+            if (totalSaves > 0) {
+                achievements.push(3);
+
+                singlePostmaxSaves >= 1000 && achievements.push(6);
+                totalSaves >= 5000 && achievements.push(10);
+
+            }
+
+            // likes and saves combined
+            if (totalLikes + totalSaves >= 20000) {
+                achievements.push(11);
+
+                totalLikes + totalSaves >= 50000 && achievements.push(14);
+                totalLikes + totalSaves >= 100000 && achievements.push(15);
+                totalLikes >= 500000 && totalSaves >= 500000 && achievements.push(18);
+                totalLikes + totalSaves >= 1000000 && achievements.push(19);
+            }
         }
     }
 }

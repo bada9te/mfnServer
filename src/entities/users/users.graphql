@@ -9,14 +9,15 @@ type Query {
 
 type User {
     _id: ID!
-    email: String!
-    nick: String!
-    description: String!
-    avatar: String!
-    background: String!
+    email: String
+    nick: String
+    description: String
+    avatar: String
+    background: String
     subscribers: [User!]
     subscribedOn: [User!]
     achievements: [Int!]
+    level: Int!
 }
 
 type TwoUsers {
