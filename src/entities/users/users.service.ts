@@ -235,26 +235,19 @@ export class UsersService {
             throw new BadRequestException("User not found");
         }
 
-        const userPosts = []
-        const totalLikes = 0;
-        const totalSaves = 0;
-        
-        const singlePostMaxLikes = 0;
-        const singlePostmaxSaves = 0;
-
         const data = await this.postsService.getPostsLikesAndSavesByOwner(user._id.toString());
-        console.log("POSTS DATA:", data);
+        const {postCount, totalLikes, totalSaves, singlePostMaxLikes, singlePostmaxSaves} = data[0];
 
         const achievements: number[] = [];
 
-        if (userPosts.length > 0) {
+        if (postCount > 0) {
             achievements.push(1);
 
             // tarcks
-            if (userPosts.length >= 100) {
+            if (postCount >= 100) {
                 achievements.push(8);
 
-                userPosts.length >= 250 && achievements.push(12);
+                postCount >= 250 && achievements.push(12);
             }
 
             // likes
@@ -286,5 +279,11 @@ export class UsersService {
                 totalLikes + totalSaves >= 1000000 && achievements.push(19);
             }
         }
+
+
+        return { 
+            ...data[0],
+            achievements,
+        };
     }
 }

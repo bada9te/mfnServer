@@ -13,4 +13,3 @@ type Query {
     achievementsByIds(ids: [ID!]!): [Achievement!]
     achievementsByPos(pos: [Int!]!): [Achievement!]
 }
-

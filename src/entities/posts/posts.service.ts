@@ -186,27 +186,21 @@ export class PostsService {
 
     async getPostsLikesAndSavesByOwner (userId: string) {
         return await this.postsModel.aggregate([
-            { $match: { owner: userId } },
+            { $match: { owner: new mongoose.Types.ObjectId(userId) } },
             {
                 $project: {
                     likesCount: { $size: "$likedBy" },
-                    savesCount: { $size: "$savedBy" },
-                }
-            },
-            {
-                $group: {
-                    _id: "$_id",
-                    likes: { $first: "$likedBy" },
-                    saves: { $first: "$savedBy" },
+                    savesCount: { $size: "$savedBy" }
                 }
             },
             {
                 $group: {
                     _id: "$owner",
-                    totalLikes: { $sum: "$likes" },
-                    totalSaves: { $sum: "$saves" },
-                    maxLikesByPost: { $max: "$likes" },
-                    maxSavesByPost: { $max: "$saves" },
+                    totalLikes: { $sum: "$likesCount" },
+                    totalSaves: { $sum: "$savesCount" },
+                    maxLikesByPost: { $max: "$likesCount" },
+                    maxSavesByPost: { $max: "$savesCount" },
+                    postCount: { $sum: 1 }
                 }
             },
             {
@@ -216,6 +210,7 @@ export class PostsService {
                     totalSaves: 1,
                     maxLikesByPost: 1,
                     maxSavesByPost: 1,
+                    postCount: 1
                 }
             }
         ]);

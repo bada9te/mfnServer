@@ -5,15 +5,16 @@ type Query {
     usersByIds(ids: [ID!]!): [User!]!
     usersByNickname(nick: String!): [User!]!
     whoAmI: User
+    userAchievementsData(_id: ID!): UserAchievementsData
 }
 
 type User {
     _id: ID!
-    email: String
-    nick: String
-    description: String
-    avatar: String
-    background: String
+    email: String!
+    nick: String!
+    description: String!
+    avatar: String!
+    background: String!
     subscribers: [User!]
     subscribedOn: [User!]
     achievements: [Int!]
@@ -77,4 +78,14 @@ input AccountRestoreInput {
 input PrepareAccountToRestoreInput {
     email: String!
     type: String!
+}
+
+
+type UserAchievementsData {
+    achievements: [Int!]
+    totalLikes: Int!,
+    totalSaves: Int!,
+    maxLikesByPost: Int!,
+    maxSavesByPost: Int!,
+    postCount: Int!,
 }

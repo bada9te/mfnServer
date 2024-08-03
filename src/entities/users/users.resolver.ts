@@ -36,6 +36,11 @@ export class UsersResolver {
         return await this.usersService.getUsersByNickname(nick);
     }
 
+    @Query()
+    async userAchievementsData(@Args('_id') _id: string) {
+        return await this.usersService.calculateAchievements(_id);
+    }
+
     @Mutation()
     async userCreate(@Args('input') input: CreateUserDto) {
         return await this.usersService.addUser(input);
