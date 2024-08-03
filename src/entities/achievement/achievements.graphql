@@ -1,12 +1,11 @@
 type Achievement {
     _id: ID!
-    title: String!
-    achievement: String!
-    description: String!
-    type: String!
-    count: Int!
-    rarity: String!
-    posNumber: Int!
+    title: String
+    achievement: String
+    description: String
+    type: String
+    rarity: String
+    posNumber: Int
 }
 
 type Query {
