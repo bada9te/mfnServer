@@ -1,10 +1,12 @@
 import { Args, Mutation, Query, Resolver } from "@nestjs/graphql";
 import { UsersService } from "./users.service";
-import { SwicthSubscriptionDto, UpdateUserDto, CreateUserDto, ConfirmAccountDto, RestoreAccountDto, PrepareToRestoreDto } from "./dto";
+import { SwicthSubscriptionDto, UpdateUserDto, CreateUserDto, ConfirmAccountDto, RestoreAccountDto, PrepareToRestoreDto, LinkTwitterDto } from "./dto";
 import { UseGuards } from "@nestjs/common";
 import { GqlAuthGuard } from "src/auth/strategy/graphql/gql.guard";
 import { CurrentUser } from "src/auth/strategy/graphql/gql.decorator";
 import { UserDocument } from "./users.schema";
+import { LinkGoogleDto } from "./dto/link-google.dto";
+import { LinkFacebookDto } from "./dto/link-facebook.dto";
 
 
 @Resolver('User')
@@ -71,5 +73,29 @@ export class UsersResolver {
     @Mutation()
     async userPrepareAccountToRestore(@Args('input') dto: PrepareToRestoreDto) {
         return await this.usersService.prepareAccountToRestore(dto);
+    }
+
+    @UseGuards(GqlAuthGuard)
+    @Mutation()
+    async userLinkGoogle(@Args('input') dto: LinkGoogleDto) {
+        return await this.usersService.linkGoogle(dto);
+    }
+
+    @UseGuards(GqlAuthGuard)
+    @Mutation()
+    async userUnlinkGoogle(@Args('_id') _id: string) {
+        return await this.usersService.unlinkGoogle(_id);
+    }
+
+    @UseGuards(GqlAuthGuard)
+    @Mutation()
+    async userLinkFacebook(@Args('input') dto: LinkFacebookDto) {
+        return await this.usersService.linkFacebook(dto);
+    }
+
+    @UseGuards(GqlAuthGuard)
+    @Mutation()
+    async userLinkTwitter(@Args('input') dto: LinkTwitterDto) {
+        return await this.usersService.linkTwitter(dto);
     }
 }

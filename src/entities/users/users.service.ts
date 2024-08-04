@@ -2,7 +2,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { User } from './users.schema';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { ConfirmAccountDto, CreateUserDto, PrepareToRestoreDto, RestoreAccountDto } from './dto';
+import { ConfirmAccountDto, CreateUserDto, LinkFacebookDto, LinkGoogleDto, LinkTwitterDto, PrepareToRestoreDto, RestoreAccountDto } from './dto';
 import { ModerationsService } from '../moderations/moderations.service';
 import * as bcrypt from 'bcrypt';
 import { EmailService } from 'src/utils/email/email.service';
@@ -285,5 +285,47 @@ export class UsersService {
             ...data[0],
             achievements,
         };
+    }
+
+
+    // link google
+    async linkGoogle(dto: LinkGoogleDto) {
+        const user = await this.getUserById(dto.userId);
+
+        if (!user) {
+            throw new BadRequestException();
+        }
+
+        user.google = {
+            id: dto.id,
+            token: dto.token,
+            name: dto.name,
+            email: dto.email
+        }
+
+        return await user.save();
+    }
+
+    // unlink google 
+    async unlinkGoogle(userId: string) {
+        const user = await this.getUserById(userId);
+
+        if (!user) {
+            throw new BadRequestException();
+        }
+
+        user.google = null;
+
+        return await user.save();
+    }
+
+    // link Facebook
+    async linkFacebook(dto: LinkFacebookDto) {
+        
+    }
+
+    // link twitter
+    async linkTwitter(dto: LinkTwitterDto) {
+
     }
 }

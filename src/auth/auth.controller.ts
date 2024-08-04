@@ -3,11 +3,13 @@ import { Request } from "express";
 import { JwtAuthGuard } from "./strategy/jwt/jwt.guard";
 import { UsersService } from "src/entities/users/users.service";
 import { JwtPayload } from "./strategy/jwt/jwt.strategy";
+import { GoogleOauthGuard } from "./strategy/google/google.guard";
+import { JwtAuthService } from "./strategy/jwt/jwt.service";
 
 
 @Controller('auth')
 export class AuthController {
-    constructor (private usersService: UsersService) {}
+    constructor (private usersService: UsersService, private jwtService: JwtAuthService) {}
 
 
     @UseGuards(JwtAuthGuard)

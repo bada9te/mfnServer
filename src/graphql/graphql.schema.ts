@@ -26,47 +26,6 @@ export class MakeBattleVoteInput {
     voterId: string;
 }
 
-export class ChatMessageCreateInput {
-    owner: string;
-    type: string;
-    text?: Nullable<string>;
-    image?: Nullable<string>;
-    video?: Nullable<string>;
-    audio?: Nullable<string>;
-    file?: Nullable<string>;
-    spotify?: Nullable<string>;
-    reply?: Nullable<string>;
-    chat?: Nullable<string>;
-    toUser?: Nullable<string>;
-    sharedItem?: Nullable<string>;
-}
-
-export class ChatMessageUpdateInput {
-    _id: string;
-    text: string;
-}
-
-export class ChatCreateInput {
-    title: string;
-    owner: string;
-    participants?: Nullable<string[]>;
-}
-
-export class ChatUpdateInput {
-    _id: string;
-    what: string;
-    value: string;
-}
-
-export class AddCommentInput {
-    owner: string;
-    receiver?: Nullable<string>;
-    text: string;
-    isReply: boolean;
-    isReplyTo?: Nullable<string>;
-    post: string;
-}
-
 export class CreateModerationActionInput {
     user: string;
     type: string;
@@ -83,7 +42,6 @@ export class CreateNotificationInput {
     receiver: string;
     sender: string;
     post?: Nullable<string>;
-    comment?: Nullable<string>;
     text: string;
 }
 
@@ -111,7 +69,6 @@ export class AddPostInput {
     audio: string;
     image: string;
     category: string;
-    commentsAllowed: boolean;
     downloadsAllowed: boolean;
 }
 
@@ -132,13 +89,29 @@ export class CreateReportInput {
     message: string;
     reportOwner?: Nullable<string>;
     reportedPost?: Nullable<string>;
-    reportedComment?: Nullable<string>;
 }
 
 export class CreateSupportRequestInput {
     contactReason: string;
     email: string;
     message: string;
+}
+
+export class LinkGoogleOrFacebookInput {
+    userId: string;
+    id: string;
+    token: string;
+    email: string;
+    name: string;
+}
+
+export class LinkTwitterInput {
+    userId: string;
+    id: string;
+    token: string;
+    email: string;
+    displayName: string;
+    username: string;
 }
 
 export class AddUserInput {
@@ -177,32 +150,34 @@ export class PrepareAccountToRestoreInput {
     type: string;
 }
 
+export class Achievement {
+    _id: string;
+    title?: Nullable<string>;
+    achievement?: Nullable<string>;
+    description?: Nullable<string>;
+    type?: Nullable<string>;
+    rarity?: Nullable<string>;
+    posNumber?: Nullable<number>;
+}
+
 export abstract class IQuery {
+    abstract allAchievements(): Nullable<Achievement[]> | Promise<Nullable<Achievement[]>>;
+
+    abstract achievementsByIds(ids: string[]): Nullable<Achievement[]> | Promise<Nullable<Achievement[]>>;
+
+    abstract achievementsByPos(pos: number[]): Nullable<Achievement[]> | Promise<Nullable<Achievement[]>>;
+
+    abstract achievemenmtsCount(): number | Promise<number>;
+
     abstract battlesByStatus(finished: boolean, offset: number, limit: number): BattlesWithCount | Promise<BattlesWithCount>;
-
-    abstract chatMessage(_id: string): ChatMessage | Promise<ChatMessage>;
-
-    abstract chatMessagesByChatId(_id: string, offset: number, limit: number): Nullable<ChatMessage[]> | Promise<Nullable<ChatMessage[]>>;
-
-    abstract chat(_id: string, userId?: Nullable<string>): Chat | Promise<Chat>;
-
-    abstract chatsByIds(ids: string[]): Nullable<Chat[]> | Promise<Nullable<Chat[]>>;
-
-    abstract chatsUserRelatedByUserId(_id: string): Nullable<Chat[]> | Promise<Nullable<Chat[]>>;
-
-    abstract comment(_id: string): Comment | Promise<Comment>;
-
-    abstract commentsByIds(ids: string[]): Nullable<Comment[]> | Promise<Nullable<Comment[]>>;
-
-    abstract commentReplies(_id: string): Nullable<Comment[]> | Promise<Nullable<Comment[]>>;
-
-    abstract commentsByPostId(_id: string): Nullable<Comment[]> | Promise<Nullable<Comment[]>>;
 
     abstract moderationActionValidate(input: ModerateActionInput): ModerationAction | Promise<ModerationAction>;
 
-    abstract notifications(receiverId: string, checked: boolean): Nullable<Notification[]> | Promise<Nullable<Notification[]>>;
+    abstract notifications(receiverId: string, checked: boolean, offset: number, limit: number): NotificationsWithCount | Promise<NotificationsWithCount>;
 
     abstract notificationsByIds(ids: string[]): Nullable<Notification[]> | Promise<Nullable<Notification[]>>;
+
+    abstract playlist(_id: string): Playlist | Promise<Playlist>;
 
     abstract playlistsByTitle(title: string): Nullable<Playlist[]> | Promise<Nullable<Playlist[]>>;
 
@@ -247,6 +222,8 @@ export abstract class IQuery {
     abstract usersByNickname(nick: string): User[] | Promise<User[]>;
 
     abstract whoAmI(): Nullable<User> | Promise<Nullable<User>>;
+
+    abstract userAchievementsData(_id: string): Nullable<UserAchievementsData> | Promise<Nullable<UserAchievementsData>>;
 }
 
 export class Battle {
@@ -274,28 +251,6 @@ export abstract class IMutation {
     abstract battleDeleteById(_id: string): Battle | Promise<Battle>;
 
     abstract battleMakeVote(input: MakeBattleVoteInput): Battle | Promise<Battle>;
-
-    abstract chatMessageCreate(input: ChatMessageCreateInput): ChatMessage | Promise<ChatMessage>;
-
-    abstract chatMessageDeleteById(_id: string): ChatMessage | Promise<ChatMessage>;
-
-    abstract chatMessageUpdate(input: ChatMessageUpdateInput): ChatMessage | Promise<ChatMessage>;
-
-    abstract chatCreate(input: ChatCreateInput): Chat | Promise<Chat>;
-
-    abstract chatUpdate(input: ChatUpdateInput): Chat | Promise<Chat>;
-
-    abstract chatReadAllMessages(chatId: string, userId: string): Chat | Promise<Chat>;
-
-    abstract chatSwitchParticipants(chatId: string, participants: string[]): Chat | Promise<Chat>;
-
-    abstract chatSwitchMessage(chatId: string, messageId: string): Chat | Promise<Chat>;
-
-    abstract chatDeleteById(_id: string): Chat | Promise<Chat>;
-
-    abstract commentCreate(input: AddCommentInput): Comment | Promise<Comment>;
-
-    abstract commentDeleteById(_id: string): Comment | Promise<Comment>;
 
     abstract moderationActionCreate(input: CreateModerationActionInput): ModerationAction | Promise<ModerationAction>;
 
@@ -349,45 +304,15 @@ export abstract class IMutation {
 
     abstract userPrepareAccountToRestore(input?: Nullable<PrepareAccountToRestoreInput>): UserWithAction | Promise<UserWithAction>;
 
+    abstract userLinkGoogle(input: LinkGoogleOrFacebookInput): Nullable<User> | Promise<Nullable<User>>;
+
+    abstract userUnlinkGoogle(_id: string): Nullable<User> | Promise<Nullable<User>>;
+
+    abstract userLinkFacebook(input: LinkGoogleOrFacebookInput): Nullable<User> | Promise<Nullable<User>>;
+
+    abstract userLinkTwitter(input: LinkTwitterInput): Nullable<User> | Promise<Nullable<User>>;
+
     abstract login(email: string, password: string): Nullable<User> | Promise<Nullable<User>>;
-}
-
-export class ChatMessage {
-    _id: string;
-    owner: User;
-    chat: Chat;
-    text?: Nullable<string>;
-    image?: Nullable<string>;
-    video?: Nullable<string>;
-    audio?: Nullable<string>;
-    file?: Nullable<string>;
-    spotify?: Nullable<string>;
-    reply?: Nullable<ChatMessage>;
-    createdAt: string;
-}
-
-export class MessagesUnreadCount {
-    user: User;
-    count: number;
-}
-
-export class Chat {
-    _id: string;
-    title: string;
-    owner?: Nullable<User>;
-    participants?: Nullable<Nullable<User>[]>;
-    messagesUnreadCount?: Nullable<Nullable<MessagesUnreadCount>[]>;
-}
-
-export class Comment {
-    _id: string;
-    owner?: Nullable<User>;
-    receiver?: Nullable<User>;
-    text: string;
-    isReply?: Nullable<boolean>;
-    replies?: Nullable<Comment[]>;
-    post: Post;
-    createdAt: string;
 }
 
 export class ModerationAction {
@@ -403,10 +328,14 @@ export class Notification {
     receiver: User;
     sender: User;
     post?: Nullable<Post>;
-    comment?: Nullable<Comment>;
     text: string;
     checked: boolean;
     createdAt: string;
+}
+
+export class NotificationsWithCount {
+    notifications?: Nullable<Notification[]>;
+    count: number;
 }
 
 export class NotificationCount {
@@ -457,10 +386,8 @@ export class Post {
     image: string;
     likedBy?: Nullable<User[]>;
     savedBy?: Nullable<User[]>;
-    comments?: Nullable<Comment[]>;
     category: string;
     downloadsAllowed: boolean;
-    commentsAllowed: boolean;
     createdAt: string;
 }
 
@@ -471,7 +398,6 @@ export class Report {
     message: string;
     reportOwner?: Nullable<User>;
     reportedPost?: Nullable<Post>;
-    reportedComment?: Nullable<Comment>;
     isClosed: boolean;
 }
 
@@ -485,23 +411,41 @@ export class SupportRequest {
 
 export class User {
     _id: string;
-    email: string;
     nick: string;
     description: string;
     avatar: string;
     background: string;
     subscribers?: Nullable<User[]>;
     subscribedOn?: Nullable<User[]>;
+    achievements?: Nullable<number[]>;
+    level: number;
+    local?: Nullable<SocialMediaData>;
+    google?: Nullable<SocialMediaData>;
+    facebook?: Nullable<SocialMediaData>;
+    twitter?: Nullable<SocialMediaData>;
+}
+
+export class SocialMediaData {
+    email?: Nullable<string>;
 }
 
 export class TwoUsers {
-    user1: User;
-    user2: User;
+    subscriber: User;
+    subscribeOn: User;
 }
 
 export class UserWithAction {
     user: User;
     action: ModerationAction;
+}
+
+export class UserAchievementsData {
+    achievements?: Nullable<number[]>;
+    totalLikes: number;
+    totalSaves: number;
+    maxLikesByPost: number;
+    maxSavesByPost: number;
+    postCount: number;
 }
 
 type Nullable<T> = T | null;

@@ -10,7 +10,6 @@ type Query {
 
 type User {
     _id: ID!
-    email: String!
     nick: String!
     description: String!
     avatar: String!
@@ -19,6 +18,14 @@ type User {
     subscribedOn: [User!]
     achievements: [Int!]
     level: Int!
+    local: SocialMediaData
+    google: SocialMediaData
+    facebook: SocialMediaData
+    twitter: SocialMediaData
+}
+
+type SocialMediaData {
+    email: String
 }
 
 type TwoUsers {
@@ -39,8 +46,28 @@ type Mutation {
     userConfirmAccount(input: AccountConfirmInput!): UserWithAction!
     userRestoreAccount(input: AccountRestoreInput!): UserWithAction!
     userPrepareAccountToRestore(input: PrepareAccountToRestoreInput): UserWithAction!
-
+    userLinkGoogle(input: LinkGoogleOrFacebookInput!): User
+    userUnlinkGoogle(_id: ID!): User
+    userLinkFacebook(input: LinkGoogleOrFacebookInput!): User
+    userLinkTwitter(input: LinkTwitterInput!): User
     login(email: String!, password: String!): User
+}
+
+input LinkGoogleOrFacebookInput {
+    userId: String!
+    id: String!
+    token: String!
+    email: String!
+    name: String!
+}
+
+input LinkTwitterInput {
+    userId: String!
+    id: String!
+    token: String!
+    email: String!
+    displayName: String!
+    username: String!
 }
 
 

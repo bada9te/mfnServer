@@ -1,8 +1,9 @@
-import { Controller, Get, Req, Res, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Req, Res, UnauthorizedException, UseGuards } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { JwtAuthService } from '../jwt/jwt.service';
 import { GoogleOauthGuard } from './google.guard';
 import { ConfigService } from '@nestjs/config';
+import { JwtAuthGuard } from '../jwt/jwt.guard';
 
 
 @Controller('auth/google')
@@ -28,6 +29,6 @@ export class GoogleOauthController {
             sameSite: 'lax',
         });
         
-        return res.redirect('me');
+        return res.redirect(`http://localhost:3000`);
     }
 }
