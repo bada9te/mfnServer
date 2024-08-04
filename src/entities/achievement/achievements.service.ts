@@ -18,4 +18,8 @@ export class AchievementsService {
     async achievementsByPos(pos: number[]) {
         return await this.achievementsModel.find({ posNumber: pos });
     }
+
+    async achievemenmtsCount() {
+        return await this.achievementsModel.estimatedDocumentCount();
+    }
 }

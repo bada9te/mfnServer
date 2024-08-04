@@ -12,4 +12,5 @@ type Query {
     allAchievements: [Achievement!]
     achievementsByIds(ids: [ID!]!): [Achievement!]
     achievementsByPos(pos: [Int!]!): [Achievement!]
+    achievemenmtsCount: Int!
 }

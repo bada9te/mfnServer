@@ -19,4 +19,9 @@ export class AchievementResolver {
     async achievementsByPos(@Args('pos') pos: number[]) {
         return await this.achievementsService.achievementsByPos(pos);
     }
+
+    @Query()
+    async achievemenmtsCount() {
+        return await this.achievementsService.achievemenmtsCount();
+    }
 }
