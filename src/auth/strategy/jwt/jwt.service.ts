@@ -123,8 +123,8 @@ export class JwtAuthService {
                 // if there is a user id already but no token (user was linked at one point and then removed)
                 if (!user.facebook?.token) {
                     user.facebook.token = token;
-                    user.facebook.name  = profile.name.givenName + ' ' + profile.name.familyName;
-                    user.facebook.email = profile.emails[0].value;
+                    user.facebook.name  = profile.displayName;
+                    //user.facebook.email = profile.emails[0].value;
 
                     const updatedUser = await user.save();
                     return updatedUser;
@@ -134,12 +134,12 @@ export class JwtAuthService {
             } else {
                 // if there is no user, create 
                 var newUser = new this.usersModel({
-                    nick: profile.name.givenName,
+                    nick: profile.displayName,
                     facebook: {
                         id: profile.id,
                         token: token,
-                        name: profile.name.givenName + ' ' + profile.name.familyName,
-                        email: profile.emails[0].value,
+                        name: profile.displayName,
+                        //email: profile.emails[0].value,
                     },
                     verified: true,
                 });
@@ -148,6 +148,7 @@ export class JwtAuthService {
                 return createdUser;
             }
         } catch (error) {
+            console.log(error)
             return null;
         }
     }

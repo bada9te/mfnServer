@@ -20,7 +20,7 @@ export class UploadController {
     uploadFile(
         @UploadedFile(
             new ParseFilePipeBuilder()
-                .addMaxSizeValidator({ maxSize: 500000, message: "File size must be less then 4MB" })
+                .addMaxSizeValidator({ maxSize: 50000000, message: "File size must be less then 4MB" })
                 .build()
         ) 
         file: Express.Multer.File

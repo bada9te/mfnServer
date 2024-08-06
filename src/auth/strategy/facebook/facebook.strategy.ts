@@ -12,11 +12,11 @@ export class FacebookOauthStrategy extends PassportStrategy(Strategy, 'facebook'
             clientID     : configService.get('PASSPORT_FACEBOOK_ID'),
             clientSecret : configService.get('PASSPORT_FACEBOOK_SECRET'),
             callbackURL  : configService.get('PASSPORT_FACEBOOK_CALLBACK'),
-            passReqToCallback : true
+            passReqToCallback : true,
         });
     }
 
-    async verify(accessToken: string, refreshToken: string, profile: Profile) {
+    async validate(req: any, accessToken: string, refreshToken: string, profile: Profile) {
         const user = await this.jwtAuthService.processFacebook(profile, accessToken);
         if (!user) {
             throw new UnauthorizedException();

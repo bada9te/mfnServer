@@ -321,11 +321,64 @@ export class UsersService {
 
     // link Facebook
     async linkFacebook(dto: LinkFacebookDto) {
-        
+        const user = await this.getUserById(dto.userId);
+
+        if (!user) {
+            throw new BadRequestException();
+        }
+
+        user.facebook = {
+            id: dto.id,
+            token: dto.token,
+            name: dto.name,
+            email: dto.email
+        }
+
+        return await user.save();
+    }
+
+    // unlink facebook 
+    async unlinkFacebook(userId: string) {
+        const user = await this.getUserById(userId);
+
+        if (!user) {
+            throw new BadRequestException();
+        }
+
+        user.facebook = null;
+
+        return await user.save();
     }
 
     // link twitter
     async linkTwitter(dto: LinkTwitterDto) {
+        const user = await this.getUserById(dto.userId);
 
+        if (!user) {
+            throw new BadRequestException();
+        }
+
+        user.twitter = {
+            id: dto.id,
+            token: dto.token,
+            displayName: dto.displayName,
+            email: dto.email,
+            username: dto.username,
+        }
+
+        return await user.save();
+    }
+
+    // unlink twitter 
+    async unlinkTwitter(userId: string) {
+        const user = await this.getUserById(userId);
+
+        if (!user) {
+            throw new BadRequestException();
+        }
+
+        user.twitter = null;
+
+        return await user.save();
     }
 }

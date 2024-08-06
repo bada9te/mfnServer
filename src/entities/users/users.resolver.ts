@@ -95,7 +95,19 @@ export class UsersResolver {
 
     @UseGuards(GqlAuthGuard)
     @Mutation()
+    async userUnlinkFacebook(@Args('_id') _id: string) {
+        return await this.usersService.unlinkFacebook(_id);
+    }
+
+    @UseGuards(GqlAuthGuard)
+    @Mutation()
     async userLinkTwitter(@Args('input') dto: LinkTwitterDto) {
         return await this.usersService.linkTwitter(dto);
+    }
+
+    @UseGuards(GqlAuthGuard)
+    @Mutation()
+    async userUnlinkTwitter(@Args('_id') _id: string) {
+        return await this.usersService.unlinkTwitter(_id);
     }
 }

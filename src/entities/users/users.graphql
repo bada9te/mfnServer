@@ -49,7 +49,9 @@ type Mutation {
     userLinkGoogle(input: LinkGoogleOrFacebookInput!): User
     userUnlinkGoogle(_id: ID!): User
     userLinkFacebook(input: LinkGoogleOrFacebookInput!): User
+    userUnlinkFacebook(_id: ID!): User
     userLinkTwitter(input: LinkTwitterInput!): User
+    userUnlinkTwitter(_id: ID!): User
     login(email: String!, password: String!): User
 }
 
