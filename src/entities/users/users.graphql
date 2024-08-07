@@ -26,6 +26,7 @@ type User {
 
 type SocialMediaData {
     email: String
+    name: String
 }
 
 type TwoUsers {
@@ -46,16 +47,16 @@ type Mutation {
     userConfirmAccount(input: AccountConfirmInput!): UserWithAction!
     userRestoreAccount(input: AccountRestoreInput!): UserWithAction!
     userPrepareAccountToRestore(input: PrepareAccountToRestoreInput): UserWithAction!
-    userLinkGoogle(input: LinkGoogleOrFacebookInput!): User
+    userLinkGoogle(input: LinkGoogleInput!): User
     userUnlinkGoogle(_id: ID!): User
-    userLinkFacebook(input: LinkGoogleOrFacebookInput!): User
+    userLinkFacebook(input: LinkTwitterOrFacebookInput!): User
     userUnlinkFacebook(_id: ID!): User
-    userLinkTwitter(input: LinkTwitterInput!): User
+    userLinkTwitter(input: LinkTwitterOrFacebookInput!): User
     userUnlinkTwitter(_id: ID!): User
     login(email: String!, password: String!): User
 }
 
-input LinkGoogleOrFacebookInput {
+input LinkGoogleInput {
     userId: String!
     id: String!
     token: String!
@@ -63,13 +64,11 @@ input LinkGoogleOrFacebookInput {
     name: String!
 }
 
-input LinkTwitterInput {
+input LinkTwitterOrFacebookInput {
     userId: String!
     id: String!
     token: String!
-    email: String!
-    displayName: String!
-    username: String!
+    name: String!
 }
 
 

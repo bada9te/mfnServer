@@ -28,6 +28,6 @@ export class TwitterOauthController {
             sameSite: 'lax',
         });
         
-        return res.redirect('me');
+        return res.redirect(`http://localhost:3000`);
     }
 }

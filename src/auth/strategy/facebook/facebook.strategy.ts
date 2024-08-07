@@ -1,8 +1,9 @@
-import { Injectable, UnauthorizedException } from "@nestjs/common";
+import { Injectable, Req, UnauthorizedException } from "@nestjs/common";
 import { PassportStrategy } from "@nestjs/passport";
 import { Strategy, Profile } from "passport-facebook";
 import { ConfigService } from "@nestjs/config";
 import { JwtAuthService } from "../jwt/jwt.service";
+import { Request } from "express";
 
 
 @Injectable()
@@ -13,10 +14,11 @@ export class FacebookOauthStrategy extends PassportStrategy(Strategy, 'facebook'
             clientSecret : configService.get('PASSPORT_FACEBOOK_SECRET'),
             callbackURL  : configService.get('PASSPORT_FACEBOOK_CALLBACK'),
             passReqToCallback : true,
+            scope: ['email']
         });
     }
 
-    async validate(req: any, accessToken: string, refreshToken: string, profile: Profile) {
+    async validate(@Req() _req: Request, accessToken: string, refreshToken: string, profile: Profile) {
         const user = await this.jwtAuthService.processFacebook(profile, accessToken);
         if (!user) {
             throw new UnauthorizedException();

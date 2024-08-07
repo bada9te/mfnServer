@@ -1,5 +1,5 @@
-import { LinkGoogleOrFacebookInput } from "src/graphql/graphql.schema";
+import { LinkGoogleInput } from "src/graphql/graphql.schema";
 
-export class LinkGoogleDto extends LinkGoogleOrFacebookInput {
+export class LinkGoogleDto extends LinkGoogleInput {
     
 }

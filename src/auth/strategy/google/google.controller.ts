@@ -31,4 +31,6 @@ export class GoogleOauthController {
         
         return res.redirect(`http://localhost:3000`);
     }
+
+
 }

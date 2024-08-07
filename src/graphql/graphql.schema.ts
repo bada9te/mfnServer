@@ -97,7 +97,7 @@ export class CreateSupportRequestInput {
     message: string;
 }
 
-export class LinkGoogleOrFacebookInput {
+export class LinkGoogleInput {
     userId: string;
     id: string;
     token: string;
@@ -105,13 +105,11 @@ export class LinkGoogleOrFacebookInput {
     name: string;
 }
 
-export class LinkTwitterInput {
+export class LinkTwitterOrFacebookInput {
     userId: string;
     id: string;
     token: string;
-    email: string;
-    displayName: string;
-    username: string;
+    name: string;
 }
 
 export class AddUserInput {
@@ -304,13 +302,17 @@ export abstract class IMutation {
 
     abstract userPrepareAccountToRestore(input?: Nullable<PrepareAccountToRestoreInput>): UserWithAction | Promise<UserWithAction>;
 
-    abstract userLinkGoogle(input: LinkGoogleOrFacebookInput): Nullable<User> | Promise<Nullable<User>>;
+    abstract userLinkGoogle(input: LinkGoogleInput): Nullable<User> | Promise<Nullable<User>>;
 
     abstract userUnlinkGoogle(_id: string): Nullable<User> | Promise<Nullable<User>>;
 
-    abstract userLinkFacebook(input: LinkGoogleOrFacebookInput): Nullable<User> | Promise<Nullable<User>>;
+    abstract userLinkFacebook(input: LinkTwitterOrFacebookInput): Nullable<User> | Promise<Nullable<User>>;
 
-    abstract userLinkTwitter(input: LinkTwitterInput): Nullable<User> | Promise<Nullable<User>>;
+    abstract userUnlinkFacebook(_id: string): Nullable<User> | Promise<Nullable<User>>;
+
+    abstract userLinkTwitter(input: LinkTwitterOrFacebookInput): Nullable<User> | Promise<Nullable<User>>;
+
+    abstract userUnlinkTwitter(_id: string): Nullable<User> | Promise<Nullable<User>>;
 
     abstract login(email: string, password: string): Nullable<User> | Promise<Nullable<User>>;
 }
@@ -427,6 +429,7 @@ export class User {
 
 export class SocialMediaData {
     email?: Nullable<string>;
+    name?: Nullable<string>;
 }
 
 export class TwoUsers {

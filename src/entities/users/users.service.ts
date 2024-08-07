@@ -300,7 +300,6 @@ export class UsersService {
             id: dto.id,
             token: dto.token,
             name: dto.name,
-            email: dto.email
         }
 
         return await user.save();
@@ -331,7 +330,6 @@ export class UsersService {
             id: dto.id,
             token: dto.token,
             name: dto.name,
-            email: dto.email
         }
 
         return await user.save();
@@ -361,9 +359,7 @@ export class UsersService {
         user.twitter = {
             id: dto.id,
             token: dto.token,
-            displayName: dto.displayName,
-            email: dto.email,
-            username: dto.username,
+            name: dto.name
         }
 
         return await user.save();

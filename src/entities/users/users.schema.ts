@@ -17,7 +17,6 @@ export class User {
     @Prop(raw({
         id: String,
         token: String,
-        email: String,
         name: String,
     }))
     facebook: Record<string, any>;
@@ -25,9 +24,7 @@ export class User {
     @Prop(raw({
         id: String,
         token: String,
-        email: String,
-        displayName: String,
-        username: String,
+        name: String,
     }))
     twitter: Record<string, any>;
     

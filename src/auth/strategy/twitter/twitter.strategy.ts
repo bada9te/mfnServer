@@ -1,8 +1,9 @@
-import { Injectable, UnauthorizedException } from "@nestjs/common";
+import { Injectable, Req, UnauthorizedException } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { PassportStrategy } from "@nestjs/passport";
 import { Strategy } from "passport-twitter";
 import { JwtAuthService } from "../jwt/jwt.service";
+import { Request } from "express";
 
 @Injectable()
 export class TwitterOauthStrategy extends PassportStrategy(Strategy, 'twitter') {
@@ -16,7 +17,8 @@ export class TwitterOauthStrategy extends PassportStrategy(Strategy, 'twitter') 
         });
     }
 
-    async verify(token: string, tokenSecret: string, profile: any) {
+    async validate(@Req() _req: Request, token: string, tokenSecret: string, profile: any) {
+        console.log("REQUEST USER", _req.user);
         const user = await this.jwtAuthService.processTwitter(profile, token);
         if (!user) {
             throw new UnauthorizedException();
