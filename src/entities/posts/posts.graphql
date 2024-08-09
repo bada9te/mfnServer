@@ -28,15 +28,16 @@ type PostsByCategoryCount {
     pop: Int!
     classical: Int!
     funk: Int!
-    soulMusic: Int!
+    soul: Int!
     hipHop: Int!
     rock: Int!
-    electronicMusic: Int!
+    electronic: Int!
     latin: Int!
     jazz: Int!
     blues: Int!
     folk: Int!
     metal: Int!
+    reggae: Int!
 }
 
 type Post {

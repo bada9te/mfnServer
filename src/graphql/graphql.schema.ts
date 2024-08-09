@@ -368,15 +368,16 @@ export class PostsByCategoryCount {
     pop: number;
     classical: number;
     funk: number;
-    soulMusic: number;
+    soul: number;
     hipHop: number;
     rock: number;
-    electronicMusic: number;
+    electronic: number;
     latin: number;
     jazz: number;
     blues: number;
     folk: number;
     metal: number;
+    reggae: number;
 }
 
 export class Post {
