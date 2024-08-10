@@ -171,20 +171,20 @@ export class PostsService {
 
     async getDocsCountByCategories() {
         return {
-            country: await this.postsModel.countDocuments({ category: "Country" }).exec(),
-            pop: await this.postsModel.countDocuments({ category: "Pop" }).exec(),
-            classical: await this.postsModel.countDocuments({ category: "Classical" }).exec(),
-            funk: await this.postsModel.countDocuments({ category: "Funk" }).exec(),
-            soul: await this.postsModel.countDocuments({ category: "Soul" }).exec(),
-            hipHop: await this.postsModel.countDocuments({ category: "Hip-hop" }).exec(),
-            rock: await this.postsModel.countDocuments({ category: "Rock" }).exec(),
-            electronic: await this.postsModel.countDocuments({ category: "Electronic" }).exec(),
-            latin: await this.postsModel.countDocuments({ category: "Latin" }).exec(),
-            jazz: await this.postsModel.countDocuments({ category: "Jazz" }).exec(),
-            blues: await this.postsModel.countDocuments({ category: "Blues" }).exec(),
-            folk: await this.postsModel.countDocuments({ category: "Folk" }).exec(),
-            metal: await this.postsModel.countDocuments({ category: "Metal" }).exec(),
-            reggae: await this.postsModel.countDocuments({ category: "Reggae" }).exec(),
+            country: await this.postsModel.countDocuments({ category: "country" }).exec(),
+            pop: await this.postsModel.countDocuments({ category: "pop" }).exec(),
+            classical: await this.postsModel.countDocuments({ category: "classical" }).exec(),
+            funk: await this.postsModel.countDocuments({ category: "funk" }).exec(),
+            soul: await this.postsModel.countDocuments({ category: "soul" }).exec(),
+            hipHop: await this.postsModel.countDocuments({ category: "hip-hop" }).exec(),
+            rock: await this.postsModel.countDocuments({ category: "rock" }).exec(),
+            electronic: await this.postsModel.countDocuments({ category: "electronic" }).exec(),
+            latin: await this.postsModel.countDocuments({ category: "latin" }).exec(),
+            jazz: await this.postsModel.countDocuments({ category: "jazz" }).exec(),
+            blues: await this.postsModel.countDocuments({ category: "blues" }).exec(),
+            folk: await this.postsModel.countDocuments({ category: "folk" }).exec(),
+            metal: await this.postsModel.countDocuments({ category: "metal" }).exec(),
+            reggae: await this.postsModel.countDocuments({ category: "reggae" }).exec(),
         }
     }
 
