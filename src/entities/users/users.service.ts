@@ -300,6 +300,7 @@ export class UsersService {
             id: dto.id,
             token: dto.token,
             name: dto.name,
+            email: dto.email,
         }
 
         return await user.save();

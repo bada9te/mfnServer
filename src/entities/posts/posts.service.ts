@@ -176,7 +176,7 @@ export class PostsService {
             classical: await this.postsModel.countDocuments({ category: "Classical" }).exec(),
             funk: await this.postsModel.countDocuments({ category: "Funk" }).exec(),
             soul: await this.postsModel.countDocuments({ category: "Soul" }).exec(),
-            hipHop: await this.postsModel.countDocuments({ category: "Hip Hop" }).exec(),
+            hipHop: await this.postsModel.countDocuments({ category: "Hip-hop" }).exec(),
             rock: await this.postsModel.countDocuments({ category: "Rock" }).exec(),
             electronic: await this.postsModel.countDocuments({ category: "Electronic" }).exec(),
             latin: await this.postsModel.countDocuments({ category: "Latin" }).exec(),
