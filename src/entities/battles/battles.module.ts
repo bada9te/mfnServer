@@ -3,6 +3,9 @@ import { BattlesService } from './battles.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Battle, BattleSchema } from './battles.schema';
 import { BattlesResolver } from './battles.resolver';
+import { Post } from 'src/graphql/graphql.schema';
+import { PostSchema } from '../posts/posts.schema';
+import { PostsModule } from '../posts/posts.module';
 
 @Module({
   imports: [
@@ -15,7 +18,7 @@ import { BattlesResolver } from './battles.resolver';
           return schema;
         }
       }
-    ])
+    ]),
   ],
   providers: [BattlesService, BattlesResolver],
   exports: [BattlesService],
