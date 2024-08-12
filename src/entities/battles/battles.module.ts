@@ -3,12 +3,11 @@ import { BattlesService } from './battles.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Battle, BattleSchema } from './battles.schema';
 import { BattlesResolver } from './battles.resolver';
-import { Post } from 'src/graphql/graphql.schema';
-import { PostSchema } from '../posts/posts.schema';
-import { PostsModule } from '../posts/posts.module';
+import { TasksModule } from 'src/utils/tasks/tasks.module';
 
 @Module({
   imports: [
+    TasksModule,
     MongooseModule.forFeatureAsync([
       {
         name: Battle.name,

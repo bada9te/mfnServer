@@ -4,6 +4,7 @@ import { PlannedTasksModule } from 'src/entities/planned-tasks/planned-tasks.mod
 
 @Module({
   imports: [PlannedTasksModule],
-  providers: [TasksService]
+  providers: [TasksService],
+  exports: [TasksService],
 })
 export class TasksModule {}

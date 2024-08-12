@@ -4,10 +4,15 @@ import { Battle } from './battles.schema';
 import { Model } from 'mongoose';
 import { CreateBattleDto, MakeBattleVoteDto } from './dto';
 import { RangeDto } from 'src/common/dto';
+import { TasksService } from 'src/utils/tasks/tasks.service';
+
 
 @Injectable()
 export class BattlesService {
-    constructor(@InjectModel(Battle.name) private battlesModel: Model<Battle>) {}
+    constructor(
+        @InjectModel(Battle.name) private battlesModel: Model<Battle>,
+        private tasksService: TasksService,
+    ) {}
     
     async addBattleByIds(battle: CreateBattleDto) {
         const dateEnd = new Date();
@@ -19,7 +24,15 @@ export class BattlesService {
         };
         const inserted = await this.battlesModel.insertMany([battleToInsert]);
         
-        // TODO: create PLANNED TASK TO FINISH BATTLE
+        // create CRON TASK TO FINISH BATTLE
+        this.tasksService.addCronJob(
+            inserted[0]._id.toString(), 
+            new Date(inserted[0].willFinishAt), 
+            () => {
+                this.setWinnerByBattleId(inserted[0]._id.toString());
+            }, 
+            "FINISH_BATTLE"
+        );
 
         return inserted[0];
     }
