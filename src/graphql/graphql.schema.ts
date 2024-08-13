@@ -450,6 +450,8 @@ export class UserAchievementsData {
     maxLikesByPost: number;
     maxSavesByPost: number;
     postCount: number;
+    maxLikesPostId?: Nullable<string>;
+    maxSavesPostId?: Nullable<string>;
 }
 
 type Nullable<T> = T | null;

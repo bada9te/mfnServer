@@ -111,9 +111,11 @@ input PrepareAccountToRestoreInput {
 
 type UserAchievementsData {
     achievements: [Int!]
-    totalLikes: Int!,
-    totalSaves: Int!,
-    maxLikesByPost: Int!,
-    maxSavesByPost: Int!,
-    postCount: Int!,
+    totalLikes: Int!
+    totalSaves: Int!
+    maxLikesByPost: Int!
+    maxSavesByPost: Int!
+    postCount: Int!
+    maxLikesPostId: String
+    maxSavesPostId: String
 }

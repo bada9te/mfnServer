@@ -188,15 +188,20 @@ export class PostsService {
         }
     }
 
-    async getPostsLikesAndSavesByOwner (userId: string) {
+    async getPostsLikesAndSavesByOwner(userId: string) {
         return await this.postsModel.aggregate([
+            // Match posts by owner
             { $match: { owner: new mongoose.Types.ObjectId(userId) } },
+            
+            // Calculate likes and saves counts
             {
                 $project: {
                     likesCount: { $size: "$likedBy" },
                     savesCount: { $size: "$savedBy" }
                 }
             },
+            
+            // Group by owner to calculate total likes, total saves, etc.
             {
                 $group: {
                     _id: "$owner",
@@ -207,6 +212,34 @@ export class PostsService {
                     postCount: { $sum: 1 }
                 }
             },
+            
+            // Lookup posts with max likes
+            {
+                $lookup: {
+                    from: "posts", // Assuming the collection name is 'posts'
+                    let: { maxLikes: "$maxLikesByPost" },
+                    pipeline: [
+                        { $match: { $expr: { $eq: [{ $size: "$likedBy" }, "$$maxLikes"] } } },
+                        { $project: { _id: 1, likesCount: { $size: "$likedBy" } } }
+                    ],
+                    as: "postsWithMaxLikes"
+                }
+            },
+            
+            // Lookup posts with max saves
+            {
+                $lookup: {
+                    from: "posts", // Assuming the collection name is 'posts'
+                    let: { maxSaves: "$maxSavesByPost" },
+                    pipeline: [
+                        { $match: { $expr: { $eq: [{ $size: "$savedBy" }, "$$maxSaves"] } } },
+                        { $project: { _id: 1, savesCount: { $size: "$savedBy" } } }
+                    ],
+                    as: "postsWithMaxSaves"
+                }
+            },
+            
+            // Project final output
             {
                 $project: {
                     _id: 0,
@@ -214,9 +247,11 @@ export class PostsService {
                     totalSaves: 1,
                     maxLikesByPost: 1,
                     maxSavesByPost: 1,
-                    postCount: 1
+                    postCount: 1,
+                    maxLikesPostId: { $arrayElemAt: ["$postsWithMaxLikes._id", 0] },
+                    maxSavesPostId: { $arrayElemAt: ["$postsWithMaxSaves._id", 0] }
                 }
             }
         ]);
-    }
+    }    
 }
