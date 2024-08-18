@@ -4,8 +4,6 @@ import { CronJob } from "cron";
 import { TTask } from './types';
 import { PlannedTasksService } from 'src/entities/planned-tasks/planned-tasks.service';
 import { BattlesService } from 'src/entities/battles/battles.service';
-import mongoose, { Mongoose } from 'mongoose';
-
 
 
 @Injectable()
