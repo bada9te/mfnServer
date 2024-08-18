@@ -16,4 +16,8 @@ export class PlannedTasksService {
     async deletePlannedTask(taskType: string, relatedEntityId: string) {
         return await this.plannedTasksModel.findOneAndDelete({taskType, relatedEntityId});
     }
+
+    async getAllTasks() {
+        return await this.plannedTasksModel.find();
+    }
 }

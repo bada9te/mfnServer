@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Battle } from './battles.schema';
-import { Model } from 'mongoose';
+import mongoose, { Model } from 'mongoose';
 import { CreateBattleDto, MakeBattleVoteDto } from './dto';
 import { RangeDto } from 'src/common/dto';
 import { TasksService } from 'src/utils/tasks/tasks.service';
@@ -42,31 +42,35 @@ export class BattlesService {
     }
 
     async setWinnerByBattleId(_id: string) {
+        // Fetch the battle document
+        const battle = await this.battlesModel.findById(_id).exec();
+        
+        if (!battle) {
+            throw new Error('Battle not found');
+        }
+    
+        // Determine the winner
+        let winner;
+        if (battle.post1Score > battle.post2Score) {
+            winner = battle.post1;
+        } else if (battle.post2Score > battle.post1Score) {
+            winner = battle.post2;
+        } else {
+            winner = null;
+        }
+    
+        // Update the document with the winner
         return await this.battlesModel.findByIdAndUpdate(
             _id,
             {
                 $set: {
-                    winner: {
-                        branches: [
-                            {
-                                case: { $gt: ["$post1Score", "$post2Score"] },
-                                then: "$post1"
-                            },
-                            {
-                                case: { $gt: ["$post2Score", "$post1Score"] },
-                                then: "$post2"
-                            },
-                            {
-                                case: { $eq: ["$post1Score", "$post2Score"] },
-                                then: null,
-                            }
-                        ],
-                    },
+                    winner: winner,
                     finished: true,
                 }
-            }
-        );
-    }
+            },
+            { new: true }
+        ).exec();
+    }    
 
     async getAllBattlesByStatus(finished: boolean, range: RangeDto) {
         return await this.battlesModel.find({ finished })

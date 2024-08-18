@@ -24,6 +24,7 @@ import { EjsAdapter } from '@nestjs-modules/mailer/dist/adapters/ejs.adapter';
 import { UploadModule } from './utils/upload/upload.module';
 import { MulterModule } from '@nestjs/platform-express';
 import { AchievementsModule } from './entities/achievement/achievements.module';
+import { OnApplicationBootstrapService } from './utils/init/on-bootstrap';
 
 @Module({
   imports: [
@@ -101,8 +102,9 @@ import { AchievementsModule } from './entities/achievement/achievements.module';
     EmailModule,
     AchievementsModule,
     // SOCKET IO 
-    SocketModule,
+    // SocketModule,
     UploadModule,
   ],
+  providers: [OnApplicationBootstrapService]
 })
 export class AppModule {}

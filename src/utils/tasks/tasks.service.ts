@@ -1,8 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { SchedulerRegistry,  } from '@nestjs/schedule';
 import { CronJob } from "cron";
 import { TTask } from './types';
 import { PlannedTasksService } from 'src/entities/planned-tasks/planned-tasks.service';
+import { BattlesService } from 'src/entities/battles/battles.service';
+import mongoose, { Mongoose } from 'mongoose';
 
 
 
@@ -11,6 +13,8 @@ export class TasksService {
     constructor(
         private scheduleRegistry: SchedulerRegistry,
         private plannedTasksService: PlannedTasksService,
+        @Inject(forwardRef(() => BattlesService))
+        private battlesService: BattlesService,
     ) {}
 
     private getUniqueTaskName(_id: string, taskType: TTask["taskType"]) {
@@ -26,5 +30,30 @@ export class TasksService {
     async cancelCronJob(_id: string, taskType: TTask["taskType"]) {
         this.scheduleRegistry.deleteCronJob(this.getUniqueTaskName(_id, taskType));
         this.plannedTasksService.deletePlannedTask(taskType, _id);
+    }
+
+    async reassignAllScheduledTasks() {
+        console.log("[CRON] Reassigning all tasks...");
+        const tasks = await this.plannedTasksService.getAllTasks();
+
+        tasks.forEach((task) => {
+            let cb: () => void;
+            switch (task.taskType) {
+                case "FINISH_BATTLE":
+                    cb = () => {
+                        this.battlesService.setWinnerByBattleId(task.relatedEntityId);
+                        this.plannedTasksService.deletePlannedTask(task.taskType, task.relatedEntityId);
+                    };
+                    break;
+                
+                default:
+                    break;
+            }
+
+            const job = new CronJob(task.date, cb);
+            this.scheduleRegistry.addCronJob(this.getUniqueTaskName(task.relatedEntityId, task.taskType as any), job);
+        });
+
+        console.log("[CRON] Reassigning all tasks... Done.");
     }
 }
