@@ -14,7 +14,6 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { EmailModule } from './utils/email/email.module';
-import { SocketModule } from './utils/socket/socket.module';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { ScheduleModule } from '@nestjs/schedule';
 import { TasksModule } from './utils/tasks/tasks.module';
@@ -25,6 +24,7 @@ import { UploadModule } from './utils/upload/upload.module';
 import { MulterModule } from '@nestjs/platform-express';
 import { AchievementsModule } from './entities/achievement/achievements.module';
 import { OnApplicationBootstrapService } from './utils/init/on-bootstrap';
+import { MinioModule } from 'nestjs-minio-client';
 
 @Module({
   imports: [
@@ -104,6 +104,20 @@ import { OnApplicationBootstrapService } from './utils/init/on-bootstrap';
     // SOCKET IO 
     // SocketModule,
     UploadModule,
+    MinioModule.registerAsync({
+      isGlobal: true,
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => {
+        return {
+          endPoint: config.get('MINIO_ENDPOINT'),
+          port: parseInt(config.get('MINIO_PORT')),
+          useSSL: true,
+          accessKey: config.get('MINIO_ACCESS_KEY'),
+          secretKey: config.get('MINIO_SECRET_KEY'),
+        };
+      },
+    }),
   ],
   providers: [OnApplicationBootstrapService]
 })

@@ -1,16 +1,19 @@
-import { Controller, Get, HttpStatus, MaxFileSizeValidator, Param, ParseFilePipe, ParseFilePipeBuilder, Post, Res, StreamableFile, UploadedFile, UploadedFiles, UseInterceptors } from '@nestjs/common';
-import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
+import { Controller, Get, HttpStatus, Inject, Param, Post, Res, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { Response } from 'express';
+import { createReadStream, existsSync, unlinkSync } from 'fs';
+import * as path from 'path';
+import { SharpPipe } from './pipes/sharp.pipe';
+import { MinioService } from 'nestjs-minio-client';
 import { diskStorage } from 'multer';
 import { editFileName, uploadFileFilter } from './upload.utils';
-import { Response } from 'express';
-import { createReadStream, existsSync } from 'fs';
-import path, { join } from 'path';
-import { SharpPipe } from './sharp.pipe';
-import { FFMpegPipe } from './ffmpeg.pipe';
 
 
 @Controller('files')
 export class UploadController {
+    constructor (private readonly minioService: MinioService) {}
+
+
     @Post('upload-image')
     @UseInterceptors(FileInterceptor('file'))
     uploadImageFile(@UploadedFile(
@@ -19,6 +22,17 @@ export class UploadController {
         const response = {
             filename,
         };
+
+        const target = path.join(__dirname, "..", "..", "..", "uploads", filename);
+
+        this.minioService.client.fPutObject(
+            "images",
+            filename,
+            target,
+        );
+
+        unlinkSync(target);
+
         return {
             status: HttpStatus.OK,
             message: 'Uploaded.',
@@ -27,13 +41,28 @@ export class UploadController {
     }
 
     @Post('upload-audio')
-    @UseInterceptors(FileInterceptor('file'))
-    uploadAudioFile(@UploadedFile(
-        FFMpegPipe
-    ) file: Express.Multer.File) {
+    @UseInterceptors(FileInterceptor('file', {
+        storage: diskStorage({
+            destination: './uploads',
+            filename: editFileName,
+        }),
+        fileFilter: uploadFileFilter,
+    }))
+    uploadAudioFile(@UploadedFile() file: Express.Multer.File) {
         const response = {
             filename: file.filename,
         };
+
+        const target = path.join(__dirname, "..", "..", "..", "uploads", response.filename);
+
+        this.minioService.client.fPutObject(
+            "audios",
+            response.filename,
+            target,
+        );
+
+        unlinkSync(target);
+
         return {
             status: HttpStatus.OK,
             message: 'Uploaded.',
@@ -69,15 +98,19 @@ export class UploadController {
     */
 
 
-    @Get(':filename')
-    getImage(@Param('filename') fileName, @Res() res: Response) {
+    @Get(':bucket/:filename')
+    async getImage(
+        @Param('filename') fileName: string, 
+        @Param('bucket') bucket: string,
+        @Res() res: Response
+    ) {
         try {
-            const filePath = join(process.cwd(), 'uploads', fileName);
-            if (!existsSync(filePath)) {
-                throw new Error();
-            }
-            const file = createReadStream(filePath);
-            file.pipe(res);
+            const readableStream = await this.minioService.client.getObject(
+                bucket,
+                fileName,
+            );
+
+            readableStream.pipe(res);
         } catch (error) {
             return res.status(404);
         }
