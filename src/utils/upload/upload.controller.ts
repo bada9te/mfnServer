@@ -3,10 +3,11 @@ import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { editFileName, uploadFileFilter } from './upload.utils';
 import { Response } from 'express';
-import { createReadStream } from 'fs';
-import { join } from 'path';
+import { createReadStream, existsSync } from 'fs';
+import path, { join } from 'path';
 import { SharpPipe } from './sharp.pipe';
-import { PipesContextCreator } from '@nestjs/core/pipes';
+import { FFMpegPipe } from './ffmpeg.pipe';
+
 
 @Controller('files')
 export class UploadController {
@@ -26,15 +27,9 @@ export class UploadController {
     }
 
     @Post('upload-audio')
-    @UseInterceptors(FileInterceptor('file', {
-        storage: diskStorage({
-            destination: './uploads',
-            filename: editFileName,
-        }),
-        fileFilter: uploadFileFilter,
-    }))
+    @UseInterceptors(FileInterceptor('file'))
     uploadAudioFile(@UploadedFile(
-
+        FFMpegPipe
     ) file: Express.Multer.File) {
         const response = {
             filename: file.filename,
@@ -78,6 +73,9 @@ export class UploadController {
     getImage(@Param('filename') fileName, @Res() res: Response) {
         try {
             const filePath = join(process.cwd(), 'uploads', fileName);
+            if (!existsSync(filePath)) {
+                throw new Error();
+            }
             const file = createReadStream(filePath);
             file.pipe(res);
         } catch (error) {
