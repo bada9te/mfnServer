@@ -13,7 +13,7 @@ async function bootstrap() {
 
   app.use(
     session({
-      secret: 'my-secret',
+      secret: process.env.SESSION_SECRET,
       resave: false,
       saveUninitialized: false,
       cookie: { secure: false },
@@ -24,7 +24,7 @@ async function bootstrap() {
 
   app.enableCors({
     origin: process.env.CLIENT_BASE,
-    credentials: true, // Allow credentials
+    credentials: true,
   });
   
   await app.listen(8000);

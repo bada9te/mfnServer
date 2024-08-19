@@ -236,55 +236,67 @@ export class UsersService {
         }
 
         const data = await this.postsService.getPostsLikesAndSavesByOwner(user._id.toString());
-        const {postCount, totalLikes, totalSaves, singlePostMaxLikes, singlePostmaxSaves} = data[0];
 
-        const achievements: number[] = [];
-
-        if (postCount > 0) {
-            achievements.push(1);
-
-            // tarcks
-            if (postCount >= 100) {
-                achievements.push(8);
-
-                postCount >= 250 && achievements.push(12);
+        if (data[0]) {
+            const {postCount, totalLikes, totalSaves, singlePostMaxLikes, singlePostmaxSaves} = data[0];
+    
+            const achievements: number[] = [];
+    
+            if (postCount > 0) {
+                achievements.push(1);
+    
+                // tarcks
+                if (postCount >= 100) {
+                    achievements.push(8);
+    
+                    postCount >= 250 && achievements.push(12);
+                }
+    
+                // likes
+                if (totalLikes > 0) {
+                    achievements.push(2);
+                    totalLikes >= 1000 && achievements.push(4);
+                    singlePostMaxLikes >= 2500 && achievements.push(5);
+                    totalLikes >= 5000 && achievements.push(7);
+                    totalLikes >= 10000 && achievements.push(9);
+                    singlePostMaxLikes >= 10000 && achievements.push(13);
+                }
+    
+                // saves
+                if (totalSaves > 0) {
+                    achievements.push(3);
+    
+                    singlePostmaxSaves >= 1000 && achievements.push(6);
+                    totalSaves >= 5000 && achievements.push(10);
+    
+                }
+    
+                // likes and saves combined
+                if (totalLikes + totalSaves >= 20000) {
+                    achievements.push(11);
+    
+                    totalLikes + totalSaves >= 50000 && achievements.push(14);
+                    totalLikes + totalSaves >= 100000 && achievements.push(15);
+                    totalLikes >= 500000 && totalSaves >= 500000 && achievements.push(18);
+                    totalLikes + totalSaves >= 1000000 && achievements.push(19);
+                }
             }
-
-            // likes
-            if (totalLikes > 0) {
-                achievements.push(2);
-                totalLikes >= 1000 && achievements.push(4);
-                singlePostMaxLikes >= 2500 && achievements.push(5);
-                totalLikes >= 5000 && achievements.push(7);
-                totalLikes >= 10000 && achievements.push(9);
-                singlePostMaxLikes >= 10000 && achievements.push(13);
-            }
-
-            // saves
-            if (totalSaves > 0) {
-                achievements.push(3);
-
-                singlePostmaxSaves >= 1000 && achievements.push(6);
-                totalSaves >= 5000 && achievements.push(10);
-
-            }
-
-            // likes and saves combined
-            if (totalLikes + totalSaves >= 20000) {
-                achievements.push(11);
-
-                totalLikes + totalSaves >= 50000 && achievements.push(14);
-                totalLikes + totalSaves >= 100000 && achievements.push(15);
-                totalLikes >= 500000 && totalSaves >= 500000 && achievements.push(18);
-                totalLikes + totalSaves >= 1000000 && achievements.push(19);
+    
+    
+            return { 
+                ...data[0],
+                achievements,
+            };
+        } else {
+            return {
+                achievements: [],
+                totalLikes: 0,
+                totalSaves: 0,
+                maxLikesByPost: 0,
+                maxSavesByPost: 0,
+                postCount: 0,
             }
         }
-
-
-        return { 
-            ...data[0],
-            achievements,
-        };
     }
 
 

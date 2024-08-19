@@ -1,15 +1,31 @@
-import { Controller, Get, HttpStatus, Param, ParseFilePipeBuilder, Post, Res, StreamableFile, UploadedFile, UploadedFiles, UseInterceptors } from '@nestjs/common';
+import { Controller, Get, HttpStatus, MaxFileSizeValidator, Param, ParseFilePipe, ParseFilePipeBuilder, Post, Res, StreamableFile, UploadedFile, UploadedFiles, UseInterceptors } from '@nestjs/common';
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { editFileName, uploadFileFilter } from './upload.utils';
 import { Response } from 'express';
 import { createReadStream } from 'fs';
-import { extname, join } from 'path';
+import { join } from 'path';
+import { SharpPipe } from './sharp.pipe';
+import { PipesContextCreator } from '@nestjs/core/pipes';
 
 @Controller('files')
 export class UploadController {
+    @Post('upload-image')
+    @UseInterceptors(FileInterceptor('file'))
+    uploadImageFile(@UploadedFile(
+        SharpPipe
+    ) filename: string) {
+        const response = {
+            filename,
+        };
+        return {
+            status: HttpStatus.OK,
+            message: 'Uploaded.',
+            data: response,
+        }
+    }
 
-    @Post('upload')
+    @Post('upload-audio')
     @UseInterceptors(FileInterceptor('file', {
         storage: diskStorage({
             destination: './uploads',
@@ -17,16 +33,10 @@ export class UploadController {
         }),
         fileFilter: uploadFileFilter,
     }))
-    uploadFile(
-        @UploadedFile(
-            new ParseFilePipeBuilder()
-                .addMaxSizeValidator({ maxSize: 50000000, message: "File size must be less then 4MB" })
-                .build()
-        ) 
-        file: Express.Multer.File
-    ) {
+    uploadAudioFile(@UploadedFile(
+
+    ) file: Express.Multer.File) {
         const response = {
-            originalname: file.originalname,
             filename: file.filename,
         };
         return {
@@ -36,6 +46,8 @@ export class UploadController {
         }
     }
 
+
+    /*
     @Post('upload-multiple')
     @UseInterceptors(FilesInterceptor('files', 10, {
         storage: diskStorage({
@@ -59,6 +71,7 @@ export class UploadController {
             data: response,
         };
     }
+    */
 
 
     @Get(':filename')
