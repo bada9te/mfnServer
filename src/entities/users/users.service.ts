@@ -303,8 +303,9 @@ export class UsersService {
     // link google
     async linkGoogle(dto: LinkGoogleDto) {
         const user = await this.getUserById(dto.userId);
+        const userWithGoogle = await this.userModel.findOne({"google.id": dto.id}); 
 
-        if (!user) {
+        if (!user || userWithGoogle) {
             throw new BadRequestException();
         }
 
@@ -334,8 +335,9 @@ export class UsersService {
     // link Facebook
     async linkFacebook(dto: LinkFacebookDto) {
         const user = await this.getUserById(dto.userId);
+        const userWithFacebook = await this.userModel.findOne({"facebook.id": dto.id});
 
-        if (!user) {
+        if (!user || userWithFacebook) {
             throw new BadRequestException();
         }
 
@@ -364,8 +366,9 @@ export class UsersService {
     // link twitter
     async linkTwitter(dto: LinkTwitterDto) {
         const user = await this.getUserById(dto.userId);
+        const userWithTwitter = this.userModel.findOne({"twitter.id": dto.id});
 
-        if (!user) {
+        if (!user || userWithTwitter) {
             throw new BadRequestException();
         }
 
