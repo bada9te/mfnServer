@@ -8,6 +8,8 @@ type Notification {
     receiver: User!
     sender: User!
     post: Post
+    battle: Battle
+    type: String!
     text: String!
     checked: Boolean!
     createdAt: String!

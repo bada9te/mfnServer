@@ -330,6 +330,8 @@ export class Notification {
     receiver: User;
     sender: User;
     post?: Nullable<Post>;
+    battle?: Nullable<Battle>;
+    type: string;
     text: string;
     checked: boolean;
     createdAt: string;
