@@ -37,6 +37,10 @@ export class BattlesService {
         return inserted[0];
     }
 
+    async getBattleById(_id: string) {
+        return await this.battlesModel.findById(_id);
+    }
+
     async deleteBattle(_id: string) {
         return await this.battlesModel.findByIdAndDelete(_id);
     }

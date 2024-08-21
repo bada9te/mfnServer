@@ -20,6 +20,11 @@ export class BattlesResolver {
         }
     }
 
+    @Query()
+    async battleById(@Args('_id') _id: string) {
+        return await this.battlesService.getBattleById(_id);
+    }
+
     // battleCreate
     @Mutation()
     @UseGuards(GqlAuthGuard)

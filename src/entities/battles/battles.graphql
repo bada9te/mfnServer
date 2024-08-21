@@ -1,4 +1,5 @@
 type Query {
+    battleById(_id: ID!): Battle!
     battlesByStatus(finished: Boolean!, offset: Int!, limit: Int!): BattlesWithCount!
 }
 
