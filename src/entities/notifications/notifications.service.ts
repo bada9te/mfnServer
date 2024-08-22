@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Notification } from './notifications.schema';
 import { Model } from 'mongoose';
-import { CreateNotificationDto } from './dto';
+import { CreateManyNotificationsDto, CreateNotificationDto } from './dto';
 
 @Injectable()
 export class NotificationsService {
@@ -60,14 +60,7 @@ export class NotificationsService {
     }
 
 
-    async createManyNotifications(
-        from: string, 
-        text: string, 
-        to: string[], 
-        relatedEntityId: string, 
-        type: "SUBSCRIBED" | "BATTLE_CREATED" | "BATTLE_FINISHED" | "POST_REPORTED" | "POST_CREATED" | "SYSTEM",
-        entityType?: "post" | "battle",
-    ) {
+    async createManyNotifications({from, text, to, relatedEntityId, type, entityType}: CreateManyNotificationsDto) {
         const notifications = to.map(i => {
             const data = {
                 sender: from,
@@ -80,6 +73,6 @@ export class NotificationsService {
                 data[entityType] = relatedEntityId;
             }
         });
-        return await this.notificationsModel.insertMany([])
+        return await this.notificationsModel.insertMany(notifications);
     }
 }

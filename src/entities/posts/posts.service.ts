@@ -19,14 +19,14 @@ export class PostsService {
         const inserted = await this.postsModel.insertMany([post]);
         const owner = await this.usersService.getUserById(post.owner);
 
-        await this.notificationsService.createManyNotifications(
-            post.owner, 
-            "Hey, user {user} has just uploaded a new track {post}", 
-            owner.subscribers.map(i => i._id.toString()),
-            inserted[0]._id.toString(),
-            "POST_CREATED",
-            "post"
-        );
+        await this.notificationsService.createManyNotifications({
+            from: post.owner,
+            to: owner.subscribers.map(i => i._id.toString()),
+            text: "Hey, user {user} has just uploaded a new track {post}",
+            type: "POST_CREATED",
+            entityType: "post",
+            relatedEntityId: inserted[0]._id.toString(),
+        });
         return inserted[0];
     }
 
