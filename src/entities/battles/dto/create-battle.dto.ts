@@ -13,4 +13,8 @@ export class CreateBattleDto extends AddNewBattleByPostsIdsInput {
     @IsNotEmpty()
     @IsString()
     post2: string;
+
+    @IsNotEmpty()
+    @IsString()
+    initiator: string;
 }

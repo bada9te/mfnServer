@@ -10,6 +10,9 @@ export class Battle {
     @Prop({ required: true })
     title: string;
 
+    @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
+    initiator: UserDocument;
+
     @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Post', autopopulate: true })
     post1: PostDocument;
 

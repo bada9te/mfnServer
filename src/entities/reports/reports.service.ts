@@ -4,14 +4,32 @@ import { Report } from './reports.schema';
 import { Model } from 'mongoose';
 import { CreateReportDto } from './dto';
 import { RangeDto } from 'src/common/dto';
+import { PostsService } from '../posts/posts.service';
+import { NotificationsService } from '../notifications/notifications.service';
+import { notificationsText } from '../notifications/notifications.config';
 
 @Injectable()
 export class ReportsService {
-    constructor(@InjectModel(Report.name) private reportsModel: Model<Report>) {}
+    constructor(
+        @InjectModel(Report.name) private reportsModel: Model<Report>,
+        private postsService: PostsService,
+        private notificationsService: NotificationsService,
+    ) {}
 
     // create
     async createReport(report: CreateReportDto) {
         const inserted = await this.reportsModel.insertMany([report]);
+        if (report.reportedPost && !report.email) {
+            const post = await this.postsService.getPostById(report.reportedPost);
+            if (post) {
+                await this.notificationsService.createNotification({
+                    receiver: post.owner._id.toString(),
+                    post: report.reportedPost,
+                    text: notificationsText.postReported,
+                    type: "POST_REPORTED",
+                });
+            }
+        }
         return inserted[0];
     }
 

@@ -6,6 +6,7 @@ import { CreatePostDto } from './dto';
 import { RangeDto } from 'src/common/dto';
 import { UsersService } from '../users/users.service';
 import { NotificationsService } from '../notifications/notifications.service';
+import { notificationsText } from '../notifications/notifications.config';
 
 @Injectable()
 export class PostsService {
@@ -22,7 +23,7 @@ export class PostsService {
         await this.notificationsService.createManyNotifications({
             from: post.owner,
             to: owner.subscribers.map(i => i._id.toString()),
-            text: "Hey, user {user} has just uploaded a new track {post}",
+            text: notificationsText.newPost,
             type: "POST_CREATED",
             entityType: "post",
             relatedEntityId: inserted[0]._id.toString(),

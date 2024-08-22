@@ -6,7 +6,7 @@ type Query {
 type Notification {
     _id: ID!
     receiver: User!
-    sender: User!
+    sender: User
     post: Post
     battle: Battle
     type: String!
@@ -34,7 +34,8 @@ type Mutation {
 
 input CreateNotificationInput {
     receiver: ID!
-    sender: ID!
+    sender: ID
     post: ID
     text: String!
+    type: String!
 }

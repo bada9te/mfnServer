@@ -14,6 +14,7 @@ export class Range {
 }
 
 export class AddNewBattleByPostsIdsInput {
+    initiator: string;
     title: string;
     post1: string;
     post2: string;
@@ -40,9 +41,10 @@ export class ModerateActionInput {
 
 export class CreateNotificationInput {
     receiver: string;
-    sender: string;
+    sender?: Nullable<string>;
     post?: Nullable<string>;
     text: string;
+    type: string;
 }
 
 export class CreatePlaylistInput {
@@ -166,6 +168,8 @@ export abstract class IQuery {
     abstract achievementsByPos(pos: number[]): Nullable<Achievement[]> | Promise<Nullable<Achievement[]>>;
 
     abstract achievemenmtsCount(): number | Promise<number>;
+
+    abstract battleById(_id: string): Battle | Promise<Battle>;
 
     abstract battlesByStatus(finished: boolean, offset: number, limit: number): BattlesWithCount | Promise<BattlesWithCount>;
 
@@ -328,7 +332,7 @@ export class ModerationAction {
 export class Notification {
     _id: string;
     receiver: User;
-    sender: User;
+    sender?: Nullable<User>;
     post?: Nullable<Post>;
     battle?: Nullable<Battle>;
     type: string;

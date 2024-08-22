@@ -1,10 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Battle } from './battles.schema';
-import mongoose, { Model } from 'mongoose';
+import { Model } from 'mongoose';
 import { CreateBattleDto, MakeBattleVoteDto } from './dto';
 import { RangeDto } from 'src/common/dto';
 import { TasksService } from 'src/utils/tasks/tasks.service';
+import { NotificationsService } from '../notifications/notifications.service';
+import { PostsService } from '../posts/posts.service';
+import { notificationsText } from '../notifications/notifications.config';
 
 
 @Injectable()
@@ -12,6 +15,8 @@ export class BattlesService {
     constructor(
         @InjectModel(Battle.name) private battlesModel: Model<Battle>,
         private tasksService: TasksService,
+        private notificationsService: NotificationsService,
+        private postsService: PostsService,
     ) {}
     
     async addBattleByIds(battle: CreateBattleDto) {
@@ -23,13 +28,32 @@ export class BattlesService {
             willFinishAt: dateEnd.toISOString(),
         };
         const inserted = await this.battlesModel.insertMany([battleToInsert]);
+        const relatedPosts = await this.postsService.getManyByIds([battle.post1, battle.post2]);
+
+        await this.notificationsService.createManyNotifications({
+            from: battle.initiator,
+            to: relatedPosts.map(i => i.owner._id.toString()),
+            text: notificationsText.battleStarted,
+            type: "BATTLE_CREATED",
+            entityType: "battle",
+            relatedEntityId: inserted[0]._id.toString(),
+        });
         
         // create CRON TASK TO FINISH BATTLE
         this.tasksService.addCronJob(
             inserted[0]._id.toString(), 
             new Date(inserted[0].willFinishAt), 
-            () => {
+            async() => {
                 this.setWinnerByBattleId(inserted[0]._id.toString());
+                // send notifications
+                await this.notificationsService.createManyNotifications({
+                    from: battle.initiator,
+                    to: relatedPosts.map(i => i.owner._id.toString()),
+                    text: notificationsText.battleFinished,
+                    type: "BATTLE_FINISHED",
+                    entityType: "battle",
+                    relatedEntityId: inserted[0]._id.toString(),
+                });
             }, 
             "FINISH_BATTLE"
         );

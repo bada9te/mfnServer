@@ -11,7 +11,7 @@ export class Notification {
     @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true, autopopulate: true })
     receiver: UserDocument;
 
-    @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true, autopopulate: true })
+    @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User', required: false, autopopulate: true })
     sender: UserDocument;
 
     @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Post', autopopulate: true })

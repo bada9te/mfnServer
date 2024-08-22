@@ -4,6 +4,8 @@ import { CronJob } from "cron";
 import { TTask } from './types';
 import { PlannedTasksService } from 'src/entities/planned-tasks/planned-tasks.service';
 import { BattlesService } from 'src/entities/battles/battles.service';
+import { NotificationsService } from 'src/entities/notifications/notifications.service';
+import { notificationsText } from 'src/entities/notifications/notifications.config';
 
 
 @Injectable()
@@ -13,6 +15,7 @@ export class TasksService {
         private plannedTasksService: PlannedTasksService,
         @Inject(forwardRef(() => BattlesService))
         private battlesService: BattlesService,
+        private notificationsService: NotificationsService,
     ) {}
 
     private getUniqueTaskName(_id: string, taskType: TTask["taskType"]) {
@@ -38,9 +41,20 @@ export class TasksService {
             let cb: () => void;
             switch (task.taskType) {
                 case "FINISH_BATTLE":
-                    cb = () => {
-                        this.battlesService.setWinnerByBattleId(task.relatedEntityId);
-                        this.plannedTasksService.deletePlannedTask(task.taskType, task.relatedEntityId);
+                    cb = async() => {
+                        // get battle
+                        const battle = await this.battlesService.setWinnerByBattleId(task.relatedEntityId);
+                        // delete task
+                        await this.plannedTasksService.deletePlannedTask(task.taskType, task.relatedEntityId);
+                        // send notifications
+                        await this.notificationsService.createManyNotifications({
+                            from: battle.initiator._id.toString(),
+                            to: [battle.post1.owner._id.toString(), battle.post2.owner._id.toString()],
+                            text: notificationsText.battleFinished,
+                            type: "BATTLE_FINISHED",
+                            entityType: "battle",
+                            relatedEntityId: battle._id.toString(),
+                        });
                     };
                     break;
                 

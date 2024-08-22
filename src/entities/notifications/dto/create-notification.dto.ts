@@ -8,7 +8,7 @@ export class CreateNotificationDto extends CreateNotificationInput {
 
     @IsNotEmpty()
     @IsString()
-    sender: string;
+    sender?: string;
 
     @IsString()
     post?: string;
