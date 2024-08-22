@@ -1,16 +1,32 @@
-import { Injectable } from '@nestjs/common';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Post } from './posts.schema';
 import mongoose, { Model } from 'mongoose';
 import { CreatePostDto } from './dto';
 import { RangeDto } from 'src/common/dto';
+import { UsersService } from '../users/users.service';
+import { NotificationsService } from '../notifications/notifications.service';
 
 @Injectable()
 export class PostsService {
-    constructor(@InjectModel(Post.name) private postsModel: Model<Post>) {}
+    constructor(
+        @InjectModel(Post.name) private postsModel: Model<Post>,
+        @Inject(forwardRef(() => UsersService)) private usersService: UsersService,
+        private notificationsService: NotificationsService
+    ) {}
     
     async addPost(post: CreatePostDto) {
         const inserted = await this.postsModel.insertMany([post]);
+        const owner = await this.usersService.getUserById(post.owner);
+
+        await this.notificationsService.createManyNotifications(
+            post.owner, 
+            "Hey, user {user} has just uploaded a new track {post}", 
+            owner.subscribers.map(i => i._id.toString()),
+            inserted[0]._id.toString(),
+            "POST_CREATED",
+            "post"
+        );
         return inserted[0];
     }
 

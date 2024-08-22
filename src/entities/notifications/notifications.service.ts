@@ -58,4 +58,28 @@ export class NotificationsService {
     async getDocsCount(filter: any) {
         return this.notificationsModel.countDocuments(filter).exec();
     }
+
+
+    async createManyNotifications(
+        from: string, 
+        text: string, 
+        to: string[], 
+        relatedEntityId: string, 
+        type: "SUBSCRIBED" | "BATTLE_CREATED" | "BATTLE_FINISHED" | "POST_REPORTED" | "POST_CREATED" | "SYSTEM",
+        entityType?: "post" | "battle",
+    ) {
+        const notifications = to.map(i => {
+            const data = {
+                sender: from,
+                receiver: i,
+                text,
+                type,
+            }
+
+            if (relatedEntityId && entityType) {
+                data[entityType] = relatedEntityId;
+            }
+        });
+        return await this.notificationsModel.insertMany([])
+    }
 }
