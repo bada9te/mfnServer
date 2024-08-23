@@ -3,6 +3,8 @@ import { AppModule } from './app.module';
 import * as cookieParser from 'cookie-parser';
 import * as compression from 'compression';
 import * as session from 'express-session';
+import express from "express";
+import path from "path";
 require("dotenv").config();
 
 
@@ -26,6 +28,8 @@ async function bootstrap() {
     origin: process.env.CLIENT_BASE,
     credentials: true,
   });
+
+  app.use(express.static(path.join(__dirname, 'public')));
   
   await app.listen(8000);
 }
