@@ -3,8 +3,8 @@ import { AppModule } from './app.module';
 import * as cookieParser from 'cookie-parser';
 import * as compression from 'compression';
 import * as session from 'express-session';
-import express from "express";
-import path from "path";
+import * as express from "express";
+import * as path from "path";
 require("dotenv").config();
 
 
