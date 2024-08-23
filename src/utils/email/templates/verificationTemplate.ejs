@@ -4,3 +4,42 @@
     <a href=<%= locals.link %>>Click me to verify</a>
     <p>Use this passcode: <%= locals.passcode %></p>
 </main>
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <div class="container">
+    <div class="container-head">
+        <img src=<%= logoUrl %> alt="logo">
+        MFN
+    </div>
+      <div class="container-subhead">Account Verification</div>
+      <div class="padding">
+        <p class="container-text">This message was generated automatically and don't need to be replied</p>
+        <hr class="delimiter">
+            <h3>Welcome <%= locals.userName %>!</h3>
+            <p>Pls, verify your account using link below:</p>
+            <a href=<%= locals.link %>>Verify</a>
+            <p>Use this passcode:</p>
+            <div class="passcode-wrapper">
+                <div class="passcode">
+                    <%= locals.passcode %>
+                </div>
+            </div>
+        <p>Wasn’t you? You can safely ignore this email.</p>
+        <hr class="delimiter">
+        <p class="container-text">Music From Nothing 2024</p>
+      </div>
+    </div>
+  </div>  
+</body>
+</html>
+
+
