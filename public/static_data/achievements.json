@@ -1,0 +1,173 @@
+[
+    { 
+        "rarity": "common",
+        "title": "First Post", 
+        "achievement": "Published your first musical post.",
+        "description": "Congratulations on sharing your first track or musical content with the world!",
+        "type": "basic",
+        "posNumber": 1,
+        "rp": 25
+    },
+    { 
+        "rarity": "common",
+        "title": "First Like", 
+        "achievement": "Received your first like on a musical post.",
+        "description": "Your music has struck a chord with at least one listener. Keep sharing!",
+        "type": "basic",
+        "posNumber": 2,
+        "rp": 25
+    },
+    { 
+        "rarity": "common",
+        "title": "First Save", 
+        "achievement": "Your post has been saved to a bookmark for the first time.",
+        "description": "Someone enjoyed your music so much that they wanted to keep it for later. Well done!",
+        "type": "basic",
+        "posNumber": 3,
+        "rp": 25
+    },
+    { 
+        "rarity": "common",
+        "title": "Growing Audience", 
+        "achievement": "Accumulated 1,000 likes on your posts.",
+        "description": "Your music is gaining traction! 1,000 likes is a solid start.",
+        "type": "likes-total",
+        "posNumber": 4,
+        "rp": 100
+    },
+    { 
+        "rarity": "common",
+        "title": "Fan Favorite", 
+        "achievement": "Reached 2,500 likes on a single post.",
+        "description": "Some track has become a favorite among your listeners!",
+        "type": "likes-single",
+        "posNumber": 5,
+        "rp": 250
+    },
+    { 
+        "rarity": "common",
+        "title": "Bookmark Champion", 
+        "achievement": "Received 1,000 saves on a single post.",
+        "description": "Your post is a hit with fans who want to keep it handy.",
+        "type": "saves",
+        "posNumber": 6,
+        "rp": 100
+    },
+    { 
+        "rarity": "rare",
+        "title": "Profile Popularity", 
+        "achievement": "Your profile has received 5,000 total likes on all posts combined.",
+        "description": "Your content is resonating with the community. Keep it up!",
+        "type": "likes-total",
+        "posNumber": 7,
+        "rp": 500
+    },
+    { 
+        "rarity": "rare",
+        "title": "Content Creator", 
+        "achievement": "Published 100 unique musical posts.",
+        "description": "You've been consistently sharing your music. This is the mark of a dedicated creator!",
+        "type": "tracks",
+        "posNumber": 8,
+        "rp": 1000
+    },
+    { 
+        "rarity": "uncommon",
+        "title": "Social Star", 
+        "achievement": "Gained 10,000 total likes on all posts combined.",
+        "description": "Your music is becoming increasingly popular. You're a rising star!",
+        "type": "likes-total",
+        "posNumber": 9,
+        "rp": 1000
+    },
+    { 
+        "rarity": "uncommon",
+        "title": "Bookmark Enthusiast", 
+        "achievement": "Your posts have received 5,000 total saves.",
+        "description": "Listeners are finding your music worth keeping in their playlists!",
+        "type": "saves-total",
+        "posNumber": 10,
+        "rp": 500
+    },
+    { 
+        "rarity": "uncommon",
+        "title": "Profile Influencer", 
+        "achievement": "Reached 20,000 total likes and saves combined.",
+        "description": "Your influence is growing in the community. Keep engaging and creating!",
+        "type": "likes-and-saves",
+        "posNumber": 11,
+        "rp": 2000
+    },
+    { 
+        "rarity": "uncommon", 
+        "title": "Top content creator",
+        "achievement": "Published 250 unique musical posts.",
+        "description": "Your contribution to the site is significant. Your dedication to sharing music is commendable!",
+        "type": "tracks",
+        "posNumber": 12,
+        "rp": 2500
+    },
+    { 
+        "rarity": "uncommon",
+        "title": "Trending Artist", 
+        "achievement": "Achieved 10,000 likes on a single post.",
+        "description": "Your music is trending and capturing widespread attention.",
+        "type": "likes",
+        "posNumber": 13,
+        "rp": 1000
+    },
+    { 
+        "rarity": "uncommon",
+        "title": "Legendary Creator", 
+        "achievement": "Reached 50,000 total likes and saves combined.",
+        "description": "You've established yourself as a prominent and influential figure in the music community!",
+        "type": "likes-and-saves",
+        "posNumber": 14,
+        "rp": 5000
+    },
+    { 
+        "rarity": "uncommon",
+        "title": "Ultimate Fan Engagement", 
+        "achievement": "Received 100,000 likes and saves combined.",
+        "description": "Your music has captured the hearts of many. You're a beloved artist in our community!",
+        "type": "likes-and-saves",
+        "posNumber": 15,
+        "rp": 10000
+    },
+    { 
+        "rarity": "legendary",
+        "title": "Master of the Mix", 
+        "achievement": "Created a musical post that reached the top of the site’s featured list.",
+        "description": "Your content has gained significant recognition and visibility.",
+        "type": "basic",
+        "posNumber": 16,
+        "rp": 1500
+    },
+    { 
+        "rarity": "legendary",
+        "title": "Community Favorite", 
+        "achievement": "Earned a spot in the top 10 most liked posts of the month.",
+        "description": "Your post has resonated strongly with the community. Congratulations on the recognition!",
+        "type": "basic",
+        "posNumber": 17,
+        "rp": 800
+    },
+    { 
+        "rarity": "legendary",
+        "title": "Influencer Status", 
+        "achievement": "Reached 500,000 total likes and 500,000 saves across all posts.",
+        "description": "Your influence in the community is undeniable. Your music is making waves!",
+        "type": "likes-and-saves-equals",
+        "posNumber": 18,
+        "rp": 5000
+    },
+    { 
+        "rarity": "legendary",
+        "title": "Hall of Fame", 
+        "achievement": "Accumulated 1,000,000 total likes and saves combined.",
+        "description": "You're a legendary figure in our music community. Your impact is substantial and lasting!",
+        "type": "likes-and-saves",
+        "posNumber": 19,
+        "rp": 10000
+    }
+]

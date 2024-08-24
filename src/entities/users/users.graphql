@@ -118,4 +118,5 @@ type UserAchievementsData {
     postCount: Int!
     maxLikesPostId: String
     maxSavesPostId: String
+    totalRP: Int!
 }

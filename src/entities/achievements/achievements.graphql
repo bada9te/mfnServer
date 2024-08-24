@@ -6,6 +6,7 @@ type Achievement {
     type: String
     rarity: String
     posNumber: Int
+    rp: Int
 }
 
 type Query {

@@ -158,6 +158,7 @@ export class Achievement {
     type?: Nullable<string>;
     rarity?: Nullable<string>;
     posNumber?: Nullable<number>;
+    rp?: Nullable<number>;
 }
 
 export abstract class IQuery {
@@ -458,6 +459,7 @@ export class UserAchievementsData {
     postCount: number;
     maxLikesPostId?: Nullable<string>;
     maxSavesPostId?: Nullable<string>;
+    totalRP: number;
 }
 
 type Nullable<T> = T | null;

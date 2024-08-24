@@ -7,7 +7,7 @@ import { ModerationsService } from '../moderations/moderations.service';
 import * as bcrypt from 'bcrypt';
 import { EmailService } from 'src/utils/email/email.service';
 import { PostsService } from '../posts/posts.service';
-import { NotificationsService } from '../notifications/notifications.service';
+import { AchievementsService } from '../achievements/achievements.service';
 
 
 @Injectable()
@@ -17,6 +17,7 @@ export class UsersService {
         private moderationsService: ModerationsService,
         private emailService: EmailService,
         private postsService: PostsService,
+        private achievementsService: AchievementsService,
     ) {}
 
     // add new user
@@ -238,7 +239,13 @@ export class UsersService {
         const data = await this.postsService.getPostsLikesAndSavesByOwner(user._id.toString());
 
         if (data[0]) {
-            const {postCount, totalLikes, totalSaves, singlePostMaxLikes, singlePostmaxSaves} = data[0];
+            const {
+                postCount, 
+                totalLikes, 
+                totalSaves, 
+                singlePostMaxLikes, 
+                singlePostmaxSaves, 
+            } = data[0];
     
             const achievements: number[] = [];
     
@@ -285,13 +292,19 @@ export class UsersService {
             user.achievements = Array.from(new Set([...user.achievements, ...achievements]));
             await user.save();
 
+            const totalRP = (await this.achievementsService.getAllAchievements())
+                .filter(i => achievements.includes(i.posNumber))
+                .reduce((prev, curr) => prev + curr.rp, 0);
+
             return { 
                 ...data[0],
                 achievements,
+                totalRP,
             };
         } else {
             return {
                 achievements: [],
+                totalRP: 0,
                 totalLikes: 0,
                 totalSaves: 0,
                 maxLikesByPost: 0,

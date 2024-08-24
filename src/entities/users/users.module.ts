@@ -10,12 +10,14 @@ import { Post } from 'src/graphql/graphql.schema';
 import { PostSchema } from '../posts/posts.schema';
 import { PostsModule } from '../posts/posts.module';
 import { NotificationsModule } from '../notifications/notifications.module';
+import { AchievementsModule } from '../achievements/achievements.module';
 
 @Module({
   imports: [
     EmailModule,
     PostsModule,
     NotificationsModule,
+    AchievementsModule,
     MongooseModule.forFeatureAsync([{ 
       name: User.name, 
       useFactory: () => {

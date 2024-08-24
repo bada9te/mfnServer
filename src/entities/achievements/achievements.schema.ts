@@ -27,6 +27,9 @@ export class Achievement {
 
     @Prop({ required: true })
     posNumber: number;
+
+    @Prop({ required: true, default: 0 })
+    rp: number;
 }
 
 export const AchievementSchema = SchemaFactory.createForClass(Achievement);
