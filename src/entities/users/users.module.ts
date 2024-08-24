@@ -6,15 +6,16 @@ import { UsersResolver } from './users.resolver';
 import { ModerationsService } from '../moderations/moderations.service';
 import { Moderation, ModerationSchema } from '../moderations/moderations.schema';
 import { EmailModule } from 'src/utils/email/email.module';
-import { PostsService } from '../posts/posts.service';
 import { Post } from 'src/graphql/graphql.schema';
 import { PostSchema } from '../posts/posts.schema';
 import { PostsModule } from '../posts/posts.module';
+import { NotificationsModule } from '../notifications/notifications.module';
 
 @Module({
   imports: [
     EmailModule,
     PostsModule,
+    NotificationsModule,
     MongooseModule.forFeatureAsync([{ 
       name: User.name, 
       useFactory: () => {

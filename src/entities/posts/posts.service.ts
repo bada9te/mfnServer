@@ -12,13 +12,12 @@ import { notificationsText } from '../notifications/notifications.config';
 export class PostsService {
     constructor(
         @InjectModel(Post.name) private postsModel: Model<Post>,
-        @Inject(forwardRef(() => UsersService)) private usersService: UsersService,
         private notificationsService: NotificationsService
     ) {}
     
     async addPost(post: CreatePostDto) {
-        const inserted = await this.postsModel.insertMany([post]);
-        const owner = await this.usersService.getUserById(post.owner);
+        const inserted = await this.postsModel.insertMany([post], {populate: ["owner"]});
+        const owner = inserted[0].owner;
 
         await this.notificationsService.createManyNotifications({
             from: post.owner,

@@ -7,7 +7,7 @@ import { ModerationsService } from '../moderations/moderations.service';
 import * as bcrypt from 'bcrypt';
 import { EmailService } from 'src/utils/email/email.service';
 import { PostsService } from '../posts/posts.service';
-import { AchievementDocument } from '../achievement/achievements.schema';
+import { NotificationsService } from '../notifications/notifications.service';
 
 
 @Injectable()
@@ -281,8 +281,10 @@ export class UsersService {
                     totalLikes + totalSaves >= 1000000 && achievements.push(19);
                 }
             }
-    
-    
+
+            user.achievements = Array.from(new Set([...user.achievements, ...achievements]));
+            await user.save();
+
             return { 
                 ...data[0],
                 achievements,
