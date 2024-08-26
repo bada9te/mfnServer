@@ -29,9 +29,9 @@ export class UploadController {
             "images",
             filename,
             target,
-        );
-
-        unlinkSync(target);
+        ).then(_ => {
+            unlinkSync(target);
+        });
 
         return {
             status: HttpStatus.OK,
@@ -59,9 +59,10 @@ export class UploadController {
             "audios",
             response.filename,
             target,
-        );
+        ).then(_ => {
+            unlinkSync(target);
+        });
 
-        unlinkSync(target);
 
         return {
             status: HttpStatus.OK,

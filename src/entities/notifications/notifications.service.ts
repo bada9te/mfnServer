@@ -72,6 +72,8 @@ export class NotificationsService {
             if (relatedEntityId && entityType) {
                 data[entityType] = relatedEntityId;
             }
+
+            return data;
         });
         return await this.notificationsModel.insertMany(notifications);
     }
