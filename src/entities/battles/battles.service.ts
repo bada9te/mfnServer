@@ -7,7 +7,6 @@ import { RangeDto } from 'src/common/dto';
 import { TasksService } from 'src/utils/tasks/tasks.service';
 import { NotificationsService } from '../notifications/notifications.service';
 import { PostsService } from '../posts/posts.service';
-import { notificationsText } from '../notifications/notifications.config';
 
 
 @Injectable()
@@ -33,7 +32,7 @@ export class BattlesService {
         await this.notificationsService.createManyNotifications({
             from: battle.initiator,
             to: relatedPosts.map(i => i.owner._id.toString()),
-            text: notificationsText.battleStarted,
+            text: "",
             type: "BATTLE_CREATED",
             entityType: "battle",
             relatedEntityId: inserted[0]._id.toString(),
@@ -49,7 +48,7 @@ export class BattlesService {
                 await this.notificationsService.createManyNotifications({
                     from: battle.initiator,
                     to: relatedPosts.map(i => i.owner._id.toString()),
-                    text: notificationsText.battleFinished,
+                    text: "",
                     type: "BATTLE_FINISHED",
                     entityType: "battle",
                     relatedEntityId: inserted[0]._id.toString(),

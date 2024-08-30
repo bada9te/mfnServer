@@ -6,7 +6,6 @@ import { CreateReportDto } from './dto';
 import { RangeDto } from 'src/common/dto';
 import { PostsService } from '../posts/posts.service';
 import { NotificationsService } from '../notifications/notifications.service';
-import { notificationsText } from '../notifications/notifications.config';
 
 @Injectable()
 export class ReportsService {
@@ -25,7 +24,7 @@ export class ReportsService {
                 await this.notificationsService.createNotification({
                     receiver: post.owner._id.toString(),
                     post: report.reportedPost,
-                    text: notificationsText.postReported,
+                    text: "",
                     type: "POST_REPORTED",
                 });
             }

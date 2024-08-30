@@ -5,7 +5,6 @@ import { TTask } from './types';
 import { PlannedTasksService } from 'src/entities/planned-tasks/planned-tasks.service';
 import { BattlesService } from 'src/entities/battles/battles.service';
 import { NotificationsService } from 'src/entities/notifications/notifications.service';
-import { notificationsText } from 'src/entities/notifications/notifications.config';
 
 
 @Injectable()
@@ -50,7 +49,7 @@ export class TasksService {
                         await this.notificationsService.createManyNotifications({
                             from: battle.initiator._id.toString(),
                             to: [battle.post1.owner._id.toString(), battle.post2.owner._id.toString()],
-                            text: notificationsText.battleFinished,
+                            text: "",
                             type: "BATTLE_FINISHED",
                             entityType: "battle",
                             relatedEntityId: battle._id.toString(),
