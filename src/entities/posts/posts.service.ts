@@ -56,6 +56,7 @@ export class PostsService {
         return await this.postsModel.find({})
             .skip(range.offset)
             .limit(range.limit)
+            .populate(["owner"])
             .sort({ createdAt: -1 });
     }
 
@@ -64,6 +65,7 @@ export class PostsService {
             return await this.postsModel.find({owner: _id})
                 .skip(range.offset)
                 .limit(range.limit)
+                .populate(["owner"])
                 .sort({ createdAt: -1 });
         }
         return await this.postsModel.find({owner: _id})
@@ -72,7 +74,7 @@ export class PostsService {
 
 
     async getByTitle(title: string) {
-        return await this.postsModel.find({title: { $regex: '.*' + title + '.*' }});
+        return await this.postsModel.find({title: { $regex: '.*' + title + '.*' }}).populate(["owner"]);
     }
 
     async getByTitleWithUserId(title: string, useOwnerId: boolean, userId: string) {
@@ -84,7 +86,7 @@ export class PostsService {
 
 
     async getManyByIds(ids: string[]) {
-        return await this.postsModel.find({ _id: ids });
+        return await this.postsModel.find({ _id: ids }).populate(["owner"]);
     }
     
     
@@ -121,6 +123,7 @@ export class PostsService {
         return await this.postsModel.find({ category })
             .skip(range.offset)
             .limit(range.limit)
+            .populate(["owner"])
             .sort({ createdAt: -1 });
     }
 
@@ -128,7 +131,8 @@ export class PostsService {
         const user = await this.usersService.getUserById(userId);
         return await this.postsModel.find({_id: user.savedPosts})
             .skip(range.offset)
-            .limit(range.limit);
+            .limit(range.limit)
+            .populate(["owner"]);
     }
 
     async getDocsCount(filter: any) {

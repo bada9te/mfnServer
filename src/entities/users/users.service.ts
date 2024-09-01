@@ -413,8 +413,8 @@ export class UsersService {
         const user = await this.userModel.findById(userId);
         const post = await this.postsService.getPostById(postId)
 
-        if (user.savedPosts.map(i => i._id).includes(post._id)) {
-            user.savedPosts = user.savedPosts.filter(i => i._id !== post._id);
+        if (user.savedPosts.map(i => i._id.toString()).includes(post._id.toString())) {
+            user.savedPosts = user.savedPosts.filter(i => i._id.toString() !== post._id.toString());
             post.saves--;
         } else {
             user.savedPosts.push(post);
@@ -427,10 +427,10 @@ export class UsersService {
 
     async switchPostInLiked(postId: string, userId: string) {
         const user = await this.userModel.findById(userId);
-        const post = await this.postsService.getPostById(postId)
+        const post = await this.postsService.getPostById(postId);
 
-        if (user.likedPosts.map(i => i._id).includes(post._id)) {
-            user.likedPosts = user.likedPosts.filter(i => i._id !== post._id);
+        if (user.likedPosts.map(i => i._id.toString()).includes(post._id.toString())) {
+            user.likedPosts = user.likedPosts.filter(i => i._id.toString() !== post._id.toString());
             post.likes--;
         } else {
             user.likedPosts.push(post);
