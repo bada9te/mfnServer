@@ -4,12 +4,12 @@ type Query {
     post(_id: ID!): Post!
     posts(offset: Int!, limit: Int!): PostsWithCount!
     postsByOwner(owner: ID!, offset: Int!, limit: Int!): PostsWithCount!
-    postsSavedByUser(user: ID!, offset: Int!, limit: Int!): PostsWithCount!
     postsByTitle(input: PostsByTitleInput!): [Post!]
     postsByIds(ids: [ID!]!): [Post!]
     postsMostPopular(date: Date!): [Post!]
     postsByCategory(category: String!, offset: Int!, limit: Int!): PostsWithCount!
     postsByCategoryCount: PostsByCategoryCount!
+    postsSavedByUser(user: ID!, offset: Int!, limit: Int!): PostsWithCount!
 }
 
 input PostsByTitleInput {
@@ -47,8 +47,8 @@ type Post {
     description: String!
     audio: String!
     image: String!
-    likedBy: [User!]
-    savedBy: [User!]
+    likes: Int!
+    saves: Int!
     category: String!
     downloadsAllowed: Boolean!
     createdAt: String!
@@ -59,8 +59,6 @@ type Mutation {
     postCreate(input: AddPostInput!): Post!
     postUpdate(input: UpdatePostInput!): Post!
     postDeleteById(_id: ID!): Post!
-    postSwitchLike(input: SwitchLikeOrPostInSavedInput!): Post!
-    postSwicthInSaved(input: SwitchLikeOrPostInSavedInput!): Post!
 }
 
 input AddPostInput {
@@ -77,9 +75,4 @@ input UpdatePostInput {
     post: ID!
     what: String!
     value: String!
-}
-
-input SwitchLikeOrPostInSavedInput {
-    userId: ID!
-    postId: ID!
 }

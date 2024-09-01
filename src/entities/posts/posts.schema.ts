@@ -23,11 +23,11 @@ export class Post {
     @Prop({ required: true })
     image: string;
 
-    @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User', autopopulate: true }] })
-    likedBy: UserDocument[];
+    @Prop({default: 0})
+    likes: number;
 
-    @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User', autopopulate: true }] })
-    savedBy: UserDocument[];
+    @Prop({default: 0})
+    saves: number;
 
     @Prop({ required: true })
     category: string;

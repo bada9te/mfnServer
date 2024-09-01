@@ -7,6 +7,7 @@ import { CurrentUser } from "src/auth/strategy/graphql/gql.decorator";
 import { UserDocument } from "./users.schema";
 import { LinkGoogleDto } from "./dto/link-google.dto";
 import { LinkFacebookDto } from "./dto/link-facebook.dto";
+import { SwicthLikeOrSaveDto } from "./dto/swicth-like-or-save.dto";
 
 
 @Resolver('User')
@@ -109,5 +110,17 @@ export class UsersResolver {
     @Mutation()
     async userUnlinkTwitter(@Args('_id') _id: string) {
         return await this.usersService.unlinkTwitter(_id);
+    }
+
+    @Mutation()
+    @UseGuards(GqlAuthGuard)
+    async userSwitchLike(@Args('input') dto: SwicthLikeOrSaveDto) {
+        return await this.usersService.switchPostInLiked(dto.postId, dto.userId);
+    }
+
+    @Mutation()
+    @UseGuards(GqlAuthGuard)
+    async userSwitchSave(@Args('input') dto: SwicthLikeOrSaveDto) {
+        return await this.usersService.switchPostInSaved(dto.postId, dto.userId);
     }
 }

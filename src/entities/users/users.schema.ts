@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory, raw } from "@nestjs/mongoose";
 import mongoose, { HydratedDocument } from "mongoose";
+import { PostDocument } from "../posts/posts.schema";
 
 export type UserDocument = HydratedDocument<User>;
 
@@ -53,6 +54,12 @@ export class User {
 
     @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }] })
     subscribedOn: UserDocument[];
+
+    @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Post' }] })
+    likedPosts: PostDocument[];
+
+    @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Post' }] })
+    savedPosts: PostDocument[];
 
     @Prop({ default: false })
     verified: boolean;

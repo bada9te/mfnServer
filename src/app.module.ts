@@ -50,7 +50,7 @@ import { MinioModule } from 'nestjs-minio-client';
       typePaths: ['./**/*.graphql'],
       transformSchema: schema => upperDirectiveTransformer(schema, 'upper'),
       installSubscriptionHandlers: true,
-      playground: false,
+      playground: true,
     }),
     // FILE UPLOAD
     MulterModule.registerAsync({

@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { User } from './users.schema';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import mongoose, { Model } from 'mongoose';
 import { ConfirmAccountDto, CreateUserDto, LinkFacebookDto, LinkGoogleDto, LinkTwitterDto, PrepareToRestoreDto, RestoreAccountDto } from './dto';
 import { ModerationsService } from '../moderations/moderations.service';
 import * as bcrypt from 'bcrypt';
@@ -407,5 +407,37 @@ export class UsersService {
         user.twitter = null;
 
         return await user.save();
+    }
+
+    async switchPostInSaved(postId: string, userId: string) {
+        const user = await this.userModel.findById(userId);
+        const post = await this.postsService.getPostById(postId)
+
+        if (user.savedPosts.map(i => i._id).includes(post._id)) {
+            user.savedPosts = user.savedPosts.filter(i => i._id !== post._id);
+            post.saves--;
+        } else {
+            user.savedPosts.push(post);
+            post.saves++;
+        }
+        await post.save();
+        await user.save();
+        return {user, post};
+    }
+
+    async switchPostInLiked(postId: string, userId: string) {
+        const user = await this.userModel.findById(userId);
+        const post = await this.postsService.getPostById(postId)
+
+        if (user.likedPosts.map(i => i._id).includes(post._id)) {
+            user.likedPosts = user.likedPosts.filter(i => i._id !== post._id);
+            post.likes--;
+        } else {
+            user.likedPosts.push(post);
+            post.likes++;
+        }
+        await post.save();
+        await user.save();
+        return {user, post};
     }
 }

@@ -38,18 +38,6 @@ export class PostsResolver {
     }
 
     @Query()
-    async postsSavedByUser(
-        @Args('user') user: string,
-        @Args('offset', ParseIntPipe) offset: number,
-        @Args('limit', ParseIntPipe) limit: number
-    ) {
-        return {
-            posts: await this.postsService.getSavedPostsByUserId(user, { offset, limit }),
-            count: await this.postsService.getDocsCount({ savedBy: user }),
-        }
-    }
-
-    @Query()
     async postsByTitle(@Args('input') dto: PostsByTitleDto) {
         const { userId, title, userIsOwner } = dto;
 
@@ -83,6 +71,18 @@ export class PostsResolver {
     }
 
     @Query()
+    async postsSavedByUser(
+        @Args('user') user: string,
+        @Args('offset', ParseIntPipe) offset: number,
+        @Args('limit', ParseIntPipe) limit: number
+    ) {
+        return {
+            posts: await this.postsService.getSavedPostsByUserId(user, { offset, limit }),
+            count: await this.postsService.getDocsCount({ savedBy: user }),
+        }
+    }
+
+    @Query()
     async postsByCategoryCount() {
         return await this.postsService.getDocsCountByCategories();
     }
@@ -103,17 +103,5 @@ export class PostsResolver {
     @UseGuards(GqlAuthGuard)
     async postDeleteById(@Args('_id') _id: string) {
         return await this.postsService.deletePostById(_id);
-    }
-
-    @Mutation()
-    @UseGuards(GqlAuthGuard)
-    async postSwitchLike(@Args('input') dto: SwicthLikeOrSaveDto) {
-        return await this.postsService.switchIsLiked(dto.postId, dto.userId);
-    }
-
-    @Mutation()
-    @UseGuards(GqlAuthGuard)
-    async postSwicthInSaved(@Args('input') dto: SwicthLikeOrSaveDto) {
-        return await this.postsService.switchInSaved(dto.postId, dto.userId);
     }
 }

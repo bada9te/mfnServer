@@ -1,17 +1,20 @@
-import { Injectable } from '@nestjs/common';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Post } from './posts.schema';
 import mongoose, { Model } from 'mongoose';
 import { CreatePostDto } from './dto';
 import { RangeDto } from 'src/common/dto';
 import { NotificationsService } from '../notifications/notifications.service';
+import { UsersService } from '../users/users.service';
 
 
 @Injectable()
 export class PostsService {
     constructor(
         @InjectModel(Post.name) private postsModel: Model<Post>,
-        private notificationsService: NotificationsService
+        private notificationsService: NotificationsService,
+        @Inject(forwardRef(() => UsersService))
+        private usersService: UsersService,
     ) {}
     
     async addPost(post: CreatePostDto) {
@@ -67,12 +70,6 @@ export class PostsService {
                 .sort({ createdAt: -1 });
     }
 
-    async getSavedPostsByUserId(userId: string, range: RangeDto) {
-        return await this.postsModel.find({ savedBy: userId })
-            .skip(range.offset)
-            .limit(range.limit)
-            .sort({ createdAt: -1 });
-    }
 
     async getByTitle(title: string) {
         return await this.postsModel.find({title: { $regex: '.*' + title + '.*' }});
@@ -85,59 +82,9 @@ export class PostsService {
         });
     }
 
-    async switchInSaved(postId: string, userId: string) {
-        const userIdMongo = new mongoose.Types.ObjectId(userId);
-        return await this.postsModel.findOneAndUpdate({ _id: postId }, [{
-                $set: {
-                    savedBy: {
-                        $cond: [
-                            { $in: [userIdMongo, "$savedBy"] },
-                            { $setDifference: ["$savedBy", [userIdMongo]] },
-                            { $concatArrays: ["$savedBy", [userIdMongo]] }
-                        ]
-                    }
-                }
-            }],
-            { new: true }
-        );
-    }
-
-    async switchIsLiked(postId: string, userId: string) {
-        const userIdMongo = new mongoose.Types.ObjectId(userId);
-        return await this.postsModel.findOneAndUpdate({ _id: postId }, [{
-                $set: {
-                    likedBy: {
-                        $cond: [
-                            { $in: [userIdMongo, "$likedBy"] },
-                            { $setDifference: ["$likedBy", [userIdMongo]] },
-                            { $concatArrays: ["$likedBy", [userIdMongo]] }
-                        ]
-                    }
-                }
-            }],
-            { new: true }
-        );
-    }
 
     async getManyByIds(ids: string[]) {
         return await this.postsModel.find({ _id: ids });
-    }
-
-    async addOrRemoveComment(postId: string, commentId: string) {
-        const commentIdMongo = new mongoose.Types.ObjectId(commentId);
-        return await this.postsModel.findOneAndUpdate({ _id: postId }, [{
-                $set: {
-                    comments: {
-                        $cond: [
-                            { $in: [commentIdMongo, "$comments"] },
-                            { $setDifference: ["$comments", [commentIdMongo]] },
-                            { $concatArrays: ["$comments", [commentIdMongo]] },
-                        ]
-                    }
-                }
-            }],
-            { new: true }
-        );
     }
     
     
@@ -163,7 +110,7 @@ export class PostsService {
             },
             {
                 $addFields: {
-                    score: { $sum: [{ $size: "$likedBy" }, {$size: "$savedBy"}] }
+                    score: { $sum: [{ $size: "$likes" }, {$size: "$saves"}] }
                 }
             },
         ]).sort({ score: -1 }).limit(3);
@@ -175,6 +122,13 @@ export class PostsService {
             .skip(range.offset)
             .limit(range.limit)
             .sort({ createdAt: -1 });
+    }
+
+    async getSavedPostsByUserId(userId: string, range: RangeDto) {
+        const user = await this.usersService.getUserById(userId);
+        return await this.postsModel.find({_id: user.savedPosts})
+            .skip(range.offset)
+            .limit(range.limit);
     }
 
     async getDocsCount(filter: any) {
@@ -208,22 +162,14 @@ export class PostsService {
             // Match posts by owner
             { $match: { owner: new mongoose.Types.ObjectId(userId) } },
             
-            // Calculate likes and saves counts
-            {
-                $project: {
-                    likesCount: { $size: "$likedBy" },
-                    savesCount: { $size: "$savedBy" }
-                }
-            },
-            
             // Group by owner to calculate total likes, total saves, etc.
             {
                 $group: {
                     _id: "$owner",
-                    totalLikes: { $sum: "$likesCount" },
-                    totalSaves: { $sum: "$savesCount" },
-                    maxLikesByPost: { $max: "$likesCount" },
-                    maxSavesByPost: { $max: "$savesCount" },
+                    totalLikes: { $sum: "$likes" },
+                    totalSaves: { $sum: "$saves" },
+                    maxLikesByPost: { $max: "$likes" },
+                    maxSavesByPost: { $max: "$saves" },
                     postCount: { $sum: 1 }
                 }
             },
@@ -234,8 +180,8 @@ export class PostsService {
                     from: "posts", // Assuming the collection name is 'posts'
                     let: { maxLikes: "$maxLikesByPost" },
                     pipeline: [
-                        { $match: { $expr: { $eq: [{ $size: "$likedBy" }, "$$maxLikes"] } } },
-                        { $project: { _id: 1, likesCount: { $size: "$likedBy" } } }
+                        { $match: { $expr: { $eq: ["$likes", "$$maxLikes"] } } },
+                        { $project: { _id: 1, likes: 1 } }
                     ],
                     as: "postsWithMaxLikes"
                 }
@@ -247,8 +193,8 @@ export class PostsService {
                     from: "posts", // Assuming the collection name is 'posts'
                     let: { maxSaves: "$maxSavesByPost" },
                     pipeline: [
-                        { $match: { $expr: { $eq: [{ $size: "$savedBy" }, "$$maxSaves"] } } },
-                        { $project: { _id: 1, savesCount: { $size: "$savedBy" } } }
+                        { $match: { $expr: { $eq: ["$saves", "$$maxSaves"] } } },
+                        { $project: { _id: 1, saves: 1 } }
                     ],
                     as: "postsWithMaxSaves"
                 }
@@ -268,5 +214,6 @@ export class PostsService {
                 }
             }
         ]);
-    }    
+    }
+    
 }

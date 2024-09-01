@@ -17,6 +17,8 @@ type User {
     subscribers: [User!]
     subscribedOn: [User!]
     achievements: [Int!]
+    likedPosts: [Post!]
+    savedPosts: [Post!]
     level: Int!
     local: SocialMediaData
     google: SocialMediaData
@@ -39,6 +41,11 @@ type UserWithAction {
     action: ModerationAction!
 }
 
+type SwitchLikeOrPostInSavedReturnType {
+    post: Post!
+    user: User!
+}
+
 type Mutation {
     userCreate(input: AddUserInput!): UserWithAction!
     userDeleteById(_id: ID!): User!
@@ -54,6 +61,8 @@ type Mutation {
     userLinkTwitter(input: LinkTwitterOrFacebookInput!): User
     userUnlinkTwitter(_id: ID!): User
     login(email: String!, password: String!): User
+    userSwitchLike(input: SwitchLikeOrPostInSavedInput!): SwitchLikeOrPostInSavedReturnType!
+    userSwitchSave(input: SwitchLikeOrPostInSavedInput!): SwitchLikeOrPostInSavedReturnType!
 }
 
 input LinkGoogleInput {
@@ -69,6 +78,11 @@ input LinkTwitterOrFacebookInput {
     id: String!
     token: String!
     name: String!
+}
+
+input SwitchLikeOrPostInSavedInput {
+    userId: ID!
+    postId: ID!
 }
 
 

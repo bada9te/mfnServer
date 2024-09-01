@@ -80,11 +80,6 @@ export class UpdatePostInput {
     value: string;
 }
 
-export class SwitchLikeOrPostInSavedInput {
-    userId: string;
-    postId: string;
-}
-
 export class CreateReportInput {
     contactReason: string;
     email?: Nullable<string>;
@@ -112,6 +107,11 @@ export class LinkTwitterOrFacebookInput {
     id: string;
     token: string;
     name: string;
+}
+
+export class SwitchLikeOrPostInSavedInput {
+    userId: string;
+    postId: string;
 }
 
 export class AddUserInput {
@@ -193,8 +193,6 @@ export abstract class IQuery {
     abstract posts(offset: number, limit: number): PostsWithCount | Promise<PostsWithCount>;
 
     abstract postsByOwner(owner: string, offset: number, limit: number): PostsWithCount | Promise<PostsWithCount>;
-
-    abstract postsSavedByUser(user: string, offset: number, limit: number): PostsWithCount | Promise<PostsWithCount>;
 
     abstract postsByTitle(input: PostsByTitleInput): Nullable<Post[]> | Promise<Nullable<Post[]>>;
 
@@ -281,10 +279,6 @@ export abstract class IMutation {
 
     abstract postDeleteById(_id: string): Post | Promise<Post>;
 
-    abstract postSwitchLike(input: SwitchLikeOrPostInSavedInput): Post | Promise<Post>;
-
-    abstract postSwicthInSaved(input: SwitchLikeOrPostInSavedInput): Post | Promise<Post>;
-
     abstract reportCreate(input: CreateReportInput): Report | Promise<Report>;
 
     abstract reportClose(_id: string): Report | Promise<Report>;
@@ -320,6 +314,10 @@ export abstract class IMutation {
     abstract userUnlinkTwitter(_id: string): Nullable<User> | Promise<Nullable<User>>;
 
     abstract login(email: string, password: string): Nullable<User> | Promise<Nullable<User>>;
+
+    abstract userSwitchLike(input: SwitchLikeOrPostInSavedInput): SwitchLikeOrPostInSavedReturnType | Promise<SwitchLikeOrPostInSavedReturnType>;
+
+    abstract userSwicthInSaved(input: SwitchLikeOrPostInSavedInput): SwitchLikeOrPostInSavedReturnType | Promise<SwitchLikeOrPostInSavedReturnType>;
 }
 
 export class ModerationAction {
@@ -394,8 +392,8 @@ export class Post {
     description: string;
     audio: string;
     image: string;
-    likedBy?: Nullable<User[]>;
-    savedBy?: Nullable<User[]>;
+    likes: number;
+    saves: number;
     category: string;
     downloadsAllowed: boolean;
     createdAt: string;
@@ -428,6 +426,8 @@ export class User {
     subscribers?: Nullable<User[]>;
     subscribedOn?: Nullable<User[]>;
     achievements?: Nullable<number[]>;
+    likedPosts?: Nullable<Post[]>;
+    savedPosts?: Nullable<Post[]>;
     level: number;
     local?: Nullable<SocialMediaData>;
     google?: Nullable<SocialMediaData>;
@@ -448,6 +448,11 @@ export class TwoUsers {
 export class UserWithAction {
     user: User;
     action: ModerationAction;
+}
+
+export class SwitchLikeOrPostInSavedReturnType {
+    post: Post;
+    user: User;
 }
 
 export class UserAchievementsData {
