@@ -49,7 +49,7 @@ export class PostsService {
     }
 
     async getPostById(_id: string) {
-        return await this.postsModel.findById(_id);
+        return await this.postsModel.findById(_id).populate(["owner"]);
     }
 
     async getAllPosts(range: RangeDto) {
