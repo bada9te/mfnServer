@@ -252,7 +252,7 @@ export class UsersService {
             if (postCount > 0) {
                 achievements.push(1);
     
-                // tarcks
+                // tracks
                 if (postCount >= 100) {
                     achievements.push(8);
     
