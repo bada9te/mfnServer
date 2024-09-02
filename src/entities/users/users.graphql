@@ -63,6 +63,7 @@ type Mutation {
     login(email: String!, password: String!): User
     userSwitchLike(input: SwitchLikeOrPostInSavedInput!): SwitchLikeOrPostInSavedReturnType!
     userSwitchSave(input: SwitchLikeOrPostInSavedInput!): SwitchLikeOrPostInSavedReturnType!
+    userSwitchPostPinned(userId: ID!, postId: ID!): User!
 }
 
 input LinkGoogleInput {

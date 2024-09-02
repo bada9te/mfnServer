@@ -123,4 +123,10 @@ export class UsersResolver {
     async userSwitchSave(@Args('input') dto: SwicthLikeOrSaveDto) {
         return await this.usersService.switchPostInSaved(dto.postId, dto.userId);
     }
+
+    @Mutation()
+    @UseGuards(GqlAuthGuard)
+    async userSwitchPostPinned(@Args('userId') userId: string, @Args('postId') postId: string) {
+        return await this.usersService.switchPostPinned(postId, userId);
+    }
 }

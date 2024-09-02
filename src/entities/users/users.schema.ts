@@ -69,6 +69,9 @@ export class User {
 
     @Prop({ default: [] })
     achievements: number[];
+
+    @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Post' }] })
+    pinnedPosts: PostDocument[];
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

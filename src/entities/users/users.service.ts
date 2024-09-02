@@ -440,4 +440,17 @@ export class UsersService {
         await user.save();
         return {user, post};
     }
+
+    async switchPostPinned(postId: string, userId: string) {
+        const user = await this.userModel.findById(userId);
+        const post = await this.postsService.getPostById(postId);
+        
+        if (user.pinnedPosts.map(i => i._id.toString()).includes(post._id.toString())) {
+            user.pinnedPosts = user.pinnedPosts.filter(i => i._id.toString() !== post._id.toString());
+        } else {
+            user.pinnedPosts.push(post);
+        }
+        await user.save();
+        return user;
+    }
 }
