@@ -103,6 +103,14 @@ export class BattlesService {
         return await this.battlesModel.find({ finished })
             .skip(range.offset)
             .limit(range.limit)
+            .populate({
+                path: 'post1.owner', // Explicitly populate owner for post1
+                select: 'name avatar', // You can limit fields for owner here
+            })
+            .populate({
+                path: 'post2.owner', // If you have a post2 field as well
+                select: 'name avatar',
+            })
             .sort({ createdAt: -1 });
     }
 

@@ -35,5 +35,5 @@ export class Post {
     @Prop({ required: true })
     downloadsAllowed: boolean;
 }
-
 export const PostSchema = SchemaFactory.createForClass(Post);
+PostSchema.plugin(require("mongoose-autopopulate"));

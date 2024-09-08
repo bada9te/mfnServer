@@ -23,7 +23,7 @@ export class Notification {
     @Prop({ required: true })
     type: "SUBSCRIBED" | "BATTLE_CREATED" | "BATTLE_FINISHED" | "POST_REPORTED" | "POST_CREATED" | "SYSTEM";
 
-    @Prop({ required: true })
+    @Prop({ required: false })
     text: string;
 
     @Prop({ default: false })

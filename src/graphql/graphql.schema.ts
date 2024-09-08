@@ -18,6 +18,7 @@ export class AddNewBattleByPostsIdsInput {
     title: string;
     post1: string;
     post2: string;
+    chainId?: Nullable<number>;
 }
 
 export class MakeBattleVoteInput {
@@ -204,6 +205,8 @@ export abstract class IQuery {
 
     abstract postsByCategoryCount(): PostsByCategoryCount | Promise<PostsByCategoryCount>;
 
+    abstract postsSavedByUser(user: string, offset: number, limit: number): PostsWithCount | Promise<PostsWithCount>;
+
     abstract report(_id: string): Nullable<Report> | Promise<Nullable<Report>>;
 
     abstract reports(offset: number, limit: number): Nullable<Report[]> | Promise<Nullable<Report[]>>;
@@ -230,6 +233,7 @@ export abstract class IQuery {
 export class Battle {
     _id: string;
     title: string;
+    chainId?: Nullable<number>;
     post1?: Nullable<Post>;
     post2?: Nullable<Post>;
     post1Score: number;
@@ -317,7 +321,9 @@ export abstract class IMutation {
 
     abstract userSwitchLike(input: SwitchLikeOrPostInSavedInput): SwitchLikeOrPostInSavedReturnType | Promise<SwitchLikeOrPostInSavedReturnType>;
 
-    abstract userSwicthInSaved(input: SwitchLikeOrPostInSavedInput): SwitchLikeOrPostInSavedReturnType | Promise<SwitchLikeOrPostInSavedReturnType>;
+    abstract userSwitchSave(input: SwitchLikeOrPostInSavedInput): SwitchLikeOrPostInSavedReturnType | Promise<SwitchLikeOrPostInSavedReturnType>;
+
+    abstract userSwitchPostPinned(userId: string, postId: string): User | Promise<User>;
 }
 
 export class ModerationAction {
@@ -335,7 +341,7 @@ export class Notification {
     post?: Nullable<Post>;
     battle?: Nullable<Battle>;
     type: string;
-    text: string;
+    text?: Nullable<string>;
     checked: boolean;
     createdAt: string;
 }

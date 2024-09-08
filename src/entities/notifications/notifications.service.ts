@@ -60,12 +60,11 @@ export class NotificationsService {
     }
 
 
-    async createManyNotifications({from, text, to, relatedEntityId, type, entityType}: CreateManyNotificationsDto) {
+    async createManyNotifications({from, to, relatedEntityId, type, entityType}: CreateManyNotificationsDto) {
         const notifications = to.map(i => {
             const data = {
                 sender: from,
                 receiver: i,
-                text,
                 type,
             }
 

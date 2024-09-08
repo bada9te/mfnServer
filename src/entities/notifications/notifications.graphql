@@ -10,7 +10,7 @@ type Notification {
     post: Post
     battle: Battle
     type: String!
-    text: String!
+    text: String
     checked: Boolean!
     createdAt: String!
 }

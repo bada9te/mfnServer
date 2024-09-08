@@ -81,7 +81,7 @@ export class PostsService {
         return await this.postsModel.find({
             title: { $regex: '.*' + title + '.*' },
             owner: useOwnerId === true ? userId : { "$ne": userId }
-        });
+        }).populate(["owner"]);
     }
 
 

@@ -6,7 +6,7 @@ import { BattlesResolver } from './battles.resolver';
 import { TasksModule } from 'src/utils/tasks/tasks.module';
 import { NotificationsModule } from '../notifications/notifications.module';
 import { PostsModule } from '../posts/posts.module';
-import { UsersModule } from '../users/users.module';
+
 
 @Module({
   imports: [

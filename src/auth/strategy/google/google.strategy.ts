@@ -19,7 +19,7 @@ export class GoogleOauthStrategy extends PassportStrategy(OAuth2Strategy, 'googl
     }
 
     async validate(@Req() _req: Request, _accessToken: string, _refreshToken: string, profile: Profile, done: VerifyFunction) {
-        console.log("REQUEST USER", _req.user);
+        //console.log("REQUEST USER", _req.user);
         const user = await this.jwtAuthService.processGoogle(profile, _accessToken);
         if (!user) {
             throw new UnauthorizedException();

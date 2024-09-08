@@ -5,7 +5,6 @@ import { Post, PostSchema } from './posts.schema';
 import { PostsResolver } from './posts.resolver';
 import { NotificationsModule } from '../notifications/notifications.module';
 import { UsersModule } from '../users/users.module';
-import { UsersService } from '../users/users.service';
 
 
 @Module({

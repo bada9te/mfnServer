@@ -6,6 +6,7 @@ type Query {
 type Battle {
     _id: ID!
     title: String!
+    chainId: Int
     post1: Post
     post2: Post
     post1Score: Int!
@@ -38,6 +39,7 @@ input AddNewBattleByPostsIdsInput {
     title: String!
     post1: ID!
     post2: ID!
+    chainId: Int
 }
 
 input MakeBattleVoteInput {
