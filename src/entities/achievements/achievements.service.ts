@@ -22,4 +22,8 @@ export class AchievementsService {
     async achievemenmtsCount() {
         return await this.achievementsModel.estimatedDocumentCount();
     }
+
+    async insertAchievements(achievements: any[]) {
+        return await this.achievementsModel.insertMany(achievements);
+    }
 }

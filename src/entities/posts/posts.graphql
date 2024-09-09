@@ -10,6 +10,7 @@ type Query {
     postsByCategory(category: String!, offset: Int!, limit: Int!): PostsWithCount!
     postsByCategoryCount: PostsByCategoryCount!
     postsSavedByUser(user: ID!, offset: Int!, limit: Int!): PostsWithCount!
+    postsMostRecent: [Post!]
 }
 
 input PostsByTitleInput {

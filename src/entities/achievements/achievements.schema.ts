@@ -18,9 +18,6 @@ export class Achievement {
     type: "basic" | "likes-total" | 
         "saves-total" | "likes" | "saves" |
         "likes-and-saves" | "tracks" | "likes-and-saves-equals"
-    
-    @Prop({ required: true })
-    count: number;
 
     @Prop({ required: true })
     rarity: "legendary" | "uncommon" | "rare" | "common";

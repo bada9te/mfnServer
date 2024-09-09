@@ -219,5 +219,8 @@ export class PostsService {
             }
         ]);
     }
-    
+
+    async getMostRecentTracks() {
+        return await this.postsModel.find({}).sort({ createdAt: -1 }).limit(10);
+    }
 }

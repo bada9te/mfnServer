@@ -87,6 +87,11 @@ export class PostsResolver {
         return await this.postsService.getDocsCountByCategories();
     }
 
+    @Query()
+    async postsMostRecent() {
+        return await this.postsService.getMostRecentTracks();
+    }
+
     @Mutation()
     @UseGuards(GqlAuthGuard)
     async postCreate(@Args('input') dto: CreatePostDto) {
