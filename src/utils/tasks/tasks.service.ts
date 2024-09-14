@@ -5,6 +5,7 @@ import { TTask } from './types';
 import { PlannedTasksService } from 'src/entities/planned-tasks/planned-tasks.service';
 import { BattlesService } from 'src/entities/battles/battles.service';
 import { NotificationsService } from 'src/entities/notifications/notifications.service';
+import { timeout } from 'rxjs';
 
 
 @Injectable()
@@ -22,9 +23,10 @@ export class TasksService {
     }
 
     async addCronJob(_id: string, date: Date, cb: () => void, taskType: TTask["taskType"]) {
-        const job = new CronJob(date, cb);
+        const executionTime = new Date(date).getTime() - new Date().getTime();
+        const timeout = setTimeout(cb, executionTime);
         this.plannedTasksService.createPlannedTask({relatedEntityId: _id, date: date.toString(), taskType});
-        this.scheduleRegistry.addCronJob(this.getUniqueTaskName(_id, taskType), job);
+        this.scheduleRegistry.addTimeout(this.getUniqueTaskName(_id, taskType), timeout);
     }
 
     async cancelCronJob(_id: string, taskType: TTask["taskType"]) {
@@ -61,8 +63,9 @@ export class TasksService {
                     break;
             }
 
-            const job = new CronJob(task.date, cb);
-            this.scheduleRegistry.addCronJob(this.getUniqueTaskName(task.relatedEntityId, task.taskType as any), job);
+            const executionTime = new Date(task.date).getTime() - new Date().getTime();
+            const timeout = setTimeout(cb, executionTime < 0 ? 1 : executionTime);
+            this.scheduleRegistry.addTimeout(this.getUniqueTaskName(task.relatedEntityId, task.taskType as any), timeout);
         });
 
         console.log("[CRON] Reassigning all tasks... Done.");
