@@ -11,6 +11,7 @@ type Query {
     postsByCategoryCount: PostsByCategoryCount!
     postsSavedByUser(user: ID!, offset: Int!, limit: Int!): PostsWithCount!
     postsMostRecent: [Post!]
+    postsMostRecentByFollowing(user: ID!): [Post!]
 }
 
 input PostsByTitleInput {

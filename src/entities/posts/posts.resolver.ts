@@ -92,6 +92,11 @@ export class PostsResolver {
         return await this.postsService.getMostRecentTracks();
     }
 
+    @Query()
+    async postsMostRecentByFollowing(@Args('user') userId: string) {
+        return await this.postsService.getMostRecentTracksByFollowing(userId);
+    }
+
     @Mutation()
     @UseGuards(GqlAuthGuard)
     async postCreate(@Args('input') dto: CreatePostDto) {

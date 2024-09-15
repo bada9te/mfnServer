@@ -223,4 +223,14 @@ export class PostsService {
     async getMostRecentTracks() {
         return await this.postsModel.find({}).sort({ createdAt: -1 }).limit(10);
     }
+
+    async getMostRecentTracksByFollowing(userId: string) {
+        const user = await this.usersService.getUserById(userId);
+
+        return await this.postsModel
+            .find({ owner: user.subscribedOn })
+            .sort({ createdAt: -1 })
+            .populate(["owner"])
+            .limit(10);
+    }
 }

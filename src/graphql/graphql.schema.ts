@@ -209,6 +209,8 @@ export abstract class IQuery {
 
     abstract postsMostRecent(): Nullable<Post[]> | Promise<Nullable<Post[]>>;
 
+    abstract postMostRecentByFollowing(user: string): Nullable<Post[]> | Promise<Nullable<Post[]>>;
+
     abstract report(_id: string): Nullable<Report> | Promise<Nullable<Report>>;
 
     abstract reports(offset: number, limit: number): Nullable<Report[]> | Promise<Nullable<Report[]>>;
