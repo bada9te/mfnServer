@@ -44,6 +44,11 @@ export class UsersResolver {
         return await this.usersService.calculateAchievements(_id);
     }
 
+    @Query()
+    async userPinnedTracks(@Args('_id') _id: string) {
+        return await this.usersService.getPinnedPosts(_id);
+    }
+
     @Mutation()
     async userCreate(@Args('input') input: CreateUserDto) {
         return await this.usersService.addUser(input);

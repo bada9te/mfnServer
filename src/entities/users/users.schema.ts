@@ -70,8 +70,9 @@ export class User {
     @Prop({ default: [] })
     achievements: number[];
 
-    @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Post' }] })
+    @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Post', autopopulate: true }] })
     pinnedPosts: PostDocument[];
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
+UserSchema.plugin(require("mongoose-autopopulate"));

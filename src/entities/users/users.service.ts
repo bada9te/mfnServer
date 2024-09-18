@@ -453,4 +453,9 @@ export class UsersService {
         await user.save();
         return user;
     }
+
+    async getPinnedPosts(userId: string) {
+        const user = await this.getUserById(userId);
+        return user.pinnedPosts;
+    }
 }

@@ -6,6 +6,7 @@ type Query {
     usersByNickname(nick: String!): [User!]!
     whoAmI: User
     userAchievementsData(_id: ID!): UserAchievementsData
+    userPinnedTracks(_id: ID!): [Post!]
 }
 
 type User {
