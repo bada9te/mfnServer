@@ -95,7 +95,7 @@ export class UsersService {
         const subscriberUSER = await this.userModel.findById(subscriberId);
         const subscribeOnUSER = await this.userModel.findById(subscribeOnId);
 
-        if (!subscriberUSER.subscribedOn.find(i => i._id === subscribeOnUSER._id)) {
+        if (!subscriberUSER.subscribedOn.find(i => i._id.toString() === subscribeOnUSER._id.toString())) {
             const subscriber = await this.userModel.findByIdAndUpdate(
                 subscriberId,
                 { $push: { subscribedOn: subscribeOnUSER._id } },
