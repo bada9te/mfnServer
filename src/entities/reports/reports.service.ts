@@ -24,7 +24,7 @@ export class ReportsService {
                 await this.notificationsService.createNotification({
                     receiver: post.owner._id.toString(),
                     post: report.reportedPost,
-                    text: "",
+                    text: report.message,
                     type: "POST_REPORTED",
                 });
             }
