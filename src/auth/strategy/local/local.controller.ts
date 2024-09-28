@@ -20,6 +20,7 @@ export class LocalOauthController {
         res.cookie(this.configService.get('SESSION_COOKIE_KEY'), accessToken, {
             //httpOnly: true,
             sameSite: 'none',
+            secure: true,
         });
 
         return res.redirect('me');
