@@ -25,7 +25,7 @@ export class GoogleOauthController {
         const { accessToken, userId } = await this.jwtAuthService.login(req.user);
 
         res.cookie(this.configService.get('SESSION_COOKIE_KEY'), accessToken, {
-            httpOnly: true,
+            //httpOnly: true,
             sameSite: 'lax',
         });
         
