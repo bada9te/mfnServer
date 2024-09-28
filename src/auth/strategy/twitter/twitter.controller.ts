@@ -25,9 +25,9 @@ export class TwitterOauthController {
         
         res.cookie(this.configService.get('SESSION_COOKIE_KEY'), accessToken, {
             //httpOnly: true,
-            sameSite: 'lax',
+            //sameSite: 'lax',
         });
         
-        return res.redirect(`http://localhost:3000`);
+        return res.redirect(`me`);
     }
 }
