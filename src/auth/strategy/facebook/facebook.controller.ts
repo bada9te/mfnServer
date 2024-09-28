@@ -25,7 +25,7 @@ export class FacebookOauthController {
 
         res.cookie(this.configService.get('SESSION_COOKIE_KEY'), accessToken, {
             //httpOnly: true,
-            //sameSite: 'lax',
+            sameSite: 'none',
         });
         
         return res.redirect(`me`);
