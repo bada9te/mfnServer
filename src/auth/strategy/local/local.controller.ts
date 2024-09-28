@@ -23,6 +23,11 @@ export class LocalOauthController {
             secure: true,
         });
 
+        res.cookie(this.configService.get('USER_ID_COOKIE_KEY'), userId, {
+            sameSite: 'none',
+            secure: true,
+        });
+
         return res.redirect('me');
     }
 }

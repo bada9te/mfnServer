@@ -29,8 +29,13 @@ export class GoogleOauthController {
             sameSite: 'none',
             secure: true,
         });
+
+        res.cookie(this.configService.get('USER_ID_COOKIE_KEY'), userId, {
+            sameSite: 'none',
+            secure: true,
+        });
         
-        return res.redirect(`me`);
+        return res.redirect(this.configService.get('CLIENT_BASE'));
     }
 
 
