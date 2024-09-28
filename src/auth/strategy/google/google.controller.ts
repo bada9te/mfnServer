@@ -28,6 +28,7 @@ export class GoogleOauthController {
             //httpOnly: true,
             sameSite: 'none',
             secure: true,
+            domain: this.configService.get('CLIENT_DOMAIN')
         });
         
         return res.redirect(`me`);

@@ -26,6 +26,8 @@ export class TwitterOauthController {
         res.cookie(this.configService.get('SESSION_COOKIE_KEY'), accessToken, {
             //httpOnly: true,
             sameSite: 'none',
+            secure: true,
+            domain: this.configService.get('CLIENT_DOMAIN')
         });
         
         return res.redirect(`me`);
