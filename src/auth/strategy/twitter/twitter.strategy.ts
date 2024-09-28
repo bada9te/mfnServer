@@ -1,19 +1,20 @@
 import { Injectable, Req, UnauthorizedException } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { PassportStrategy } from "@nestjs/passport";
-import { Strategy } from "passport-twitter";
 import { JwtAuthService } from "../jwt/jwt.service";
 import { Request } from "express";
+import { Strategy } from "@superfaceai/passport-twitter-oauth2";
 
 @Injectable()
 export class TwitterOauthStrategy extends PassportStrategy(Strategy, 'twitter') {
     constructor(private configService: ConfigService, private jwtAuthService: JwtAuthService) {
         super({
-            consumerKey      : configService.get('PASSPORT_TWITTER_KEY'),
-            consumerSecret   : configService.get('PASSPORT_TWITTER_SECRET'),
-            callbackURL      : configService.get('PASSPORT_TWITTER_CALLBACK'),
-            includeEmail     : true,
-            passReqToCallback: true
+            clientType:   'confidential',
+            clientID:     configService.get('PASSPORT_TWITTER_KEY'),
+            clientSecret: configService.get('PASSPORT_TWITTER_SECRET'),
+            callbackURL:  configService.get('PASSPORT_TWITTER_CALLBACK'),
+            scope:        ['tweet.read', 'tweet.write', 'users.read'],
+            passReqToCallback: true,
         });
     }
 
