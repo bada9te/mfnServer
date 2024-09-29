@@ -4,6 +4,7 @@ import { PassportStrategy } from "@nestjs/passport";
 import { OAuth2Strategy, Profile, VerifyFunction } from "passport-google-oauth";
 import { JwtAuthService } from "../jwt/jwt.service";
 import { Request } from "express";
+import { UserDocument } from "src/entities/users/users.schema";
 
 
 @Injectable()
@@ -19,8 +20,17 @@ export class GoogleOauthStrategy extends PassportStrategy(OAuth2Strategy, 'googl
     }
 
     async validate(@Req() _req: Request, _accessToken: string, _refreshToken: string, profile: Profile, done: VerifyFunction) {
-        //console.log("REQUEST USER", _req.user);
-        const user = await this.jwtAuthService.processGoogle(profile, _accessToken);
+        const currentUserJwt = _req.cookies[this.configService.get('SESSION_COOKIE_KEY')];
+        const currentUserId = _req.cookies[this.configService.get('USER_ID_COOKIE_KEY')];
+
+        let user: UserDocument | null;
+        if (currentUserId && currentUserJwt) {
+            console.log({currentUserJwt, currentUserId});
+            user = await this.jwtAuthService.processGoogle(profile, _accessToken, currentUserId);
+        } else {
+            user = await this.jwtAuthService.processGoogle(profile, _accessToken);
+        }
+
         if (!user) {
             throw new UnauthorizedException();
         }

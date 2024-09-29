@@ -41,62 +41,74 @@ export class JwtAuthService {
     }
 
 
-    async processTwitter(profile: any, token: string) {
-        const user = await this.usersModel.findOne({ 'twitter.id' : profile.id });
+    async processTwitter(profile: any, token: string, currentUserId?: string) {
         try {
+            const user = await this.usersModel.findOne({ 'twitter.id' : profile.id });
+            // user already linked
             if (user) {
-                // if there is a user id already but no token (user was linked at one point and then removed)
-                if (!user.twitter?.token) {
-                    user.twitter.token = token;
-                    user.twitter.username = profile.username;
-                    user.twitter.displayName = profile.displayName;
-                    user.twitter.email = profile.emails[0].value;
+                throw new Error();
+            }
 
-                    const updatedUser = await user.save();
-                    return updatedUser;
+            // USER WANTS TO LINK A TWITTER ACCOUNT
+            if (currentUserId) {
+                const userToLink = await this.usersModel.findById(currentUserId);
+
+                // invalid _id
+                if (!userToLink) {
+                    throw new Error();
                 }
 
-                return user; // user found, return that user
+                userToLink.twitter = {
+                    id: profile.id,
+                    token: token,
+                    name: profile.displayName,
+                }
+                return await userToLink.save();
             } else {
-                // if there is no user, create 
                 const newUser = new this.usersModel({
                     nick: profile.displayName,
                     twitter: {
                         id: profile.id,
                         token: token,
-                        username: profile.username,
-                        displayName: profile.displayName,
-                        email: profile.emails[0].value,
+                        name: profile.displayName,
                     },
                     verified: true,
                 });
-          
-                const createdUser = await newUser.save();
-                return createdUser;
+                return await newUser.save();
             }
         } catch (error) {
             return null;
         }
     }
 
-    async processGoogle(profile: any, token: string) {
+    async processGoogle(profile: any, token: string, currentUserId?: string) {
         try {
             const user = await this.usersModel.findOne({ 'google.id' : profile.id });
 
+            // user already linked
             if (user) {
-                // if there is a user id already but no token (user was linked at one point and then removed)
-                if (!user.google?.token) {
-                    user.google.token = token;
-                    user.google.name  = profile.displayName;
-                    user.google.email = profile.emails[0].value; // pull the first email
+                throw new Error();
+            }
 
-                    const createdUser = await user.save();
-                    return createdUser;
+            // USER WANTS TO LINK A GOOGLE ACCOUNT
+            if (currentUserId) {
+                const userToLink = await this.usersModel.findById(currentUserId);
+
+                // invalid _id
+                if (!userToLink) {
+                    throw new Error();
                 }
 
-                return user;
+                userToLink.google = {
+                    id: profile.id,
+                    token: token,
+                    name: profile.displayName,
+                    email: profile.emails[0].value
+                };
+
+                return await userToLink.save();
             } else {
-                var newUser = new this.usersModel({
+                const newUser = new this.usersModel({
                     nick: profile.displayName,
                     google: {
                         id: profile.id,
@@ -106,31 +118,38 @@ export class JwtAuthService {
                     },
                     verified: true,
                 });
-
-                const createdUser = await newUser.save();
-                return createdUser;
+                return await newUser.save();
             }
         } catch (error) {
             return null;
         }
     }
 
-    async processFacebook(profile: any, token: string) {
+    async processFacebook(profile: any, token: string, currentUserId?: string) {
         try {
             const user = await this.usersModel.findOne({ 'facebook.id' : profile.id });
 
+            // user already linked
             if (user) {
-                // if there is a user id already but no token (user was linked at one point and then removed)
-                if (!user.facebook?.token) {
-                    user.facebook.token = token;
-                    user.facebook.name  = profile.displayName;
-                    //user.facebook.email = profile.emails[0].value;
+                throw new Error();
+            }
 
-                    const updatedUser = await user.save();
-                    return updatedUser;
+            // USER WANTS TO LINK A GOOGLE ACCOUNT
+            if (currentUserId) {
+                const userToLink = await this.usersModel.findById(currentUserId);
+
+                // invalid _id
+                if (!userToLink) {
+                    throw new Error();
                 }
 
-                return user; 
+                userToLink.facebook = {
+                    id: profile.id,
+                    token: token,
+                    name: profile.displayName,
+                };
+
+                return await userToLink.save();
             } else {
                 // if there is no user, create 
                 var newUser = new this.usersModel({
@@ -139,16 +158,13 @@ export class JwtAuthService {
                         id: profile.id,
                         token: token,
                         name: profile.displayName,
-                        //email: profile.emails[0].value,
                     },
                     verified: true,
                 });
 
-                const createdUser = await newUser.save();
-                return createdUser;
+                return await newUser.save();
             }
         } catch (error) {
-            console.log(error)
             return null;
         }
     }

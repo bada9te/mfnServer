@@ -4,6 +4,7 @@ import { PassportStrategy } from "@nestjs/passport";
 import { JwtAuthService } from "../jwt/jwt.service";
 import { Request } from "express";
 import { Strategy } from "@superfaceai/passport-twitter-oauth2";
+import { UserDocument } from "src/entities/users/users.schema";
 
 @Injectable()
 export class TwitterOauthStrategy extends PassportStrategy(Strategy, 'twitter') {
@@ -19,8 +20,17 @@ export class TwitterOauthStrategy extends PassportStrategy(Strategy, 'twitter') 
     }
 
     async validate(@Req() _req: Request, token: string, tokenSecret: string, profile: any) {
-        console.log("REQUEST USER", _req.user);
-        const user = await this.jwtAuthService.processTwitter(profile, token);
+        const currentUserJwt = _req.cookies[this.configService.get('SESSION_COOKIE_KEY')];
+        const currentUserId = _req.cookies[this.configService.get('USER_ID_COOKIE_KEY')];
+        
+        let user: UserDocument | null;
+        if (currentUserId && currentUserJwt) {
+            console.log({currentUserJwt, currentUserId});
+            user = await this.jwtAuthService.processTwitter(profile, token, currentUserId);
+        } else {
+            user = await this.jwtAuthService.processTwitter(profile, token);
+        }
+        
         if (!user) {
             throw new UnauthorizedException();
         }
