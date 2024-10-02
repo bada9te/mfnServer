@@ -43,19 +43,23 @@ export class TasksService {
             switch (task.taskType) {
                 case "FINISH_BATTLE":
                     cb = async() => {
-                        // get battle
-                        const battle = await this.battlesService.setWinnerByBattleId(task.relatedEntityId);
-                        // delete task
-                        await this.plannedTasksService.deletePlannedTask(task.taskType, task.relatedEntityId);
-                        // send notifications
-                        await this.notificationsService.createManyNotifications({
-                            from: battle.initiator._id.toString(),
-                            to: [battle.post1.owner._id.toString(), battle.post2.owner._id.toString()],
-                            text: "",
-                            type: "BATTLE_FINISHED",
-                            entityType: "battle",
-                            relatedEntityId: battle._id.toString(),
-                        });
+                        try {
+                            // delete task
+                            await this.plannedTasksService.deletePlannedTask(task.taskType, task.relatedEntityId);
+                            // get battle
+                            const battle = await this.battlesService.setWinnerByBattleId(task.relatedEntityId);
+                            // send notifications
+                            await this.notificationsService.createManyNotifications({
+                                from: battle.initiator._id.toString(),
+                                to: [battle.post1.owner._id.toString(), battle.post2.owner._id.toString()],
+                                text: "",
+                                type: "BATTLE_FINISHED",
+                                entityType: "battle",
+                                relatedEntityId: battle._id.toString(),
+                            });
+                        } catch (error) {
+                            console.log(`[FINSIH_BATTLE_ERROR] ${error}`)
+                        }
                     };
                     break;
                 
