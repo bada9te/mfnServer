@@ -45,8 +45,13 @@ export class JwtAuthService {
         try {
             const user = await this.usersModel.findOne({ 'twitter.id' : profile.id });
             // user already linked
-            if (user) {
+            if (user && currentUserId) {
                 throw new Error();
+            }
+
+            // basic login
+            if (user) {
+                return user;
             }
 
             // USER WANTS TO LINK A TWITTER ACCOUNT
@@ -86,8 +91,13 @@ export class JwtAuthService {
             const user = await this.usersModel.findOne({ 'google.id' : profile.id });
 
             // user already linked
-            if (user) {
+            if (user && currentUserId) {
                 throw new Error();
+            }
+
+            // basic login
+            if (user) {
+                return user;
             }
 
             // USER WANTS TO LINK A GOOGLE ACCOUNT
@@ -121,6 +131,7 @@ export class JwtAuthService {
                 return await newUser.save();
             }
         } catch (error) {
+            console.log(error)
             return null;
         }
     }
@@ -130,8 +141,13 @@ export class JwtAuthService {
             const user = await this.usersModel.findOne({ 'facebook.id' : profile.id });
 
             // user already linked
-            if (user) {
+            if (user && currentUserId) {
                 throw new Error();
+            }
+
+            // basic login
+            if (user) {
+                return user;
             }
 
             // USER WANTS TO LINK A GOOGLE ACCOUNT
