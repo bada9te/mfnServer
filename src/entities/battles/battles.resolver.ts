@@ -25,6 +25,18 @@ export class BattlesResolver {
         return await this.battlesService.getBattleById(_id);
     }
 
+    @Query()
+    async battlesUserParticipatedIn(
+        @Args('userId') userId: string,
+        @Args('offset', ParseIntPipe) offset: number,
+        @Args('limit', ParseIntPipe) limit: number,
+    ) {
+        return {
+            battles: await this.battlesService.getBattlesUserParticipatedIn(userId, { offset, limit }),
+            count: await this.battlesService.getDocsCount({ $or: [{ initiator: userId }, { votedBy: userId }] })
+        }
+    }
+
     // battleCreate
     @Mutation()
     @UseGuards(GqlAuthGuard)

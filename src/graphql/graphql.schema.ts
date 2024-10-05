@@ -175,6 +175,8 @@ export abstract class IQuery {
 
     abstract battlesByStatus(finished: boolean, offset: number, limit: number): BattlesWithCount | Promise<BattlesWithCount>;
 
+    abstract battlesUserParticipatedIn(userId: string, offset: number, limit: number): BattlesWithCount | Promise<BattlesWithCount>;
+
     abstract moderationActionValidate(input: ModerateActionInput): ModerationAction | Promise<ModerationAction>;
 
     abstract notifications(receiverId: string, checked: boolean, offset: number, limit: number): NotificationsWithCount | Promise<NotificationsWithCount>;
@@ -209,7 +211,7 @@ export abstract class IQuery {
 
     abstract postsMostRecent(): Nullable<Post[]> | Promise<Nullable<Post[]>>;
 
-    abstract postMostRecentByFollowing(user: string): Nullable<Post[]> | Promise<Nullable<Post[]>>;
+    abstract postsMostRecentByFollowing(user: string): Nullable<Post[]> | Promise<Nullable<Post[]>>;
 
     abstract report(_id: string): Nullable<Report> | Promise<Nullable<Report>>;
 
@@ -232,6 +234,8 @@ export abstract class IQuery {
     abstract whoAmI(): Nullable<User> | Promise<Nullable<User>>;
 
     abstract userAchievementsData(_id: string): Nullable<UserAchievementsData> | Promise<Nullable<UserAchievementsData>>;
+
+    abstract userPinnedTracks(_id: string): Nullable<Post[]> | Promise<Nullable<Post[]>>;
 }
 
 export class Battle {

@@ -128,4 +128,13 @@ export class BattlesService {
     async getDocsCount(filter: any) {
         return await this.battlesModel.countDocuments(filter).exec();
     }
+
+    async getBattlesUserParticipatedIn(userId: string, range: RangeDto) {
+        return await this.battlesModel.find({
+            $or: [{ initiator: userId }, { votedBy: userId }]
+        })
+        .skip(range.offset)
+        .limit(range.limit)
+        .sort({ createdAt: -1 });;
+    }
 }
