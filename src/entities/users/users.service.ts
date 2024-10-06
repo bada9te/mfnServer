@@ -45,7 +45,7 @@ export class UsersService {
         this.emailService.sendVerificationEmail(
             inserted[0].local.email,
             inserted[0].nick,
-            `${process.env.CLIENT_BASE}/app/account-verify/${inserted[0]._id}/${moderation._id}/${moderation.verifyToken}/${moderation.type}`,
+            `${process.env.CLIENT_BASE}/account-verify/${inserted[0]._id}/${moderation._id}/${moderation.verifyToken}/${moderation.type}`,
             moderation.verifyToken
         );
         return {
@@ -221,7 +221,7 @@ export class UsersService {
         this.emailService.sendRestorationEmail(
             user.local.email,
             user.nick,
-            `${process.env.CLIENT_BASE}/app/account-restore/${user._id}/${moderation._id}/${moderation.verifyToken}/${type}`,
+            `${process.env.CLIENT_BASE}/account-restore/${user._id}/${moderation._id}/${moderation.verifyToken}/${type}`,
         );
 
         return { action: moderation, user };

@@ -15,7 +15,7 @@ export class EmailService {
     async sendVerificationEmail(to: string, userName: string, link: string, passcode: string) {
         this.nodemailerService.sendMail({
             to,
-            from: this.configService.get("EMAIL_USERNAME"),
+            from: "MFN",
             subject: `Account verification`,
             template: "./verificationTemplate",
             context: {
@@ -30,6 +30,7 @@ export class EmailService {
     async sendRestorationEmail(to: string, userName: string, linkRestore: string) {
         this.nodemailerService.sendMail({
             to,
+            from: "MFN",
             subject: 'Account restoring',
             template: join(__dirname, 'templates', 'restorationTemplate'),
             context: {
@@ -42,6 +43,7 @@ export class EmailService {
     async sendInformationEmail(to: string, userName: string, text: string) {
         this.nodemailerService.sendMail({
             to,
+            from: "MFN",
             subject: 'Account info',
             template: join(__dirname, 'templates', 'informationTemplate'),
             context: {
@@ -52,9 +54,11 @@ export class EmailService {
     }
 
     // chnage email
+    /*
     async sendChangingEmail(to: string, userName: string, newEmail: string, link: string, passcode: string) {
         this.nodemailerService.sendMail({
             to,
+            from: "MFN",
             subject: 'Email changing',
             template: join(__dirname, 'templates', 'informationTemplate'),
             context: {
@@ -65,4 +69,5 @@ export class EmailService {
             },
         }).then(console.log).catch(console.log);;
     }
+    */
 }

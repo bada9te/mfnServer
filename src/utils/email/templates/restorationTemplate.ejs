@@ -6,23 +6,38 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
 </head>
-<body>
-  <div class="container">
-    <div class="container-head">
-      <img src=<%= logoUrl %> alt="logo">
+<body style="margin: 0; padding: 0; background-color: #f4f4f4; font-family: Arial, sans-serif;">
+  <div class="container" style="max-width: 600px; margin: 20px auto; background-color: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);">
+    
+    <!-- Header with Logo -->
+    <div class="container-head" style="background-color: #28373e; color: white; padding: 20px; text-align: center; font-size: 24px; font-weight: bold;">
+      <img src="https://gateway.pinata.cloud/ipfs/bafkreig2ruoyg7bsinnncmr7qdomupnongmtyrzupnptw3p7xnjpuvwhey" alt="logo" style="width: 50px; height: 50px; vertical-align: middle; margin-right: 10px; border-radius: 50%;">
       MFN
     </div>
-      <div class="container-subhead">Account Restoration</div>
-      <div class="padding">
-        <p class="container-text">This message was generated automatically and don't need to be replied</p>
-        <hr class="delimiter">
-          <h3>Dear <%= locals.userName %>,</h3>
-          <p>You can restore your account using link below:</p>
-          <a href=<%= locals.linkRestore %>>Restore my account</a>
-          <p>In case this action is not caused by you, it can be canceled with the same link.</p>
-        <hr class="delimiter">
-        <p class="container-text">Music From Nothing 2024</p>
+
+    <!-- Subheader for Account Verification -->
+    <div class="container-subhead" style="background-color: #6d9a9d; color: #ffffff; padding: 15px; text-align: center; font-size: 20px; font-weight: 600;">
+        Account Restoration
+    </div>
+
+    <!-- Main Email Body -->
+    <div class="padding" style="padding: 20px; line-height: 1.6;">
+      <p class="container-text" style="color: #666; font-size: 14px; text-align: center; margin-bottom: 20px;">This message was generated automatically and doesn't need to be replied to.</p>
+      
+      <hr class="delimiter" style="border: 0; height: 1px; background: #ddd; margin: 20px 0;">
+
+      <h3 style="color: #28373e; font-size: 22px; text-align: center;">Dear <%= locals.userName %>,</h3>
+      <p style="font-size: 16px; color: #333; text-align: center;">You can restore your account using link below:</p>
+      
+      <!-- Verification Button -->
+      <div class="passcode-wrapper" style="text-align: center; margin: 20px 0;">
+      	<a href="<%= locals.link %>" style="display: inline-block; background-color: #529f9a; color: white; padding: 10px 20px; text-decoration: none; border-radius: 4px; margin: 20px auto; font-size: 20px; font-weight: bold; text-align: center;">Restore my account</a>
       </div>
+      
+      <p style="font-size: 16px; color: #333; text-align: center;">In case this action is not caused by you, it can be canceled with the same link.</p>
+
+      <hr class="delimiter" style="border: 0; height: 1px; background: #ddd; margin: 20px 0;">
+      <p class="container-text" style="color: #666; font-size: 14px; text-align: center;">Music From Nothing 2024</p>
     </div>
   </div>  
 </body>
