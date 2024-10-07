@@ -5,7 +5,7 @@ type Query {
 
 type Notification {
     _id: ID!
-    receiver: User!
+    receiver: User
     sender: User
     post: Post
     battle: Battle

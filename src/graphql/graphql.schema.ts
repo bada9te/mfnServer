@@ -344,7 +344,7 @@ export class ModerationAction {
 
 export class Notification {
     _id: string;
-    receiver: User;
+    receiver?: Nullable<User>;
     sender?: Nullable<User>;
     post?: Nullable<Post>;
     battle?: Nullable<Battle>;
@@ -365,7 +365,7 @@ export class NotificationCount {
 
 export class Playlist {
     _id: string;
-    owner: User;
+    owner?: Nullable<User>;
     title: string;
     tracks?: Nullable<Post[]>;
     public: boolean;
@@ -401,7 +401,7 @@ export class PostsByCategoryCount {
 
 export class Post {
     _id: string;
-    owner: User;
+    owner?: Nullable<User>;
     title: string;
     description: string;
     audio: string;

@@ -44,7 +44,7 @@ type PostsByCategoryCount {
 
 type Post {
     _id: ID!
-    owner: User!
+    owner: User
     title: String!
     description: String!
     audio: String!

@@ -7,7 +7,7 @@ type Query {
 
 type Playlist {
     _id: ID!
-    owner: User!
+    owner: User
     title: String!
     tracks: [Post!]
     public: Boolean!
