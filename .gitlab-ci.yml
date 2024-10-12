@@ -45,6 +45,6 @@ deploy-railway:
   script:
     - apt-get update && apt-get install -y curl
     - curl -fsSL https://railway.app/install.sh | sh
-    - railway up --service=$RAILWAY_SERVICE_NAME_DEV -d
+    - RAILWAY_TOKEN=$RAILWAY_TOKEN_DEV railway up --service=$RAILWAY_SERVICE_NAME_DEV -d
   environment:
     name: development
