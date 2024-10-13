@@ -35,7 +35,7 @@ export class EmailService {
             template: join(__dirname, 'templates', 'restorationTemplate'),
             context: {
                 userName,
-                linkRestore,
+                link: linkRestore,
             },
         }).then(console.log).catch(console.log);;
     }
