@@ -23,3 +23,25 @@ export class Playlist {
 }
 
 export const PlaylistSchema = SchemaFactory.createForClass(Playlist);
+
+PlaylistSchema.post('find', function(docs) {
+    docs.forEach(doc => {
+        if (!doc.owner) {
+            doc.owner = {
+                _id: '000000000000000000000000',
+                nick: 'Unknown',
+                avatar: '',
+            };
+        }
+    });
+});
+  
+PlaylistSchema.post('findOne', function(doc) {
+    if (doc && !doc.owner) {
+        doc.owner = {
+            _id: '000000000000000000000000',
+            nick: 'Unknown',
+            avatar: '',
+        };
+    }
+});

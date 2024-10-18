@@ -42,3 +42,45 @@ export class Battle {
 }
 
 export const BattleSchema = SchemaFactory.createForClass(Battle);
+
+BattleSchema.post('find', function(docs) {
+    docs.forEach(doc => {
+        if (!doc.initiator) {
+            doc.initiator = {
+                _id: '000000000000000000000000',
+                nick: 'Unknown',
+                avatar: '',
+            };
+        }
+
+        doc.votedBy.forEach(voter => {
+            if (!voter) {
+                voter = {
+                    _id: '000000000000000000000000',
+                    nick: 'Unknown',
+                    avatar: '',
+                };
+            }
+        });
+    });
+});
+
+BattleSchema.post('findOne', function(doc) {
+    if (doc && !doc.initiator) {
+        doc.initiator = {
+            _id: '000000000000000000000000',
+            nick: 'Unknown',
+            avatar: '',
+        };
+    }
+
+    doc.votedBy.forEach(voter => {
+        if (!voter) {
+            voter = {
+                _id: '000000000000000000000000',
+                nick: 'Unknown',
+                avatar: '',
+            };
+        }
+    });
+});
