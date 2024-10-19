@@ -55,9 +55,11 @@ export class UsersService {
     }
 
     // remove user by id
+    /*
     async deleteUserById(_id: string) {
         return await this.userModel.findByIdAndDelete(_id);
     }
+    */
 
     // update user by id
     async updateUser(_id: string, value: string | number, what: string) {

@@ -242,6 +242,7 @@ export class Battle {
     _id: string;
     title: string;
     chainId?: Nullable<number>;
+    initiator?: Nullable<User>;
     post1?: Nullable<Post>;
     post2?: Nullable<Post>;
     post1Score: number;
@@ -250,7 +251,7 @@ export class Battle {
     createdAt: string;
     willFinishAt: string;
     finished: boolean;
-    votedBy?: Nullable<User[]>;
+    votedBy?: Nullable<Nullable<User>[]>;
 }
 
 export class BattlesWithCount {
@@ -300,8 +301,6 @@ export abstract class IMutation {
     abstract supportRequestClose(_id: string): SupportRequest | Promise<SupportRequest>;
 
     abstract userCreate(input: AddUserInput): UserWithAction | Promise<UserWithAction>;
-
-    abstract userDeleteById(_id: string): User | Promise<User>;
 
     abstract userUpdate(input: UpdateUserInput): User | Promise<User>;
 

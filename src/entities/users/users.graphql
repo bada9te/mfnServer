@@ -49,7 +49,6 @@ type SwitchLikeOrPostInSavedReturnType {
 
 type Mutation {
     userCreate(input: AddUserInput!): UserWithAction!
-    userDeleteById(_id: ID!): User!
     userUpdate(input: UpdateUserInput!): User!
     userSwitchSubscription(input: SwitchSubscriptionOnUserInput!): TwoUsers!
     userConfirmAccount(input: AccountConfirmInput!): UserWithAction!
