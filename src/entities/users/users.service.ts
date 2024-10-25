@@ -169,11 +169,14 @@ export class UsersService {
             throw new BadRequestException('Invalid verification credentials');
         }
         
+        let textType = "";
         if (type === "password") {
             type = "local.password";
+            textType = "PASSWORD";
             newValue = await bcrypt.hash(newValue, await bcrypt.genSalt(8));
         } else if (type === "email") {
             type = "local.email";
+            textType = "EMAIL";
             // try to find a user with the same email
             const user = await this.getUserByEmail(newValue)
             if (user) {
@@ -181,6 +184,7 @@ export class UsersService {
             }
         } else if (type == "link-email") {
             type = "local.email";
+            textType = "EMAIL";
             const user = await this.getUserByEmail(newValue)
             if (user) {
                 throw new BadRequestException("This email was already taken");
@@ -208,7 +212,7 @@ export class UsersService {
         this.emailService.sendInformationEmail(
             type == "local.email" ? newValue : affectedUser.local.email, 
             affectedUser.nick, 
-            `Your account ${type} was successfully updated.` 
+            `Your account ${textType} was successfully updated.` 
         );
 
         return { action, user: affectedUser };
