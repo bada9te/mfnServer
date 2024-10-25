@@ -1,6 +1,6 @@
 import { Args, Mutation, Query, Resolver } from "@nestjs/graphql";
 import { UsersService } from "./users.service";
-import { SwicthSubscriptionDto, UpdateUserDto, CreateUserDto, ConfirmAccountDto, RestoreAccountDto, PrepareToRestoreDto, LinkTwitterDto } from "./dto";
+import { SwicthSubscriptionDto, UpdateUserDto, CreateUserDto, ConfirmAccountDto, RestoreAccountDto, PrepareToRestoreDto, LinkTwitterDto, LinkEmailDto } from "./dto";
 import { UseGuards } from "@nestjs/common";
 import { GqlAuthGuard } from "src/auth/strategy/graphql/gql.guard";
 import { CurrentUser } from "src/auth/strategy/graphql/gql.decorator";
@@ -133,5 +133,11 @@ export class UsersResolver {
     @UseGuards(GqlAuthGuard)
     async userSwitchPostPinned(@Args('userId') userId: string, @Args('postId') postId: string) {
         return await this.usersService.switchPostPinned(postId, userId);
+    }
+
+    @Mutation()
+    @UseGuards(GqlAuthGuard)
+    async userLinkEmailRequest(@Args('input') input: LinkEmailDto) {
+        return await this.usersService.linkEmailRequest(input.email, input.userId);
     }
 }

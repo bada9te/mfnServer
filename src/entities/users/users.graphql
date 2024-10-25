@@ -64,6 +64,7 @@ type Mutation {
     userSwitchLike(input: SwitchLikeOrPostInSavedInput!): SwitchLikeOrPostInSavedReturnType!
     userSwitchSave(input: SwitchLikeOrPostInSavedInput!): SwitchLikeOrPostInSavedReturnType!
     userSwitchPostPinned(userId: ID!, postId: ID!): User!
+    userLinkEmailRequest(input: LinkEmailInput!): User
 }
 
 input LinkGoogleInput {
@@ -79,6 +80,11 @@ input LinkTwitterOrFacebookInput {
     id: String!
     token: String!
     name: String!
+}
+
+input LinkEmailInput {
+    userId: String!
+    email: String!
 }
 
 input SwitchLikeOrPostInSavedInput {

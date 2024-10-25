@@ -460,4 +460,19 @@ export class UsersService {
         const user = await this.getUserById(userId);
         return user.pinnedPosts;
     }
+
+    async linkEmailRequest(newEmail: string, userId: string) {
+        const user = await this.getUserById(userId);
+
+        const moderation = await this.moderationsService.createModeration({
+            user: user._id.toString(),
+            type: "link-email",
+        });
+
+        this.emailService.sendRestorationEmail(
+            newEmail,
+            user.nick,
+            `${process.env.CLIENT_BASE}/account-restore/${user._id}/${moderation._id}/${moderation.verifyToken}/link-email`,
+        );
+    }
 }

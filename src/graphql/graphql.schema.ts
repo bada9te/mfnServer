@@ -110,6 +110,11 @@ export class LinkTwitterOrFacebookInput {
     name: string;
 }
 
+export class LinkEmailInput {
+    userId: string;
+    email: string;
+}
+
 export class SwitchLikeOrPostInSavedInput {
     userId: string;
     postId: string;
@@ -331,6 +336,8 @@ export abstract class IMutation {
     abstract userSwitchSave(input: SwitchLikeOrPostInSavedInput): SwitchLikeOrPostInSavedReturnType | Promise<SwitchLikeOrPostInSavedReturnType>;
 
     abstract userSwitchPostPinned(userId: string, postId: string): User | Promise<User>;
+
+    abstract userLinkEmail(input: LinkEmailInput): Nullable<User> | Promise<Nullable<User>>;
 }
 
 export class ModerationAction {
