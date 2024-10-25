@@ -40,6 +40,47 @@ export class JwtAuthService {
         return user;
     }
 
+    async processWeb3(address: string, message: string, signed: string, currentUserId?: string) {
+        try {
+            const user = await this.usersModel.findOne({ "web3.address": address });
+    
+            // user already linked
+            if (user && currentUserId) {
+                throw new Error();
+            }
+    
+            // basic login
+            if (user) {
+                return user;
+            }
+            
+            // USER WANTS TO LINK A TWITTER ACCOUNT
+            if (currentUserId) {
+                const userToLink = await this.usersModel.findById(currentUserId);
+
+                // invalid _id
+                if (!userToLink) {
+                    throw new Error();
+                }
+
+                userToLink.web3 = {
+                    address, message, signed
+                }
+                return await userToLink.save();
+            } else {
+                const newUser = new this.usersModel({
+                    nick: address.substring(0, 6),
+                    web3: {
+                        address, message, signed
+                    },
+                    verified: true,
+                });
+                return await newUser.save();
+            }
+        } catch (error) {
+            return null;
+        }
+    }
 
     async processTwitter(profile: any, token: string, currentUserId?: string) {
         try {
