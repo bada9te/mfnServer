@@ -179,6 +179,12 @@ export class UsersService {
             if (user) {
                 throw new BadRequestException("This email was already taken");
             }
+        } else if (type == "link-email") {
+            type = "local.email";
+            const user = await this.getUserByEmail(newValue)
+            if (user) {
+                throw new BadRequestException("This email was already taken");
+            }
         }
 
         // update user data
@@ -200,7 +206,7 @@ export class UsersService {
 
         // TODO: send email to affected user
         this.emailService.sendInformationEmail(
-            affectedUser.local.email, 
+            type == "local.email" ? newValue : affectedUser.local.email, 
             affectedUser.nick, 
             `Your account ${type} was successfully updated.` 
         );
@@ -464,12 +470,21 @@ export class UsersService {
     async linkEmailRequest(newEmail: string, userId: string) {
         const user = await this.getUserById(userId);
 
+        if (!user) {
+            throw new BadRequestException();
+        }
+
+        const userByEmail = await this.getUserByEmail(newEmail);
+        if (userByEmail) {
+            throw new BadRequestException();
+        }
+
         const moderation = await this.moderationsService.createModeration({
             user: user._id.toString(),
             type: "link-email",
         });
 
-        this.emailService.sendRestorationEmail(
+        this.emailService.sendEmailLinkingEmail(
             newEmail,
             user.nick,
             `${process.env.CLIENT_BASE}/account-restore/${user._id}/${moderation._id}/${moderation.verifyToken}/link-email`,
