@@ -1,12 +1,20 @@
 import { Args, Mutation, Query, Resolver } from "@nestjs/graphql";
 import { PlaylistsService } from "./playlists.service";
 import { CreatePlaylistDto, SwitchTrackDto } from "./dto";
-import { ParseIntPipe, UseGuards } from "@nestjs/common";
+import { BadRequestException, ParseIntPipe, UseGuards } from "@nestjs/common";
 import { GqlAuthGuard } from "src/auth/strategy/graphql/gql.guard";
+import { UserDocument } from "../users/users.schema";
+import { CurrentUser } from "src/auth/strategy/graphql/gql.decorator";
 
 @Resolver('Playlist')
 export class PlaylistResolver {
     constructor(private playlistsService: PlaylistsService) {}
+
+    private validateUserAccess(userId: string, currentUser: UserDocument) {
+        if (currentUser._id.toString() !== userId.toString()) {
+            throw new BadRequestException('User access violation!');
+        }
+    }
 
     @Query()
     async playlist(@Args('_id') _id: string) {
@@ -43,19 +51,24 @@ export class PlaylistResolver {
 
     @Mutation()
     @UseGuards(GqlAuthGuard)
-    async playlistCreate(@Args('input') dto: CreatePlaylistDto) {
+    async playlistCreate(@Args('input') dto: CreatePlaylistDto, @CurrentUser() user: UserDocument) {
+        this.validateUserAccess(dto.owner, user);
         return await this.playlistsService.createPlaylist(dto);
     }
 
     @Mutation()
     @UseGuards(GqlAuthGuard)
-    async playlistDeleteById(@Args('_id') _id: string) {
+    async playlistDeleteById(@Args('_id') _id: string, @CurrentUser() user: UserDocument) {
+        const playlist = await this.playlistsService.getPlaylistById(_id);
+        this.validateUserAccess(playlist.owner._id.toString(), user);
         return await this.playlistsService.deletePlaylistById(_id);
     }
 
     @Mutation()
     @UseGuards(GqlAuthGuard)
-    async playlistSwicthTrack(@Args('input') dto: SwitchTrackDto) {
+    async playlistSwicthTrack(@Args('input') dto: SwitchTrackDto, @CurrentUser() user: UserDocument) {
+        const playlist = await this.playlistsService.getPlaylistById(dto.playlistId);
+        this.validateUserAccess(playlist.owner._id.toString(), user);
         return await this.playlistsService.swicthTrackInPlaylist(dto.playlistId, dto.trackId);
     }
 }
