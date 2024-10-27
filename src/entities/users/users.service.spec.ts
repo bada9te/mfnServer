@@ -14,10 +14,16 @@ describe('UsersService', () => {
 
     const mockUser = {
         _id: "66d434125a960f3fe329a338",
+        local: {
+            email: "test@mail.jest",
+        },
+        nick: "jestUser",
     };
 
     const mockUserModel = {
-        findById: jest.fn().mockResolvedValue(mockUser),
+        findById: jest.fn(),
+        findOne: jest.fn(),
+        find: jest.fn(),
     };
 
     // Mock for dependencies
@@ -44,10 +50,45 @@ describe('UsersService', () => {
 
     describe('getUserById', () => {
         it('should find and return a user by id', async () => {
+            jest.spyOn(model, 'findById').mockResolvedValue(mockUser);
             const res = await usersService.getUserById(mockUser._id);
 
             expect(model.findById).toHaveBeenCalledWith(mockUser._id);
             expect(res).toEqual(mockUser);
+        });
+    });
+
+    describe('getUserByEmail', () => {
+        it('should find and return user by email', async() => {
+            jest.spyOn(model, 'findOne').mockResolvedValue(mockUser);
+            const res = await usersService.getUserByEmail(mockUser.local.email);
+
+            expect(model.findOne).toHaveBeenCalledWith({ 'local.email': mockUser.local.email });
+            expect(res).toEqual(mockUser);
+        });
+    });
+
+    describe('getUsersByIds', () => {
+        it('should find and return a list of users by ids array', async() => {
+            jest.spyOn(model, 'find').mockResolvedValue([mockUser]);
+            const res = await usersService.getUsersByIds([mockUser._id]);
+
+            expect(model.find).toHaveBeenCalledWith({ _id: [mockUser._id] });
+            expect(res).toEqual([mockUser]);
+        });
+    });
+
+    describe('getUsersByNickname', () => {
+        it('should find and return a list of users by nickname', async() => {
+            jest.spyOn(model, 'find').mockImplementation(() => ({
+                limit: jest.fn().mockResolvedValue([mockUser]),
+            } as any));
+
+            const res = await usersService.getUsersByNickname(mockUser.nick);
+            expect(model.find).toHaveBeenCalledWith({
+                nick: { $regex: '.*' + mockUser.nick + '.*' }
+            });
+            expect(res).toEqual([mockUser]);
         });
     });
 });
