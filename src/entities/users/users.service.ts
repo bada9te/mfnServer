@@ -29,27 +29,27 @@ export class UsersService {
         }
 
         const toInsert = {
-            ...user,
+            nick: user.nick,
             local: {
                 email: user.email,
                 password: await bcrypt.hash(user.password, await bcrypt.genSalt(8))
             }
         }
-        const inserted = await this.userModel.insertMany([toInsert]);
+        const inserted = await this.userModel.create(toInsert);
 
         const moderation = await this.moderationsService.createModeration({
-            user: inserted[0]._id.toString(),
+            user: inserted._id.toString(),
             type: "verify",
         });
 
         this.emailService.sendVerificationEmail(
-            inserted[0].local.email,
-            inserted[0].nick,
-            `${process.env.CLIENT_BASE}/account-verify/${inserted[0]._id}/${moderation._id}/${moderation.verifyToken}/${moderation.type}`,
+            inserted.local.email,
+            inserted.nick,
+            `${process.env.CLIENT_BASE}/account-verify/${inserted._id}/${moderation._id}/${moderation.verifyToken}/${moderation.type}`,
             moderation.verifyToken
         );
         return {
-            user: inserted[0],
+            user: inserted,
             action: moderation,
         };
     }
