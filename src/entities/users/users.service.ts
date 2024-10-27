@@ -54,13 +54,6 @@ export class UsersService {
         };
     }
 
-    // remove user by id
-    /*
-    async deleteUserById(_id: string) {
-        return await this.userModel.findByIdAndDelete(_id);
-    }
-    */
-
     // update user by id
     async updateUser(_id: string, value: string | number, what: string) {
         return await this.userModel.findOneAndUpdate(
@@ -156,7 +149,7 @@ export class UsersService {
     }
 
     // restore account
-    // type: "password" | "email"
+    // type: "password" | "email" | "link-email"
     async restoreAccount({ userId, actionId, verifyToken, type, newValue }: RestoreAccountDto) {
         const action = await this.moderationsService.validateAction({
             userId,
@@ -326,26 +319,6 @@ export class UsersService {
         }
     }
 
-
-    // link google
-    async linkGoogle(dto: LinkGoogleDto) {
-        const user = await this.getUserById(dto.userId);
-        const userWithGoogle = await this.userModel.findOne({"google.id": dto.id}); 
-
-        if (!user || userWithGoogle) {
-            throw new BadRequestException();
-        }
-
-        user.google = {
-            id: dto.id,
-            token: dto.token,
-            name: dto.name,
-            email: dto.email,
-        }
-
-        return await user.save();
-    }
-
     // unlink google 
     async unlinkGoogle(userId: string) {
         const user = await this.getUserById(userId);
@@ -359,24 +332,6 @@ export class UsersService {
         return await user.save();
     }
 
-    // link Facebook
-    async linkFacebook(dto: LinkFacebookDto) {
-        const user = await this.getUserById(dto.userId);
-        const userWithFacebook = await this.userModel.findOne({"facebook.id": dto.id});
-
-        if (!user || userWithFacebook) {
-            throw new BadRequestException();
-        }
-
-        user.facebook = {
-            id: dto.id,
-            token: dto.token,
-            name: dto.name,
-        }
-
-        return await user.save();
-    }
-
     // unlink facebook 
     async unlinkFacebook(userId: string) {
         const user = await this.getUserById(userId);
@@ -386,24 +341,6 @@ export class UsersService {
         }
 
         user.facebook = null;
-
-        return await user.save();
-    }
-
-    // link twitter
-    async linkTwitter(dto: LinkTwitterDto) {
-        const user = await this.getUserById(dto.userId);
-        const userWithTwitter = this.userModel.findOne({"twitter.id": dto.id});
-
-        if (!user || userWithTwitter) {
-            throw new BadRequestException();
-        }
-
-        user.twitter = {
-            id: dto.id,
-            token: dto.token,
-            name: dto.name
-        }
 
         return await user.save();
     }

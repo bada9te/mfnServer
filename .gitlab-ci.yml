@@ -2,7 +2,7 @@ image: node:18
 
 stages:
   - install
-#  - test
+  - test
   - build
   - deploy
 
@@ -16,13 +16,13 @@ install_dependencies:
       - node_modules/
 
 # Run linting and tests
-#run_tests:
-#  stage: test
-#  script:
-#    - yarn lint  # Optional: run this if you have linting configured
-#    - yarn test  # Optional: run this if you have tests
-#  dependencies:
-#   - install_dependencies
+run_tests:
+  stage: test
+  script:
+    - yarn lint
+    - yarn test
+  dependencies:
+   - install_dependencies
 
 # Build the Next.js app
 build_nestjs:
