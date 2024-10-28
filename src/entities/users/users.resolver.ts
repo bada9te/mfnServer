@@ -91,24 +91,11 @@ export class UsersResolver {
 
     @UseGuards(GqlAuthGuard)
     @Mutation()
-    async userLinkGoogle(@Args('input') dto: LinkGoogleDto, @CurrentUser() user: UserDocument) {
-        this.validateUserAccess(dto.userId, user);
-        return await this.usersService.linkGoogle(dto);
-    }
-
-    @UseGuards(GqlAuthGuard)
-    @Mutation()
     async userUnlinkGoogle(@Args('_id') _id: string, @CurrentUser() user: UserDocument) {
         this.validateUserAccess(_id, user);
         return await this.usersService.unlinkGoogle(_id);
     }
 
-    @UseGuards(GqlAuthGuard)
-    @Mutation()
-    async userLinkFacebook(@Args('input') dto: LinkFacebookDto, @CurrentUser() user: UserDocument) {
-        this.validateUserAccess(dto.userId, user);
-        return await this.usersService.linkFacebook(dto);
-    }
 
     @UseGuards(GqlAuthGuard)
     @Mutation()
@@ -117,13 +104,6 @@ export class UsersResolver {
             throw new BadRequestException('User access violation!');
         }
         return await this.usersService.unlinkFacebook(_id);
-    }
-
-    @UseGuards(GqlAuthGuard)
-    @Mutation()
-    async userLinkTwitter(@Args('input') dto: LinkTwitterDto, @CurrentUser() user: UserDocument) {
-        this.validateUserAccess(dto.userId, user);
-        return await this.usersService.linkTwitter(dto);
     }
 
     @UseGuards(GqlAuthGuard)

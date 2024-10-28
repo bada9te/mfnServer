@@ -54,11 +54,8 @@ type Mutation {
     userConfirmAccount(input: AccountConfirmInput!): UserWithAction!
     userRestoreAccount(input: AccountRestoreInput!): UserWithAction!
     userPrepareAccountToRestore(input: PrepareAccountToRestoreInput): UserWithAction!
-    userLinkGoogle(input: LinkGoogleInput!): User
     userUnlinkGoogle(_id: ID!): User
-    userLinkFacebook(input: LinkTwitterOrFacebookInput!): User
     userUnlinkFacebook(_id: ID!): User
-    userLinkTwitter(input: LinkTwitterOrFacebookInput!): User
     userUnlinkTwitter(_id: ID!): User
     login(email: String!, password: String!): User
     userSwitchLike(input: SwitchLikeOrPostInSavedInput!): SwitchLikeOrPostInSavedReturnType!
@@ -67,20 +64,6 @@ type Mutation {
     userLinkEmailRequest(input: LinkEmailInput!): User
 }
 
-input LinkGoogleInput {
-    userId: String!
-    id: String!
-    token: String!
-    email: String!
-    name: String!
-}
-
-input LinkTwitterOrFacebookInput {
-    userId: String!
-    id: String!
-    token: String!
-    name: String!
-}
 
 input LinkEmailInput {
     userId: String!
