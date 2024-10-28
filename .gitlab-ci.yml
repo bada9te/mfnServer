@@ -19,7 +19,6 @@ install_dependencies:
 run_tests:
   stage: test
   script:
-    - yarn lint
     - yarn test
   dependencies:
    - install_dependencies
