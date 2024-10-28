@@ -17,7 +17,7 @@ export class ReportsService {
 
     // create
     async createReport(report: CreateReportDto) {
-        const inserted = await this.reportsModel.insertMany([report]);
+        const inserted = await this.reportsModel.create(report);
         if (report.reportedPost && !report.email) {
             const post = await this.postsService.getPostById(report.reportedPost);
             if (post) {
@@ -29,7 +29,7 @@ export class ReportsService {
                 });
             }
         }
-        return inserted[0];
+        return inserted;
     }
 
     // get all

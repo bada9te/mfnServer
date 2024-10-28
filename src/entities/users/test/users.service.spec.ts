@@ -1,15 +1,15 @@
 import { Test, TestingModule } from "@nestjs/testing";
-import { UsersService } from "./users.service";
-import { User, UserDocument } from "./users.schema";
+import { UsersService } from "../users.service";
+import { User, UserDocument } from "../users.schema";
 import { getModelToken } from "@nestjs/mongoose";
 import { Model } from "mongoose";
-import { ModerationsService } from "../moderations/moderations.service";
+import { ModerationsService } from "../../moderations/moderations.service";
 import { EmailService } from "src/utils/email/email.service";
-import { PostsService } from "../posts/posts.service";
-import { AchievementsService } from "../achievements/achievements.service";
+import { PostsService } from "../../posts/posts.service";
+import { AchievementsService } from "../../achievements/achievements.service";
 import * as bcrypt from 'bcrypt';
 import { BadRequestException } from "@nestjs/common";
-import { PrepareToRestoreDto, RestoreAccountDto } from "./dto";
+import { PrepareToRestoreDto, RestoreAccountDto } from "../dto";
 
 describe('UsersService', () => {
     let usersService: UsersService;
@@ -34,20 +34,12 @@ describe('UsersService', () => {
 
 
     const mockUser2 = {
+        ...mockUser,
         _id: "0000bc125a960f3fe329111a",
         local: {
             email: "test2@mail.jest",
         },
         nick: "jestUser2",
-        subscribers: [],
-        achievements: [],
-        google: { a: 1 },
-        facebook: { a: 1 },
-        twitter: { a: 1 },
-        savedPosts: [],
-        likedPosts: [],
-        pinnedPosts: [],
-        save: jest.fn(),
     };
 
     const mockPost = {
