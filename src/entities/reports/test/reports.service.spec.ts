@@ -86,7 +86,7 @@ describe('ReportsService', () => {
     });
 
     describe('closeReport', () => {
-        it('should update support request', async() => {
+        it('should update report', async() => {
             jest.spyOn(model, 'findByIdAndUpdate').mockResolvedValue(mockReport);
 
             const res = await reportsService.closeReport(mockReport._id);
@@ -100,7 +100,7 @@ describe('ReportsService', () => {
     });
 
     describe('getSupportRequestById', () => {
-        it('should return a support-request by id', async() => {
+        it('should return a report by id', async() => {
             jest.spyOn(model, 'findById').mockResolvedValue(mockReport);
 
             const res = await reportsService.getReportById(mockReport._id);
