@@ -9,8 +9,8 @@ export class PlannedTasksService {
     constructor(@InjectModel(PlannedTask.name) private plannedTasksModel: Model<PlannedTask>) {}
 
     async createPlannedTask(dto: CreateTaskDto) {
-        const inserted = await this.plannedTasksModel.insertMany([dto]);
-        return inserted[0];
+        const inserted = await this.plannedTasksModel.create(dto);
+        return inserted;
     }
 
     async deletePlannedTask(taskType: string, relatedEntityId: string) {
