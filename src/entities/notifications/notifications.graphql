@@ -36,6 +36,7 @@ input CreateNotificationInput {
     receiver: ID!
     sender: ID
     post: ID
+    battle: ID
     text: String!
     type: String!
 }

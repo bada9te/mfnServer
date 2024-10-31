@@ -9,8 +9,8 @@ export class NotificationsService {
     constructor(@InjectModel(Notification.name) private notificationsModel: Model<Notification>) {}
     
     async createNotification(notification: CreateNotificationDto) {
-        const inserted = await this.notificationsModel.insertMany([notification]);
-        return inserted[0];
+        const inserted = await this.notificationsModel.create(notification);
+        return inserted;
     }
 
     async deleteNotificationById(_id: string) {
