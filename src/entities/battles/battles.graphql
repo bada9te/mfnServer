@@ -8,6 +8,7 @@ type Battle {
     _id: ID!
     title: String!
     chainId: Int
+    initiator: User
     post1: Post
     post2: Post
     post1Score: Int!
@@ -16,7 +17,7 @@ type Battle {
     createdAt: String!
     willFinishAt: String!
     finished: Boolean!
-    votedBy: [User!]
+    votedBy: [User]
 }
 
 input Range {

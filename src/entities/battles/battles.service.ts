@@ -70,7 +70,7 @@ export class BattlesService {
 
     async setWinnerByBattleId(_id: string) {
         // Fetch the battle document
-        const battle = await this.battlesModel.findById(_id).exec();
+        const battle = await this.battlesModel.findById(_id);
         
         if (!battle) {
             throw new Error('Battle not found');
@@ -96,7 +96,7 @@ export class BattlesService {
                 }
             },
             { new: true }
-        ).exec();
+        );
     }    
 
     async getAllBattlesByStatus(finished: boolean, range: RangeDto) {

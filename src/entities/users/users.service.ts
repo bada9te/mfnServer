@@ -29,34 +29,29 @@ export class UsersService {
         }
 
         const toInsert = {
-            ...user,
+            nick: user.nick,
             local: {
                 email: user.email,
                 password: await bcrypt.hash(user.password, await bcrypt.genSalt(8))
             }
         }
-        const inserted = await this.userModel.insertMany([toInsert]);
+        const inserted = await this.userModel.create(toInsert);
 
         const moderation = await this.moderationsService.createModeration({
-            user: inserted[0]._id.toString(),
+            user: inserted._id.toString(),
             type: "verify",
         });
 
         this.emailService.sendVerificationEmail(
-            inserted[0].local.email,
-            inserted[0].nick,
-            `${process.env.CLIENT_BASE}/account-verify/${inserted[0]._id}/${moderation._id}/${moderation.verifyToken}/${moderation.type}`,
+            inserted.local.email,
+            inserted.nick,
+            `${process.env.CLIENT_BASE}/account-verify/${inserted._id}/${moderation._id}/${moderation.verifyToken}/${moderation.type}`,
             moderation.verifyToken
         );
         return {
-            user: inserted[0],
+            user: inserted,
             action: moderation,
         };
-    }
-
-    // remove user by id
-    async deleteUserById(_id: string) {
-        return await this.userModel.findByIdAndDelete(_id);
     }
 
     // update user by id
@@ -154,7 +149,7 @@ export class UsersService {
     }
 
     // restore account
-    // type: "password" | "email"
+    // type: "password" | "email" | "link-email"
     async restoreAccount({ userId, actionId, verifyToken, type, newValue }: RestoreAccountDto) {
         const action = await this.moderationsService.validateAction({
             userId,
@@ -167,12 +162,22 @@ export class UsersService {
             throw new BadRequestException('Invalid verification credentials');
         }
         
+        let textType = "";
         if (type === "password") {
             type = "local.password";
+            textType = "PASSWORD";
             newValue = await bcrypt.hash(newValue, await bcrypt.genSalt(8));
         } else if (type === "email") {
             type = "local.email";
+            textType = "EMAIL";
             // try to find a user with the same email
+            const user = await this.getUserByEmail(newValue)
+            if (user) {
+                throw new BadRequestException("This email was already taken");
+            }
+        } else if (type == "link-email") {
+            type = "local.email";
+            textType = "EMAIL";
             const user = await this.getUserByEmail(newValue)
             if (user) {
                 throw new BadRequestException("This email was already taken");
@@ -198,9 +203,9 @@ export class UsersService {
 
         // TODO: send email to affected user
         this.emailService.sendInformationEmail(
-            affectedUser.local.email, 
+            type == "local.email" ? newValue : affectedUser.local.email, 
             affectedUser.nick, 
-            `Your account ${type} was successfully updated.` 
+            `Your account ${textType} was successfully updated.` 
         );
 
         return { action, user: affectedUser };
@@ -314,26 +319,6 @@ export class UsersService {
         }
     }
 
-
-    // link google
-    async linkGoogle(dto: LinkGoogleDto) {
-        const user = await this.getUserById(dto.userId);
-        const userWithGoogle = await this.userModel.findOne({"google.id": dto.id}); 
-
-        if (!user || userWithGoogle) {
-            throw new BadRequestException();
-        }
-
-        user.google = {
-            id: dto.id,
-            token: dto.token,
-            name: dto.name,
-            email: dto.email,
-        }
-
-        return await user.save();
-    }
-
     // unlink google 
     async unlinkGoogle(userId: string) {
         const user = await this.getUserById(userId);
@@ -347,24 +332,6 @@ export class UsersService {
         return await user.save();
     }
 
-    // link Facebook
-    async linkFacebook(dto: LinkFacebookDto) {
-        const user = await this.getUserById(dto.userId);
-        const userWithFacebook = await this.userModel.findOne({"facebook.id": dto.id});
-
-        if (!user || userWithFacebook) {
-            throw new BadRequestException();
-        }
-
-        user.facebook = {
-            id: dto.id,
-            token: dto.token,
-            name: dto.name,
-        }
-
-        return await user.save();
-    }
-
     // unlink facebook 
     async unlinkFacebook(userId: string) {
         const user = await this.getUserById(userId);
@@ -374,24 +341,6 @@ export class UsersService {
         }
 
         user.facebook = null;
-
-        return await user.save();
-    }
-
-    // link twitter
-    async linkTwitter(dto: LinkTwitterDto) {
-        const user = await this.getUserById(dto.userId);
-        const userWithTwitter = this.userModel.findOne({"twitter.id": dto.id});
-
-        if (!user || userWithTwitter) {
-            throw new BadRequestException();
-        }
-
-        user.twitter = {
-            id: dto.id,
-            token: dto.token,
-            name: dto.name
-        }
 
         return await user.save();
     }
@@ -457,5 +406,29 @@ export class UsersService {
     async getPinnedPosts(userId: string) {
         const user = await this.getUserById(userId);
         return user.pinnedPosts;
+    }
+
+    async linkEmailRequest(newEmail: string, userId: string) {
+        const user = await this.getUserById(userId);
+
+        if (!user) {
+            throw new BadRequestException();
+        }
+
+        const userByEmail = await this.getUserByEmail(newEmail);
+        if (userByEmail) {
+            throw new BadRequestException();
+        }
+
+        const moderation = await this.moderationsService.createModeration({
+            user: user._id.toString(),
+            type: "link-email",
+        });
+
+        this.emailService.sendEmailLinkingEmail(
+            newEmail,
+            user.nick,
+            `${process.env.CLIENT_BASE}/account-restore/${user._id}/${moderation._id}/${moderation.verifyToken}/link-email`,
+        );
     }
 }

@@ -8,6 +8,7 @@ import { FacebookOauthModule } from './strategy/facebook/facebook.module';
 import { TwitterOauthModule } from './strategy/twitter/twitter.module';
 import { LocalOauthModule } from './strategy/local/local.module';
 import { NotificationsModule } from 'src/entities/notifications/notifications.module';
+import { Web3OauthModule } from './strategy/web3/web3.module';
 
 
 @Module({
@@ -21,6 +22,7 @@ import { NotificationsModule } from 'src/entities/notifications/notifications.mo
     FacebookOauthModule,
     TwitterOauthModule,
     NotificationsModule,
+    Web3OauthModule,
   ],
 })
 export class AuthModule {}

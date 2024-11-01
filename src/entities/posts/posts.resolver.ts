@@ -1,13 +1,21 @@
 import { Args, Resolver, Query, Mutation } from "@nestjs/graphql";
 import { PostsService } from "./posts.service";
 import { CreatePostDto, PostsByTitleDto, SwicthLikeOrSaveDto, UpdatePostDto } from "./dto";
-import { ParseIntPipe, UseGuards } from "@nestjs/common";
+import { BadRequestException, ParseIntPipe, UseGuards } from "@nestjs/common";
 import { GqlAuthGuard } from "src/auth/strategy/graphql/gql.guard";
+import { UserDocument } from "../users/users.schema";
+import { CurrentUser } from "src/auth/strategy/graphql/gql.decorator";
 
 
 @Resolver('Post')
 export class PostsResolver {
     constructor(private postsService: PostsService) {}
+
+    private validateUserAccess(userId: string, currentUser: UserDocument) {
+        if (currentUser._id.toString() !== userId.toString()) {
+            throw new BadRequestException('User access violation!');
+        }
+    }
 
     @Query()
     async post(@Args('_id') _id: string) {
@@ -99,19 +107,24 @@ export class PostsResolver {
 
     @Mutation()
     @UseGuards(GqlAuthGuard)
-    async postCreate(@Args('input') dto: CreatePostDto) {
+    async postCreate(@Args('input') dto: CreatePostDto, @CurrentUser() user: UserDocument) {
+        this.validateUserAccess(dto.owner, user);
         return await this.postsService.addPost(dto);
     }
 
     @Mutation()
     @UseGuards(GqlAuthGuard)
-    async postUpdate(@Args('input') { post, value, what }: UpdatePostDto) {
+    async postUpdate(@Args('input') { post, value, what }: UpdatePostDto, @CurrentUser() user: UserDocument) {
+        const postData = await this.postsService.getPostById(post);
+        this.validateUserAccess(postData.owner._id.toString(), user);
         return await this.postsService.updatePost(post, value, what);
     }
 
     @Mutation()
     @UseGuards(GqlAuthGuard)
-    async postDeleteById(@Args('_id') _id: string) {
+    async postDeleteById(@Args('_id') _id: string, @CurrentUser() user: UserDocument) {
+        const postData = await this.postsService.getPostById(_id);
+        this.validateUserAccess(postData.owner._id.toString(), user);
         return await this.postsService.deletePostById(_id);
     }
 }

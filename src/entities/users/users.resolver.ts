@@ -1,7 +1,7 @@
 import { Args, Mutation, Query, Resolver } from "@nestjs/graphql";
 import { UsersService } from "./users.service";
-import { SwicthSubscriptionDto, UpdateUserDto, CreateUserDto, ConfirmAccountDto, RestoreAccountDto, PrepareToRestoreDto, LinkTwitterDto } from "./dto";
-import { UseGuards } from "@nestjs/common";
+import { SwicthSubscriptionDto, UpdateUserDto, CreateUserDto, ConfirmAccountDto, RestoreAccountDto, PrepareToRestoreDto, LinkTwitterDto, LinkEmailDto } from "./dto";
+import { BadRequestException, UseGuards } from "@nestjs/common";
 import { GqlAuthGuard } from "src/auth/strategy/graphql/gql.guard";
 import { CurrentUser } from "src/auth/strategy/graphql/gql.decorator";
 import { UserDocument } from "./users.schema";
@@ -13,6 +13,12 @@ import { SwicthLikeOrSaveDto } from "./dto/swicth-like-or-save.dto";
 @Resolver('User')
 export class UsersResolver {
     constructor(private usersService: UsersService) {}
+
+    private validateUserAccess(userId: string, currentUser: UserDocument) {
+        if (currentUser._id.toString() !== userId.toString()) {
+            throw new BadRequestException('User access violation!');
+        }
+    }
 
     @UseGuards(GqlAuthGuard)
     async whoAmI(@CurrentUser() user: UserDocument) {
@@ -56,13 +62,15 @@ export class UsersResolver {
 
     @Mutation()
     @UseGuards(GqlAuthGuard)
-    async userUpdate(@Args('input') { _id, what, value }: UpdateUserDto) {
+    async userUpdate(@Args('input') { _id, what, value }: UpdateUserDto, @CurrentUser() user: UserDocument) {
+        this.validateUserAccess(_id, user);
         return await this.usersService.updateUser(_id, value, what);
     }
 
     @Mutation()
     @UseGuards(GqlAuthGuard)
-    async userSwitchSubscription(@Args('input') { subscriberId, userId }: SwicthSubscriptionDto) {
+    async userSwitchSubscription(@Args('input') { subscriberId, userId }: SwicthSubscriptionDto, @CurrentUser() user: UserDocument) {
+        this.validateUserAccess(userId, user);
         return await this.usersService.swicthUserSubscription(subscriberId, userId);
     }
 
@@ -83,55 +91,53 @@ export class UsersResolver {
 
     @UseGuards(GqlAuthGuard)
     @Mutation()
-    async userLinkGoogle(@Args('input') dto: LinkGoogleDto) {
-        return await this.usersService.linkGoogle(dto);
-    }
-
-    @UseGuards(GqlAuthGuard)
-    @Mutation()
-    async userUnlinkGoogle(@Args('_id') _id: string) {
+    async userUnlinkGoogle(@Args('_id') _id: string, @CurrentUser() user: UserDocument) {
+        this.validateUserAccess(_id, user);
         return await this.usersService.unlinkGoogle(_id);
     }
 
-    @UseGuards(GqlAuthGuard)
-    @Mutation()
-    async userLinkFacebook(@Args('input') dto: LinkFacebookDto) {
-        return await this.usersService.linkFacebook(dto);
-    }
 
     @UseGuards(GqlAuthGuard)
     @Mutation()
-    async userUnlinkFacebook(@Args('_id') _id: string) {
+    async userUnlinkFacebook(@Args('_id') _id: string, @CurrentUser() user: UserDocument) {
+        if (user._id.toString() !== _id.toString()) {
+            throw new BadRequestException('User access violation!');
+        }
         return await this.usersService.unlinkFacebook(_id);
     }
 
     @UseGuards(GqlAuthGuard)
     @Mutation()
-    async userLinkTwitter(@Args('input') dto: LinkTwitterDto) {
-        return await this.usersService.linkTwitter(dto);
-    }
-
-    @UseGuards(GqlAuthGuard)
-    @Mutation()
-    async userUnlinkTwitter(@Args('_id') _id: string) {
+    async userUnlinkTwitter(@Args('_id') _id: string, @CurrentUser() user: UserDocument) {
+        this.validateUserAccess(_id, user);
         return await this.usersService.unlinkTwitter(_id);
     }
 
     @Mutation()
     @UseGuards(GqlAuthGuard)
-    async userSwitchLike(@Args('input') dto: SwicthLikeOrSaveDto) {
+    async userSwitchLike(@Args('input') dto: SwicthLikeOrSaveDto, @CurrentUser() user: UserDocument) {
+        this.validateUserAccess(dto.userId, user);
         return await this.usersService.switchPostInLiked(dto.postId, dto.userId);
     }
 
     @Mutation()
     @UseGuards(GqlAuthGuard)
-    async userSwitchSave(@Args('input') dto: SwicthLikeOrSaveDto) {
+    async userSwitchSave(@Args('input') dto: SwicthLikeOrSaveDto, @CurrentUser() user: UserDocument) {
+        this.validateUserAccess(dto.userId, user);
         return await this.usersService.switchPostInSaved(dto.postId, dto.userId);
     }
 
     @Mutation()
     @UseGuards(GqlAuthGuard)
-    async userSwitchPostPinned(@Args('userId') userId: string, @Args('postId') postId: string) {
+    async userSwitchPostPinned(@Args('userId') userId: string, @Args('postId') postId: string, @CurrentUser() user: UserDocument) {
+        this.validateUserAccess(userId, user);
         return await this.usersService.switchPostPinned(postId, userId);
+    }
+
+    @Mutation()
+    @UseGuards(GqlAuthGuard)
+    async userLinkEmailRequest(@Args('input') input: LinkEmailDto, @CurrentUser() user: UserDocument) {
+        this.validateUserAccess(input.userId, user);
+        return await this.usersService.linkEmailRequest(input.email, input.userId);
     }
 }

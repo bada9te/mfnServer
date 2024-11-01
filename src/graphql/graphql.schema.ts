@@ -110,6 +110,11 @@ export class LinkTwitterOrFacebookInput {
     name: string;
 }
 
+export class LinkEmailInput {
+    userId: string;
+    email: string;
+}
+
 export class SwitchLikeOrPostInSavedInput {
     userId: string;
     postId: string;
@@ -242,6 +247,7 @@ export class Battle {
     _id: string;
     title: string;
     chainId?: Nullable<number>;
+    initiator?: Nullable<User>;
     post1?: Nullable<Post>;
     post2?: Nullable<Post>;
     post1Score: number;
@@ -250,7 +256,7 @@ export class Battle {
     createdAt: string;
     willFinishAt: string;
     finished: boolean;
-    votedBy?: Nullable<User[]>;
+    votedBy?: Nullable<Nullable<User>[]>;
 }
 
 export class BattlesWithCount {
@@ -301,8 +307,6 @@ export abstract class IMutation {
 
     abstract userCreate(input: AddUserInput): UserWithAction | Promise<UserWithAction>;
 
-    abstract userDeleteById(_id: string): User | Promise<User>;
-
     abstract userUpdate(input: UpdateUserInput): User | Promise<User>;
 
     abstract userSwitchSubscription(input: SwitchSubscriptionOnUserInput): TwoUsers | Promise<TwoUsers>;
@@ -332,6 +336,8 @@ export abstract class IMutation {
     abstract userSwitchSave(input: SwitchLikeOrPostInSavedInput): SwitchLikeOrPostInSavedReturnType | Promise<SwitchLikeOrPostInSavedReturnType>;
 
     abstract userSwitchPostPinned(userId: string, postId: string): User | Promise<User>;
+
+    abstract userLinkEmail(input: LinkEmailInput): Nullable<User> | Promise<Nullable<User>>;
 }
 
 export class ModerationAction {

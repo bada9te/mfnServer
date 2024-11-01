@@ -14,8 +14,8 @@ export class ModerationsService {
             ...action,
             verifyToken: generateRandomString(),
         }
-        const inserted = await this.moderationsModel.insertMany([actionWithVerifyToken]);
-        return inserted[0];
+        const inserted = await this.moderationsModel.create(actionWithVerifyToken);
+        return inserted;
     }
 
     async deleteModeration({actionId, userId, verifyToken, type}: ModerationDto) {

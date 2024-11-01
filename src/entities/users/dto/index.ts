@@ -7,3 +7,4 @@ export * from "./prepare-to-restore.dto";
 export * from "./link-google.dto";
 export * from "./link-facebook.dto";
 export * from "./link-twitter.dto";
+export * from "./link-email.dto";

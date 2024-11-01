@@ -52,6 +52,7 @@
     "mongoose-autopopulate": "^1.1.0",
     "nestjs-minio-client": "^2.2.0",
     "passport": "^0.7.0",
+    "passport-dapp-web3": "^1.0.4",
     "passport-facebook": "^3.0.0",
     "passport-google-oauth": "^2.0.0",
     "passport-jwt": "^4.0.1",
@@ -110,6 +111,9 @@
       "**/*.(t|j)s"
     ],
     "coverageDirectory": "../coverage",
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "moduleNameMapper": {
+      "^src/(.*)$": "<rootDir>/$1"
+    }
   }
 }

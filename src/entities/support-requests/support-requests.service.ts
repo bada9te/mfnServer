@@ -11,8 +11,8 @@ export class SupportRequestsService {
 
     // create
     async createSupportRequest(supReq: CreateSupportRequestDto) {
-        const inserted = await this.supportRequestModel.insertMany([supReq]);
-        return inserted[0];
+        const inserted = await this.supportRequestModel.create(supReq);
+        return inserted;
     }
 
     // get all

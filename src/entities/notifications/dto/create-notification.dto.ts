@@ -12,6 +12,9 @@ export class CreateNotificationDto extends CreateNotificationInput {
 
     @IsString()
     post?: string;
+
+    @IsString()
+    battle?: string;
     
     @IsString()
     text: string;

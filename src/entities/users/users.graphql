@@ -49,37 +49,25 @@ type SwitchLikeOrPostInSavedReturnType {
 
 type Mutation {
     userCreate(input: AddUserInput!): UserWithAction!
-    userDeleteById(_id: ID!): User!
     userUpdate(input: UpdateUserInput!): User!
     userSwitchSubscription(input: SwitchSubscriptionOnUserInput!): TwoUsers!
     userConfirmAccount(input: AccountConfirmInput!): UserWithAction!
     userRestoreAccount(input: AccountRestoreInput!): UserWithAction!
     userPrepareAccountToRestore(input: PrepareAccountToRestoreInput): UserWithAction!
-    userLinkGoogle(input: LinkGoogleInput!): User
     userUnlinkGoogle(_id: ID!): User
-    userLinkFacebook(input: LinkTwitterOrFacebookInput!): User
     userUnlinkFacebook(_id: ID!): User
-    userLinkTwitter(input: LinkTwitterOrFacebookInput!): User
     userUnlinkTwitter(_id: ID!): User
     login(email: String!, password: String!): User
     userSwitchLike(input: SwitchLikeOrPostInSavedInput!): SwitchLikeOrPostInSavedReturnType!
     userSwitchSave(input: SwitchLikeOrPostInSavedInput!): SwitchLikeOrPostInSavedReturnType!
     userSwitchPostPinned(userId: ID!, postId: ID!): User!
+    userLinkEmailRequest(input: LinkEmailInput!): User
 }
 
-input LinkGoogleInput {
+
+input LinkEmailInput {
     userId: String!
-    id: String!
-    token: String!
     email: String!
-    name: String!
-}
-
-input LinkTwitterOrFacebookInput {
-    userId: String!
-    id: String!
-    token: String!
-    name: String!
 }
 
 input SwitchLikeOrPostInSavedInput {

@@ -14,8 +14,8 @@ export class PlaylistsService {
     }
     
     async createPlaylist(playlist: CreatePlaylistDto) {
-        const inserted = await this.playlistsModel.insertMany([playlist]);
-        return inserted[0];
+        const inserted = await this.playlistsModel.create(playlist);
+        return inserted;
     }
 
     async deletePlaylistById(_id: string) {

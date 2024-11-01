@@ -36,4 +36,29 @@ export class Post {
     downloadsAllowed: boolean;
 }
 export const PostSchema = SchemaFactory.createForClass(Post);
+
+
 PostSchema.plugin(require("mongoose-autopopulate"));
+
+
+PostSchema.post('find', function(docs) {
+    docs.forEach(doc => {
+        if (!doc.owner) {
+            doc.owner = {
+                _id: '000000000000000000000000',
+                nick: 'Unknown',
+                avatar: '',
+            };
+        }
+    });
+});
+  
+PostSchema.post('findOne', function(doc) {
+    if (doc && !doc.owner) {
+        doc.owner = {
+            _id: '000000000000000000000000',
+            nick: 'Unknown',
+            avatar: '',
+        };
+    }
+});

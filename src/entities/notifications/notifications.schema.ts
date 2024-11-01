@@ -31,3 +31,25 @@ export class Notification {
 }
 
 export const NotificationSchema = SchemaFactory.createForClass(Notification);
+
+NotificationSchema.post('find', function(docs) {
+    docs.forEach(doc => {
+        if (!doc.receiver) {
+            doc.receiver = {
+                _id: '000000000000000000000000',
+                nick: 'Unknown',
+                avatar: '',
+            };
+        }
+    });
+});
+
+NotificationSchema.post('findOne', function(doc) {
+    if (doc && !doc.receiver) {
+        doc.receiver = {
+            _id: '000000000000000000000000',
+            nick: 'Unknown',
+            avatar: '',
+        };
+    }
+});

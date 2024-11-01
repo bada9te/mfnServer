@@ -37,7 +37,7 @@ export class EmailService {
                 userName,
                 link: linkRestore,
             },
-        }).then(console.log).catch(console.log);;
+        }).then(console.log).catch(console.log);
     }
 
     async sendInformationEmail(to: string, userName: string, text: string) {
@@ -50,24 +50,19 @@ export class EmailService {
                 userName, 
                 text,
             },
-        }).then(console.log).catch(console.log);;
+        }).then(console.log).catch(console.log);
     }
 
-    // chnage email
-    /*
-    async sendChangingEmail(to: string, userName: string, newEmail: string, link: string, passcode: string) {
+    async sendEmailLinkingEmail(to: string, userName: string, linkLink: string) {
         this.nodemailerService.sendMail({
             to,
             from: "MFN",
-            subject: 'Email changing',
-            template: join(__dirname, 'templates', 'informationTemplate'),
+            subject: 'Email linking',
+            template: join(__dirname, 'templates', 'linkEmailTemplate'),
             context: {
-                userName, 
-                link,
-                passcode,
-                newEmail,
+                userName,
+                link: linkLink,
             },
-        }).then(console.log).catch(console.log);;
+        }).then(console.log).catch(console.log);
     }
-    */
 }

@@ -36,6 +36,20 @@ export class User {
         name: String,
     }))
     google: Record<string, any>;
+
+    @Prop({
+        _id: false,
+        type: {
+            address: { type: String },
+            message: { type: String },
+            signed: { type: String },
+        }
+    })
+    web3: {
+        address: string,
+        message: string,
+        signed: string,
+    }
     
     @Prop()
     nick: string;
