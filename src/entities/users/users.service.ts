@@ -405,6 +405,9 @@ export class UsersService {
 
     async getPinnedPosts(userId: string) {
         const user = await this.getUserById(userId);
+        if (!user) {
+            throw new BadRequestException();
+        }
         return user.pinnedPosts;
     }
 
