@@ -110,9 +110,9 @@ export class UploadController {
                 bucket,
                 fileName,
             );
-
             readableStream.pipe(res);
         } catch (error) {
+            console.log(error);
             return res.status(404);
         }
     }
