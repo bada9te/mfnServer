@@ -18,12 +18,12 @@ export class NotificationsResolver {
         if (checked) {
             return {
                 notifications: await this.notificationsService.getAllReadNotifications(receiverId, offset, limit),
-                count: await this.notificationsService.getDocsCount({receiverId, checked})
+                count: await this.notificationsService.getDocsCount({receiver: receiverId, checked})
             }
         } else {
             return {
                 notifications: await this.notificationsService.getAllUnreadNotifications(receiverId, offset, limit),
-                count: await this.notificationsService.getDocsCount({receiverId, checked: false})
+                count: await this.notificationsService.getDocsCount({receiver: receiverId, checked})
             }
         }
     }
