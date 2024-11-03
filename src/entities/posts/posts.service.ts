@@ -6,7 +6,7 @@ import { CreatePostDto } from './dto';
 import { RangeDto } from 'src/common/dto';
 import { NotificationsService } from '../notifications/notifications.service';
 import { UsersService } from '../users/users.service';
-
+import { ownerPopulationObject } from 'src/utils/constants/population';
 
 @Injectable()
 export class PostsService {
@@ -49,14 +49,14 @@ export class PostsService {
     }
 
     async getPostById(_id: string) {
-        return await this.postsModel.findById(_id).populate(["owner"]);
+        return await this.postsModel.findById(_id).populate(ownerPopulationObject);
     }
 
     async getAllPosts(range: RangeDto) {
         return await this.postsModel.find({})
             .skip(range.offset)
             .limit(range.limit)
-            .populate(["owner"])
+            .populate(ownerPopulationObject)
             .sort({ createdAt: -1 });
     }
 
@@ -65,7 +65,7 @@ export class PostsService {
             return await this.postsModel.find({owner: _id})
                 .skip(range.offset)
                 .limit(range.limit)
-                .populate(["owner"])
+                .populate(ownerPopulationObject)
                 .sort({ createdAt: -1 });
         }
         return await this.postsModel.find({owner: _id})
@@ -74,19 +74,19 @@ export class PostsService {
 
 
     async getByTitle(title: string) {
-        return await this.postsModel.find({title: { $regex: '.*' + title + '.*' }}).populate(["owner"]);
+        return await this.postsModel.find({title: { $regex: '.*' + title + '.*' }}).populate(ownerPopulationObject);
     }
 
     async getByTitleWithUserId(title: string, useOwnerId: boolean, userId: string) {
         return await this.postsModel.find({
             title: { $regex: '.*' + title + '.*' },
             owner: useOwnerId === true ? userId : { "$ne": userId }
-        }).populate(["owner"]);
+        }).populate(ownerPopulationObject);
     }
 
 
     async getManyByIds(ids: string[]) {
-        return await this.postsModel.find({ _id: ids }).populate(["owner"]);
+        return await this.postsModel.find({ _id: ids }).populate(ownerPopulationObject);
     }
     
     
@@ -123,7 +123,7 @@ export class PostsService {
         return await this.postsModel.find({ category })
             .skip(range.offset)
             .limit(range.limit)
-            .populate(["owner"])
+            .populate(ownerPopulationObject)
             .sort({ createdAt: -1 });
     }
 
@@ -132,7 +132,7 @@ export class PostsService {
         return await this.postsModel.find({_id: user.savedPosts})
             .skip(range.offset)
             .limit(range.limit)
-            .populate(["owner"]);
+            .populate(ownerPopulationObject);
     }
 
     async getDocsCount(filter: any) {
@@ -230,7 +230,7 @@ export class PostsService {
         return await this.postsModel
             .find({ owner: user.subscribedOn })
             .sort({ createdAt: -1 })
-            .populate(["owner"])
+            .populate(ownerPopulationObject)
             .limit(10);
     }
 }

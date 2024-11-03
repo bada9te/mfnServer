@@ -1,8 +1,8 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { User } from './users.schema';
 import { InjectModel } from '@nestjs/mongoose';
-import mongoose, { Model } from 'mongoose';
-import { ConfirmAccountDto, CreateUserDto, LinkFacebookDto, LinkGoogleDto, LinkTwitterDto, PrepareToRestoreDto, RestoreAccountDto } from './dto';
+import { Model } from 'mongoose';
+import { ConfirmAccountDto, CreateUserDto, PrepareToRestoreDto, RestoreAccountDto } from './dto';
 import { ModerationsService } from '../moderations/moderations.service';
 import * as bcrypt from 'bcrypt';
 import { EmailService } from 'src/utils/email/email.service';
@@ -70,7 +70,9 @@ export class UsersService {
 
     // get by id
     async getUserById(_id: string) {
-        return await this.userModel.findById(_id);
+        return await this.userModel.findById(
+            _id, 
+        );
     }
 
     // get by ids

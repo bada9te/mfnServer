@@ -19,6 +19,7 @@ export class AddNewBattleByPostsIdsInput {
     post1: string;
     post2: string;
     chainId?: Nullable<number>;
+    contractAddress?: Nullable<string>;
 }
 
 export class MakeBattleVoteInput {
@@ -44,6 +45,7 @@ export class CreateNotificationInput {
     receiver: string;
     sender?: Nullable<string>;
     post?: Nullable<string>;
+    battle?: Nullable<string>;
     text: string;
     type: string;
 }
@@ -93,21 +95,6 @@ export class CreateSupportRequestInput {
     contactReason: string;
     email: string;
     message: string;
-}
-
-export class LinkGoogleInput {
-    userId: string;
-    id: string;
-    token: string;
-    email: string;
-    name: string;
-}
-
-export class LinkTwitterOrFacebookInput {
-    userId: string;
-    id: string;
-    token: string;
-    name: string;
 }
 
 export class LinkEmailInput {
@@ -247,6 +234,7 @@ export class Battle {
     _id: string;
     title: string;
     chainId?: Nullable<number>;
+    contractAddress?: Nullable<string>;
     initiator?: Nullable<User>;
     post1?: Nullable<Post>;
     post2?: Nullable<Post>;
@@ -317,15 +305,9 @@ export abstract class IMutation {
 
     abstract userPrepareAccountToRestore(input?: Nullable<PrepareAccountToRestoreInput>): UserWithAction | Promise<UserWithAction>;
 
-    abstract userLinkGoogle(input: LinkGoogleInput): Nullable<User> | Promise<Nullable<User>>;
-
     abstract userUnlinkGoogle(_id: string): Nullable<User> | Promise<Nullable<User>>;
 
-    abstract userLinkFacebook(input: LinkTwitterOrFacebookInput): Nullable<User> | Promise<Nullable<User>>;
-
     abstract userUnlinkFacebook(_id: string): Nullable<User> | Promise<Nullable<User>>;
-
-    abstract userLinkTwitter(input: LinkTwitterOrFacebookInput): Nullable<User> | Promise<Nullable<User>>;
 
     abstract userUnlinkTwitter(_id: string): Nullable<User> | Promise<Nullable<User>>;
 
@@ -337,7 +319,7 @@ export abstract class IMutation {
 
     abstract userSwitchPostPinned(userId: string, postId: string): User | Promise<User>;
 
-    abstract userLinkEmail(input: LinkEmailInput): Nullable<User> | Promise<Nullable<User>>;
+    abstract userLinkEmailRequest(input: LinkEmailInput): Nullable<User> | Promise<Nullable<User>>;
 }
 
 export class ModerationAction {
