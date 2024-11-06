@@ -8,6 +8,7 @@ type Battle {
     _id: ID!
     title: String!
     chainId: Int
+    contractAddress: String
     initiator: User
     post1: Post
     post2: Post
@@ -42,6 +43,7 @@ input AddNewBattleByPostsIdsInput {
     post1: ID!
     post2: ID!
     chainId: Int
+    contractAddress: String
 }
 
 input MakeBattleVoteInput {

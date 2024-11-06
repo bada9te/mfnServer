@@ -13,6 +13,9 @@ export class Battle {
     @Prop({ required: false })
     chainId: number;
 
+    @Prop({ required: false })
+    contractAddress: string;
+
     @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
     initiator: UserDocument;
 

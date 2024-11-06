@@ -5,10 +5,11 @@ import { JwtAuthService } from "../jwt/jwt.service";
 import { Request } from "express";
 import { Strategy } from "@superfaceai/passport-twitter-oauth2";
 import { UserDocument } from "src/entities/users/users.schema";
+import { UsersService } from "src/entities/users/users.service";
 
 @Injectable()
 export class TwitterOauthStrategy extends PassportStrategy(Strategy, 'twitter') {
-    constructor(private configService: ConfigService, private jwtAuthService: JwtAuthService) {
+    constructor(private configService: ConfigService, private jwtAuthService: JwtAuthService, private usersService: UsersService) {
         super({
             clientType:   'confidential',
             clientID:     configService.get('PASSPORT_TWITTER_KEY'),
@@ -23,12 +24,16 @@ export class TwitterOauthStrategy extends PassportStrategy(Strategy, 'twitter') 
         const currentUserJwt = _req.cookies[this.configService.get('SESSION_COOKIE_KEY')];
         const currentUserId = _req.cookies[this.configService.get('USER_ID_COOKIE_KEY')];
         
-        let user: UserDocument | null;
+        let user: UserDocument | null = await this.usersService.getUserById(currentUserId);
+        let processedUser: UserDocument | null;
         if (currentUserId && currentUserJwt) {
-            console.log({currentUserJwt, currentUserId});
-            user = await this.jwtAuthService.processTwitter(profile, token, currentUserId);
+            processedUser = await this.jwtAuthService.processTwitter(profile, token, currentUserId);
         } else {
-            user = await this.jwtAuthService.processTwitter(profile, token);
+            processedUser = await this.jwtAuthService.processTwitter(profile, token);
+        }
+
+        if (processedUser) {
+            user = processedUser;
         }
         
         if (!user) {
