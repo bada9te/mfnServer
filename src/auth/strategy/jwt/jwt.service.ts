@@ -85,6 +85,7 @@ export class JwtAuthService {
     async processTwitter(profile: any, token: string, currentUserId?: string) {
         try {
             const user = await this.usersModel.findOne({ 'twitter.id' : profile.id });
+
             // user already linked
             if (user && currentUserId) {
                 throw new Error();
@@ -98,7 +99,6 @@ export class JwtAuthService {
             // USER WANTS TO LINK A TWITTER ACCOUNT
             if (currentUserId) {
                 const userToLink = await this.usersModel.findById(currentUserId);
-
                 // invalid _id
                 if (!userToLink) {
                     throw new Error();

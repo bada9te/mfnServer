@@ -56,7 +56,6 @@ export class NotificationsService {
     }
 
     async getDocsCount(filter: any) {
-        console.log(filter);
         return this.notificationsModel.countDocuments(filter).exec();
     }
 
