@@ -20,7 +20,7 @@ export class BattlesService {
     
     async addBattleByIds(battle: CreateBattleDto) {
         const dateEnd = new Date();
-        dateEnd.setDate(dateEnd.getDate() + 1);
+        dateEnd.setHours(dateEnd.getHours() + 1);
 
         const battleToInsert = {
             ...battle,
