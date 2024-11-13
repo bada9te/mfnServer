@@ -56,7 +56,8 @@ BattleSchema.post('find', function(docs) {
             };
         }
 
-        doc.votedBy.forEach(voter => {
+
+        (doc?.votedBy?.length) && doc.votedBy.forEach(voter => {
             if (!voter) {
                 voter = {
                     _id: '000000000000000000000000',
@@ -77,7 +78,7 @@ BattleSchema.post('findOne', function(doc) {
         };
     }
 
-    doc.votedBy.forEach(voter => {
+    (doc?.votedBy?.length) && doc.votedBy.forEach(voter => {
         if (!voter) {
             voter = {
                 _id: '000000000000000000000000',
