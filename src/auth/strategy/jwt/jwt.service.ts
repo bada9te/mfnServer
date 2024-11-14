@@ -22,7 +22,7 @@ export class JwtAuthService {
     }
 
     async processLocal(email: string, password: string) {
-        const user = await this.usersModel.findOne({ "local.email": email });
+        const user = await this.usersModel.findOne({ "local.email": email }).select('local.password verified');;
         if (!user) {
             return null;
         }
