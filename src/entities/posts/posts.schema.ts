@@ -8,7 +8,7 @@ export type PostDocument = HydratedDocument<Post>;
 
 @Schema({ timestamps: true })
 export class Post {
-    @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true, autopopulate: true })
+    @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true, autopopulate: { select: '_id nick avatar' } })
     owner: UserDocument;
 
     @Prop({ required: true })
