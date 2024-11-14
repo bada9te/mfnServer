@@ -10,7 +10,7 @@ export class User {
         _id: false,
         type: {
             email: { type: String },
-            password: { type: String }
+            password: { type: String, select: false }
         },
     })
     local: { email: string, password: string }
