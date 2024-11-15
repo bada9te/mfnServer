@@ -25,7 +25,7 @@ export class AuthController {
         const user = await this.usersService.getUserById((req.user as JwtPayload)._id);
         const unreadNotifications = await this.notificationsService.getDocsCount({receiver: user._id, checked: false});
 
-        console.log({ reqUser: req.user, user, unreadNotifications })
+        //console.log({ reqUser: req.user, user, unreadNotifications })
         if (!user) {
             throw new UnauthorizedException("Unauthorized");
         }
