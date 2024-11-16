@@ -68,7 +68,7 @@ export class UsersResolver {
     @Mutation()
     @UseGuards(GqlAuthGuard)
     async userSwitchSubscription(@Args('input') { subscriberId, userId }: SwicthSubscriptionDto, @CurrentUser() user: UserDocument) {
-        this.validateUserAccess(userId, user);
+        this.validateUserAccess(subscriberId, user);
         return await this.usersService.swicthUserSubscription(subscriberId, userId);
     }
 

@@ -20,11 +20,9 @@ import { TasksModule } from './utils/tasks/tasks.module';
 import { PlannedTasksModule } from './entities/planned-tasks/planned-tasks.module';
 import { join } from 'path';
 import { EjsAdapter } from '@nestjs-modules/mailer/dist/adapters/ejs.adapter';
-import { UploadModule } from './utils/upload/upload.module';
 import { MulterModule } from '@nestjs/platform-express';
 import { AchievementsModule } from './entities/achievements/achievements.module';
 import { OnApplicationBootstrapService } from './utils/init/on-bootstrap';
-import { MinioModule } from 'nestjs-minio-client';
 
 @Module({
   imports: [
@@ -101,23 +99,6 @@ import { MinioModule } from 'nestjs-minio-client';
     AuthModule,
     EmailModule,
     AchievementsModule,
-    // SOCKET IO 
-    // SocketModule,
-    UploadModule,
-    MinioModule.registerAsync({
-      isGlobal: true,
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: (config: ConfigService) => {
-        return {
-          endPoint: config.get('MINIO_ENDPOINT'),
-          port: parseInt(config.get('MINIO_PORT')),
-          useSSL: true,
-          accessKey: config.get('MINIO_ACCESS_KEY'),
-          secretKey: config.get('MINIO_SECRET_KEY'),
-        };
-      },
-    }),
   ],
   providers: [OnApplicationBootstrapService]
 })
