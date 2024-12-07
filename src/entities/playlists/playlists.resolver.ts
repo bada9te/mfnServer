@@ -1,10 +1,11 @@
 import { Args, Mutation, Query, Resolver } from "@nestjs/graphql";
 import { PlaylistsService } from "./playlists.service";
-import { CreatePlaylistDto, SwitchTrackDto } from "./dto";
+import { CreatePlaylistDto, SwitchTrackDto, SwitchTracksDto } from "./dto";
 import { BadRequestException, ParseIntPipe, UseGuards } from "@nestjs/common";
 import { GqlAuthGuard } from "src/auth/strategy/graphql/gql.guard";
-import { UserDocument } from "../users/users.schema";
+import { User, UserDocument } from "../users/users.schema";
 import { CurrentUser } from "src/auth/strategy/graphql/gql.decorator";
+import { Playlist } from "./playlists.schema";
 
 @Resolver('Playlist')
 export class PlaylistResolver {
@@ -70,5 +71,17 @@ export class PlaylistResolver {
         const playlist = await this.playlistsService.getPlaylistById(dto.playlistId);
         this.validateUserAccess(playlist.owner._id.toString(), user);
         return await this.playlistsService.swicthTrackInPlaylist(dto.playlistId, dto.trackId);
+    }
+
+    @Mutation()
+    @UseGuards(GqlAuthGuard)
+    async playlistsSwitchTrack(@Args('input') dto: SwitchTracksDto, @CurrentUser() user: UserDocument) {
+        const playlists: Playlist[] = [];
+        dto.playlistsIds.forEach(async playlistId => {
+            const playlist = await this.playlistsService.getPlaylistById(playlistId);
+            this.validateUserAccess(playlist.owner._id.toString(), user);
+            playlists.push(await this.playlistsService.swicthTrackInPlaylist(playlistId, dto.trackId))
+        });
+        return playlists;
     }
 }

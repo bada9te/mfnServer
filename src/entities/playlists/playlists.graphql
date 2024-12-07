@@ -23,6 +23,7 @@ type Mutation {
     playlistCreate(input: CreatePlaylistInput!): Playlist!
     playlistDeleteById(_id: ID!): Playlist!
     playlistSwicthTrack(input: SwitchTrackInPlaylistInput): Playlist!
+    playlistsSwitchTrack(input: SwitchTrackInPlaylistsInput): [Playlist!]
 }
 
 input Range {
@@ -39,5 +40,10 @@ input CreatePlaylistInput {
 
 input SwitchTrackInPlaylistInput {
     playlistId: ID!
+    trackId: ID!
+}
+
+input SwitchTrackInPlaylistsInput {
+    playlistsIds: [ID!]
     trackId: ID!
 }

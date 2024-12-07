@@ -61,6 +61,11 @@ export class SwitchTrackInPlaylistInput {
     trackId: string;
 }
 
+export class SwitchTrackInPlaylistsInput {
+    playlistsIds?: Nullable<string[]>;
+    trackId: string;
+}
+
 export class PostsByTitleInput {
     title: string;
     userId?: Nullable<string>;
@@ -278,6 +283,8 @@ export abstract class IMutation {
     abstract playlistDeleteById(_id: string): Playlist | Promise<Playlist>;
 
     abstract playlistSwicthTrack(input?: Nullable<SwitchTrackInPlaylistInput>): Playlist | Promise<Playlist>;
+
+    abstract playlistsSwitchTrack(input?: Nullable<SwitchTrackInPlaylistsInput>): Nullable<Playlist[]> | Promise<Nullable<Playlist[]>>;
 
     abstract postCreate(input: AddPostInput): Post | Promise<Post>;
 
