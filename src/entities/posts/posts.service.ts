@@ -33,9 +33,15 @@ export class PostsService {
     }
 
     async updatePost(_id: string, value: any, what: string) {
+        let updatedValue: any = value;
+
+        if (what == "downloadsAllowed") {
+            updatedValue = (value == "on");
+        }
+
         return await this.postsModel.findByIdAndUpdate(
             _id,
-            { [what]: value },
+            { [what]: updatedValue },
             { new: true }
         );
     }
