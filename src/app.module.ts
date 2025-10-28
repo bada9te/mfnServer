@@ -34,7 +34,7 @@ import { OnApplicationBootstrapService } from './utils/init/on-bootstrap';
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: async(configService: ConfigService) => ({
-        uri: configService.get('MONGO_URL')
+        uri: configService.get('MONGODB_URI')
       }),
       inject: [ConfigService]
     }),
