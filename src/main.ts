@@ -5,8 +5,12 @@ import * as cookieParser from 'cookie-parser';
 // import * as session from 'express-session';
 import * as express from 'express';
 import * as path from 'path';
+import { Callback, Context, Handler } from 'aws-lambda';
+import serverlessExpress from '@codegenie/serverless-express';
 require("dotenv").config();
 
+
+let server: Handler;
 
 
 async function bootstrap() {
@@ -32,6 +36,18 @@ async function bootstrap() {
   });
 
   app.use(express.static(path.join(__dirname, 'public')));
-  await app.listen(8000);
+
+  await app.init();
+
+  const expressApp = app.getHttpAdapter().getInstance();
+  return serverlessExpress({ app: expressApp });
 }
-bootstrap();
+
+export const handler: Handler = async (
+  event: any,
+  context: Context,
+  callback: Callback,
+) => {
+  server = server ?? (await bootstrap());
+  return server(event, context, callback);
+};
