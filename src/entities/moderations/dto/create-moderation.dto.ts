@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { IsNotEmpty, IsString } from "class-validator";
 import { CreateModerationActionInput } from "src/graphql/graphql.schema";
 

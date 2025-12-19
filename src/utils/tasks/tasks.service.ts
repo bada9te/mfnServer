@@ -39,7 +39,7 @@ export class TasksService {
         const tasks = await this.plannedTasksService.getAllTasks();
 
         tasks.forEach((task) => {
-            let cb: () => void;
+            let cb: () => void = () => {};
             switch (task.taskType) {
                 case "FINISH_BATTLE":
                     cb = async() => {
@@ -50,12 +50,12 @@ export class TasksService {
                             const battle = await this.battlesService.setWinnerByBattleId(task.relatedEntityId);
                             // send notifications
                             await this.notificationsService.createManyNotifications({
-                                from: battle.initiator._id.toString(),
-                                to: [battle.post1.owner._id.toString(), battle.post2.owner._id.toString()],
+                                from: battle?.initiator._id.toString() as string,
+                                to: [battle?.post1.owner._id.toString(), battle?.post2.owner._id.toString()] as string[],
                                 text: "",
                                 type: "BATTLE_FINISHED",
                                 entityType: "battle",
-                                relatedEntityId: battle._id.toString(),
+                                relatedEntityId: battle?._id.toString() as string,
                             });
                         } catch (error) {
                             console.log(`[FINSIH_BATTLE_ERROR] ${error}`)

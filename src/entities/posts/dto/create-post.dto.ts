@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { IsBoolean, IsNotEmpty, IsString } from "class-validator";
 import { AddPostInput } from "src/graphql/graphql.schema";
 

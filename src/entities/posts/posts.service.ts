@@ -129,7 +129,7 @@ export class PostsService {
 
     async getSavedPostsByUserId(userId: string, range: RangeDto) {
         const user = await this.usersService.getUserById(userId);
-        return await this.postsModel.find({_id: user.savedPosts})
+        return await this.postsModel.find({_id: user?.savedPosts})
             .skip(range.offset)
             .limit(range.limit)
             .populate(ownerPopulationObject);
@@ -228,7 +228,7 @@ export class PostsService {
         const user = await this.usersService.getUserById(userId);
 
         return await this.postsModel
-            .find({ owner: user.subscribedOn })
+            .find({ owner: user?.subscribedOn })
             .sort({ createdAt: -1 })
             .populate(ownerPopulationObject)
             .limit(10);

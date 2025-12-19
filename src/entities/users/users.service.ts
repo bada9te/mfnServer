@@ -92,16 +92,16 @@ export class UsersService {
         const subscriberUSER = await this.userModel.findById(subscriberId);
         const subscribeOnUSER = await this.userModel.findById(subscribeOnId);
 
-        if (!subscriberUSER.subscribedOn.find(i => i._id.toString() === subscribeOnUSER._id.toString())) {
+        if (!subscriberUSER?.subscribedOn.find(i => i._id.toString() === subscribeOnUSER?._id.toString())) {
             const subscriber = await this.userModel.findByIdAndUpdate(
                 subscriberId,
-                { $push: { subscribedOn: subscribeOnUSER._id } },
+                { $push: { subscribedOn: subscribeOnUSER?._id } },
                 { new: true }
             );
     
             const subscribeOn = await this.userModel.findByIdAndUpdate(
                 subscribeOnId,
-                { $push: { subscribers: subscriberUSER._id } },
+                { $push: { subscribers: subscriberUSER?._id } },
                 { new: true }
             );
 
@@ -109,13 +109,13 @@ export class UsersService {
         } else {
             const subscriber = await this.userModel.findByIdAndUpdate(
                 subscriberId,
-                { $pull: { subscribedOn: subscribeOnUSER._id } },
+                { $pull: { subscribedOn: subscribeOnUSER?._id } },
                 { new: true }
             );
     
             const subscribeOn = await this.userModel.findByIdAndUpdate(
                 subscribeOnId,
-                { $pull: { subscribers: subscriberUSER._id } },
+                { $pull: { subscribers: subscriberUSER?._id } },
                 { new: true }
             );
 
@@ -329,6 +329,7 @@ export class UsersService {
             throw new BadRequestException();
         }
 
+        // @ts-ignore
         user.google = null;
 
         return await user.save();
@@ -342,6 +343,7 @@ export class UsersService {
             throw new BadRequestException();
         }
 
+        // @ts-ignore
         user.facebook = null;
 
         return await user.save();
@@ -355,6 +357,7 @@ export class UsersService {
             throw new BadRequestException();
         }
 
+        // @ts-ignore
         user.twitter = null;
 
         return await user.save();
@@ -364,15 +367,15 @@ export class UsersService {
         const user = await this.userModel.findById(userId);
         const post = await this.postsService.getPostById(postId)
 
-        if (user.savedPosts.map(i => i._id.toString()).includes(post._id.toString())) {
-            user.savedPosts = user.savedPosts.filter(i => i._id.toString() !== post._id.toString());
-            post.saves--;
+        if (user?.savedPosts.map(i => i._id.toString()).includes(post?._id.toString() as string)) {
+            user.savedPosts = user.savedPosts.filter(i => i._id.toString() !== post?._id.toString());
+            post && post.saves--;
         } else {
-            user.savedPosts.push(post);
-            post.saves++;
+            user?.savedPosts.push(post as any);
+            post && post.saves++;
         }
-        await post.save();
-        await user.save();
+        await post?.save();
+        await user?.save();
         return {user, post};
     }
 
@@ -380,15 +383,15 @@ export class UsersService {
         const user = await this.userModel.findById(userId);
         const post = await this.postsService.getPostById(postId);
 
-        if (user.likedPosts.map(i => i._id.toString()).includes(post._id.toString())) {
-            user.likedPosts = user.likedPosts.filter(i => i._id.toString() !== post._id.toString());
-            post.likes--;
+        if (user?.likedPosts.map(i => i._id.toString()).includes(post?._id.toString() as string)) {
+            user.likedPosts = user.likedPosts.filter(i => i._id.toString() !== post?._id.toString());
+            post && post.likes--;
         } else {
-            user.likedPosts.push(post);
-            post.likes++;
+            user?.likedPosts.push(post as any);
+            post && post.likes++;
         }
-        await post.save();
-        await user.save();
+        await post?.save();
+        await user?.save();
         return {user, post};
     }
 
@@ -396,12 +399,12 @@ export class UsersService {
         const user = await this.userModel.findById(userId);
         const post = await this.postsService.getPostById(postId);
         
-        if (user.pinnedPosts.map(i => i._id.toString()).includes(post._id.toString())) {
-            user.pinnedPosts = user.pinnedPosts.filter(i => i._id.toString() !== post._id.toString());
+        if (user?.pinnedPosts.map(i => i._id.toString()).includes(post?._id.toString() as string)) {
+            user.pinnedPosts = user.pinnedPosts.filter(i => i._id.toString() !== post?._id.toString());
         } else {
-            user.pinnedPosts.push(post);
+            user?.pinnedPosts.push(post as any);
         }
-        await user.save();
+        await user?.save();
         return user;
     }
 

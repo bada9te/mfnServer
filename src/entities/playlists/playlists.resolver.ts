@@ -61,7 +61,7 @@ export class PlaylistResolver {
     @UseGuards(GqlAuthGuard)
     async playlistDeleteById(@Args('_id') _id: string, @CurrentUser() user: UserDocument) {
         const playlist = await this.playlistsService.getPlaylistById(_id);
-        this.validateUserAccess(playlist.owner._id.toString(), user);
+        this.validateUserAccess(playlist?.owner._id.toString() as string, user);
         return await this.playlistsService.deletePlaylistById(_id);
     }
 
@@ -69,7 +69,7 @@ export class PlaylistResolver {
     @UseGuards(GqlAuthGuard)
     async playlistSwicthTrack(@Args('input') dto: SwitchTrackDto, @CurrentUser() user: UserDocument) {
         const playlist = await this.playlistsService.getPlaylistById(dto.playlistId);
-        this.validateUserAccess(playlist.owner._id.toString(), user);
+        this.validateUserAccess(playlist?.owner._id.toString() as string, user);
         return await this.playlistsService.swicthTrackInPlaylist(dto.playlistId, dto.trackId);
     }
 
@@ -77,10 +77,10 @@ export class PlaylistResolver {
     @UseGuards(GqlAuthGuard)
     async playlistsSwitchTrack(@Args('input') dto: SwitchTracksDto, @CurrentUser() user: UserDocument) {
         const playlists: Playlist[] = [];
-        dto.playlistsIds.forEach(async playlistId => {
+        dto?.playlistsIds?.forEach(async playlistId => {
             const playlist = await this.playlistsService.getPlaylistById(playlistId);
-            this.validateUserAccess(playlist.owner._id.toString(), user);
-            playlists.push(await this.playlistsService.swicthTrackInPlaylist(playlistId, dto.trackId))
+            this.validateUserAccess(playlist?.owner._id.toString() as string, user);
+            playlists.push(await this.playlistsService.swicthTrackInPlaylist(playlistId, dto.trackId) as any)
         });
         return playlists;
     }

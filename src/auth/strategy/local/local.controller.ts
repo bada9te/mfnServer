@@ -17,12 +17,12 @@ export class LocalOauthController {
     async localAuth(@Req() req: Request, @Res() res: Response) {
         const { userId, accessToken } = await this.jwtAuthService.login(req.user);
 
-        res.cookie(this.configService.get('SESSION_COOKIE_KEY'), accessToken, {
+        res.cookie(this.configService.get('SESSION_COOKIE_KEY') as string, accessToken, {
             sameSite: 'none',
             secure: true,
         });
 
-        res.cookie(this.configService.get('USER_ID_COOKIE_KEY'), userId, {
+        res.cookie(this.configService.get('USER_ID_COOKIE_KEY') as string, userId, {
             sameSite: 'none',
             secure: true,
         });

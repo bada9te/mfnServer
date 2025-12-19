@@ -50,7 +50,7 @@ export class PostsResolver {
         const { userId, title, userIsOwner } = dto;
 
         if (userId) {
-            return await this.postsService.getByTitleWithUserId(title, userIsOwner, userId);
+            return await this.postsService.getByTitleWithUserId(title, userIsOwner as boolean, userId);
         } else {
             return await this.postsService.getByTitle(title);
         }
@@ -116,7 +116,7 @@ export class PostsResolver {
     @UseGuards(GqlAuthGuard)
     async postUpdate(@Args('input') { post, value, what }: UpdatePostDto, @CurrentUser() user: UserDocument) {
         const postData = await this.postsService.getPostById(post);
-        this.validateUserAccess(postData.owner._id.toString(), user);
+        this.validateUserAccess(postData?.owner._id.toString() as string, user);
         return await this.postsService.updatePost(post, value, what);
     }
 
@@ -124,7 +124,7 @@ export class PostsResolver {
     @UseGuards(GqlAuthGuard)
     async postDeleteById(@Args('_id') _id: string, @CurrentUser() user: UserDocument) {
         const postData = await this.postsService.getPostById(_id);
-        this.validateUserAccess(postData.owner._id.toString(), user);
+        this.validateUserAccess(postData?.owner._id.toString() as string, user);
         return await this.postsService.deletePostById(_id);
     }
 }

@@ -24,18 +24,18 @@ export class GoogleOauthController {
     async googleAuthRedirect(@Req() req: Request, @Res() res: Response) {
         const { accessToken, userId } = await this.jwtAuthService.login(req.user);
 
-        res.cookie(this.configService.get('SESSION_COOKIE_KEY'), accessToken, {
+        res.cookie(this.configService.get('SESSION_COOKIE_KEY') as string, accessToken, {
             //httpOnly: true,
             sameSite: 'none',
             secure: true,
         });
 
-        res.cookie(this.configService.get('USER_ID_COOKIE_KEY'), userId, {
+        res.cookie(this.configService.get('USER_ID_COOKIE_KEY') as string, userId, {
             sameSite: 'none',
             secure: true,
         });
         
-        return res.redirect(this.configService.get('CLIENT_BASE'));
+        return res.redirect(this.configService.get('CLIENT_BASE') as string);
     }
 
 

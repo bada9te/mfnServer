@@ -25,16 +25,11 @@ export class GoogleOauthStrategy extends PassportStrategy(OAuth2Strategy, 'googl
         const currentUserId = _req.cookies[this.configService.get('USER_ID_COOKIE_KEY')];
 
         let user: UserDocument | null = await this.usersService.getUserById(currentUserId);
-        let processedUser: UserDocument | null;
         if (currentUserId && currentUserJwt) {
             //console.log({currentUserJwt, currentUserId});
             user = await this.jwtAuthService.processGoogle(profile, _accessToken, currentUserId);
         } else {
             user = await this.jwtAuthService.processGoogle(profile, _accessToken);
-        }
-
-        if (processedUser) {
-            user = processedUser;
         }
 
         if (!user) {

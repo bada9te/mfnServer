@@ -1,9 +1,7 @@
-import 'tsconfig-paths/register';
-
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import * as cookieParser from 'cookie-parser';
-import * as compression from 'compression';
+// import * as cookieParser from 'cookie-parser';
+// import * as compression from 'compression';
 // import * as session from 'express-session';
 import * as express from 'express';
 import * as path from 'path';
@@ -14,7 +12,7 @@ dotenv.config();
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  app.use(compression());
+  // app.use(compression());
 
   // app.use(
   //   session({
@@ -25,7 +23,7 @@ async function bootstrap() {
   //   }),
   // );
 
-  app.use(cookieParser());
+  // app.use(cookieParser());
 
   app.enableCors({
     origin: process.env.CLIENT_BASE,

@@ -23,7 +23,7 @@ export class AuthController {
     @Get('me')
     async getProfile(@Req() req: Request) {
         const user = await this.usersService.getUserById((req.user as JwtPayload)._id);
-        const unreadNotifications = await this.notificationsService.getDocsCount({receiver: user._id, checked: false});
+        const unreadNotifications = await this.notificationsService.getDocsCount({receiver: user?._id, checked: false});
 
         //console.log({ reqUser: req.user, user, unreadNotifications })
         if (!user) {
@@ -40,9 +40,9 @@ export class AuthController {
             throw new UnauthorizedException("Unauthorized");
         }
 
-        res.clearCookie(this.configService.get('SESSION_COOKIE_KEY'), { secure: true, sameSite: 'none' });
+        res.clearCookie(this.configService.get('SESSION_COOKIE_KEY') as string, { secure: true, sameSite: 'none' });
 
-        res.clearCookie(this.configService.get('USER_ID_COOKIE_KEY'), { secure: true, sameSite: 'none' });
+        res.clearCookie(this.configService.get('USER_ID_COOKIE_KEY') as string, { secure: true, sameSite: 'none' });
 
         return res.end();
     }
