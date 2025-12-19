@@ -1,9 +1,4 @@
 {
-  "compilerOptions": {
-    "outDir": "api",
-    "module": "commonjs",
-    "target": "es2020"
-  },
   "extends": "./tsconfig.json",
   "exclude": ["node_modules", "test", "dist", "**/*spec.ts"]
 }
