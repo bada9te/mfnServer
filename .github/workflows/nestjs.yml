@@ -14,7 +14,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: "22"
       - name: Install dependencies
         run: yarn install
       - name: Add .env File
@@ -23,29 +23,29 @@ jobs:
       - name: Build with Nest.js
         run: yarn build
 
-  docker:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-      - name: Login to Docker Hub
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-      - name: Add .env File
-        run: |
-          echo "${{ secrets.ENV_PRODUCTION }}" > .env
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          push: true
-          tags: bada9te/mfnserver:latest
-          build-args: |
-            --env-file .env
+#  docker:
+#    needs: build
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v4
+#      - name: Set up QEMU
+#        uses: docker/setup-qemu-action@v3
+#      - name: Set up Docker Buildx
+#        uses: docker/setup-buildx-action@v3
+#      - name: Login to Docker Hub
+#        uses: docker/login-action@v3
+#        with:
+#          username: ${{ secrets.DOCKERHUB_USERNAME }}
+#          password: ${{ secrets.DOCKERHUB_TOKEN }}
+#      - name: Add .env File
+#        run: |
+#          echo "${{ secrets.ENV_PRODUCTION }}" > .env
+#      - name: Build and push Docker image
+#        uses: docker/build-push-action@v6
+#        with:
+#          context: .
+#          push: true
+#          tags: bada9te/mfnserver:latest
+#          build-args: |
+#            --env-file .env
