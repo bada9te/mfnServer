@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtAuthService } from './jwt.service';
 import { JwtAuthStrategy } from './jwt.strategy';

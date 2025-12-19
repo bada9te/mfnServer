@@ -1,13 +1,13 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-// import * as cookieParser from 'cookie-parser';
+import * as cookieParser from 'cookie-parser';
 // import * as compression from 'compression';
 // import * as session from 'express-session';
 import * as express from 'express';
 import * as path from 'path';
-import dotenv from 'dotenv';
+require("dotenv").config();
 
-dotenv.config();
+
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -23,7 +23,8 @@ async function bootstrap() {
   //   }),
   // );
 
-  // app.use(cookieParser());
+  // @ts-ignore
+  app.use(cookieParser());
 
   app.enableCors({
     origin: process.env.CLIENT_BASE,
