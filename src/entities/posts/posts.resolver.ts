@@ -2,9 +2,9 @@ import { Args, Resolver, Query, Mutation } from "@nestjs/graphql";
 import { PostsService } from "./posts.service";
 import { CreatePostDto, PostsByTitleDto, SwicthLikeOrSaveDto, UpdatePostDto } from "./dto";
 import { BadRequestException, ParseIntPipe, UseGuards } from "@nestjs/common";
-import { GqlAuthGuard } from "src/auth/strategy/graphql/gql.guard";
+import { GqlAuthGuard } from "../../auth/strategy/graphql/gql.guard";
 import { UserDocument } from "../users/users.schema";
-import { CurrentUser } from "src/auth/strategy/graphql/gql.decorator";
+import { CurrentUser } from "../../auth/strategy/graphql/gql.decorator";
 
 
 @Resolver('Post')

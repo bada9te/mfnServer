@@ -4,8 +4,8 @@ import { PassportStrategy } from "@nestjs/passport";
 import { JwtAuthService } from "../jwt/jwt.service";
 import { Request } from "express";
 import { Strategy } from "@superfaceai/passport-twitter-oauth2";
-import { UserDocument } from "src/entities/users/users.schema";
-import { UsersService } from "src/entities/users/users.service";
+import { UserDocument } from "../../../entities/users/users.schema";
+import { UsersService } from "../../../entities/users/users.service";
 
 @Injectable()
 export class TwitterOauthStrategy extends PassportStrategy(Strategy, 'twitter') {

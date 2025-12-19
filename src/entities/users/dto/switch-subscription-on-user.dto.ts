@@ -1,4 +1,4 @@
-import { SwitchSubscriptionOnUserInput } from "src/graphql/graphql.schema";
+import { SwitchSubscriptionOnUserInput } from "../../../graphql/graphql.schema";
 
 export class SwicthSubscriptionDto extends SwitchSubscriptionOnUserInput {
     

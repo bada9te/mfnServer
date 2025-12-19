@@ -1,4 +1,4 @@
-import { AddUserInput } from "src/graphql/graphql.schema";
+import { AddUserInput } from "../../../graphql/graphql.schema";
 export class CreateUserDto extends AddUserInput {
     
 }

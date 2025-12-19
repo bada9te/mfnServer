@@ -1,6 +1,6 @@
 // @ts-nocheck
 import { IsNotEmpty, IsString } from "class-validator";
-import { CreateSupportRequestInput } from "src/graphql/graphql.schema";
+import { CreateSupportRequestInput } from "../../../graphql/graphql.schema";
 
 export class CreateSupportRequestDto extends CreateSupportRequestInput {
     @IsNotEmpty()

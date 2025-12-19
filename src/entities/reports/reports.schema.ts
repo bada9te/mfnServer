@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import mongoose, { HydratedDocument } from "mongoose";
-import { PostDocument } from "src/entities/posts/posts.schema";
-import { UserDocument } from "src/entities/users/users.schema";
+import { PostDocument } from "../../entities/posts/posts.schema";
+import { UserDocument } from "../../entities/users/users.schema";
 
 export type ReportDocument = HydratedDocument<Report>;
 

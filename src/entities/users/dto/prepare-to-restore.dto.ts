@@ -1,4 +1,4 @@
-import { PrepareAccountToRestoreInput } from "src/graphql/graphql.schema";
+import { PrepareAccountToRestoreInput } from "../../../graphql/graphql.schema";
 
 export class PrepareToRestoreDto extends PrepareAccountToRestoreInput {
     

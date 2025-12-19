@@ -3,7 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Report } from './reports.schema';
 import { Model } from 'mongoose';
 import { CreateReportDto } from './dto';
-import { RangeDto } from 'src/common/dto';
+import { RangeDto } from '../../common/dto';
 import { PostsService } from '../posts/posts.service';
 import { NotificationsService } from '../notifications/notifications.service';
 

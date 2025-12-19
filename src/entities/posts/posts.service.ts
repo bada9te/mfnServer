@@ -3,10 +3,10 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Post } from './posts.schema';
 import mongoose, { Model } from 'mongoose';
 import { CreatePostDto } from './dto';
-import { RangeDto } from 'src/common/dto';
+import { RangeDto } from '../../common/dto';
 import { NotificationsService } from '../notifications/notifications.service';
 import { UsersService } from '../users/users.service';
-import { ownerPopulationObject } from 'src/utils/constants/population';
+import { ownerPopulationObject } from '../../utils/constants/population';
 
 @Injectable()
 export class PostsService {

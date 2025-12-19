@@ -2,7 +2,7 @@ import { Args, Mutation, Query, Resolver } from "@nestjs/graphql";
 import { BattlesService } from "./battles.service";
 import { ParseBoolPipe, ParseIntPipe, UseGuards } from "@nestjs/common";
 import { CreateBattleDto, MakeBattleVoteDto } from "./dto";
-import { GqlAuthGuard } from "src/auth/strategy/graphql/gql.guard";
+import { GqlAuthGuard } from "../../auth/strategy/graphql/gql.guard";
 
 @Resolver('Battle')
 export class BattlesResolver {

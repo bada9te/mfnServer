@@ -2,7 +2,7 @@ import { Args, Resolver, Query, Mutation } from "@nestjs/graphql";
 import { ReportsService } from "./reports.service";
 import { CreateReportDto } from "./dto";
 import { ParseIntPipe, UseGuards } from "@nestjs/common";
-import { GqlAuthGuard } from "src/auth/strategy/graphql/gql.guard";
+import { GqlAuthGuard } from "../../auth/strategy/graphql/gql.guard";
 
 
 @Resolver('Report')

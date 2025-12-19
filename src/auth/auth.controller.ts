@@ -1,11 +1,11 @@
 import { Controller, Get, Res, UseGuards, Req, UnauthorizedException, Post } from "@nestjs/common";
 import { Request, Response } from "express";
 import { JwtAuthGuard } from "./strategy/jwt/jwt.guard";
-import { UsersService } from "src/entities/users/users.service";
+import { UsersService } from "../entities/users/users.service";
 import { JwtPayload } from "./strategy/jwt/jwt.strategy";
 import { GoogleOauthGuard } from "./strategy/google/google.guard";
 import { JwtAuthService } from "./strategy/jwt/jwt.service";
-import { NotificationsService } from "src/entities/notifications/notifications.service";
+import { NotificationsService } from "../entities/notifications/notifications.service";
 import { ConfigService } from "@nestjs/config";
 
 

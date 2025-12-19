@@ -3,7 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Playlist } from './playlists.schema';
 import mongoose, { Model } from 'mongoose';
 import { CreatePlaylistDto } from './dto';
-import { RangeDto } from 'src/common/dto';
+import { RangeDto } from '../../common/dto';
 
 @Injectable()
 export class PlaylistsService {

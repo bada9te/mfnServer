@@ -2,9 +2,9 @@ import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { SchedulerRegistry,  } from '@nestjs/schedule';
 import { CronJob } from "cron";
 import { TTask } from './types';
-import { PlannedTasksService } from 'src/entities/planned-tasks/planned-tasks.service';
-import { BattlesService } from 'src/entities/battles/battles.service';
-import { NotificationsService } from 'src/entities/notifications/notifications.service';
+import { PlannedTasksService } from '../../entities/planned-tasks/planned-tasks.service';
+import { BattlesService } from '../../entities/battles/battles.service';
+import { NotificationsService } from '../../entities/notifications/notifications.service';
 import { timeout } from 'rxjs';
 
 

@@ -3,8 +3,8 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Battle } from './battles.schema';
 import { Model } from 'mongoose';
 import { CreateBattleDto, MakeBattleVoteDto } from './dto';
-import { RangeDto } from 'src/common/dto';
-import { TasksService } from 'src/utils/tasks/tasks.service';
+import { RangeDto } from '../../common/dto';
+import { TasksService } from '../../utils/tasks/tasks.service';
 import { NotificationsService } from '../notifications/notifications.service';
 import { PostsService } from '../posts/posts.service';
 

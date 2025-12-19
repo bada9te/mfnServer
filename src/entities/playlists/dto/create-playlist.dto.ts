@@ -1,6 +1,6 @@
 // @ts-nocheck
 import { IsBoolean, IsNotEmpty, IsString } from "class-validator";
-import { CreatePlaylistInput } from "src/graphql/graphql.schema";
+import { CreatePlaylistInput } from "../../../graphql/graphql.schema";
 
 export class CreatePlaylistDto extends CreatePlaylistInput {
     @IsNotEmpty()

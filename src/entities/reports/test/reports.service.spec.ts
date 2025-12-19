@@ -5,8 +5,8 @@ import { Test, TestingModule } from "@nestjs/testing";
 import { getModelToken } from "@nestjs/mongoose";
 import { Report } from "../reports.schema";
 import { ReportsService } from "../reports.service";
-import { PostsService } from "src/entities/posts/posts.service";
-import { NotificationsService } from "src/entities/notifications/notifications.service";
+import { PostsService } from "../entities/posts/posts.service";
+import { NotificationsService } from "../entities/notifications/notifications.service";
 
 describe('ReportsService', () => {
     let reportsService: ReportsService;

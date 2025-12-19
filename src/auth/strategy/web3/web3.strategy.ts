@@ -4,7 +4,7 @@ import { Strategy } from "passport-dapp-web3";
 import { JwtAuthService } from "../jwt/jwt.service";
 import { Request } from "express";
 import { ConfigService } from "@nestjs/config";
-import { UserDocument } from "src/entities/users/users.schema";
+import { UserDocument } from "../../../entities/users/users.schema";
 
 @Injectable()
 export class Web3OauthStrategy extends PassportStrategy(Strategy, 'web3') {

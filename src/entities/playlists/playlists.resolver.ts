@@ -2,9 +2,9 @@ import { Args, Mutation, Query, Resolver } from "@nestjs/graphql";
 import { PlaylistsService } from "./playlists.service";
 import { CreatePlaylistDto, SwitchTrackDto, SwitchTracksDto } from "./dto";
 import { BadRequestException, ParseIntPipe, UseGuards } from "@nestjs/common";
-import { GqlAuthGuard } from "src/auth/strategy/graphql/gql.guard";
+import { GqlAuthGuard } from "../../auth/strategy/graphql/gql.guard";
 import { User, UserDocument } from "../users/users.schema";
-import { CurrentUser } from "src/auth/strategy/graphql/gql.decorator";
+import { CurrentUser } from "../../auth/strategy/graphql/gql.decorator";
 import { Playlist } from "./playlists.schema";
 
 @Resolver('Playlist')

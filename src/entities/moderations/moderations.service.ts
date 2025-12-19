@@ -3,7 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Moderation } from './moderations.schema';
 import { Model } from 'mongoose';
 import { CreateModerationDto, ModerationDto } from './dto';
-import generateRandomString from 'src/utils/functions/generateRandomString';
+import generateRandomString from '../../utils/functions/generateRandomString';
 
 @Injectable()
 export class ModerationsService {

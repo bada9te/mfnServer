@@ -3,8 +3,8 @@ import { PostsService } from "../posts.service";
 import { Post } from "../posts.schema";
 import { Test, TestingModule } from "@nestjs/testing";
 import { getModelToken } from "@nestjs/mongoose";
-import { NotificationsService } from "src/entities/notifications/notifications.service";
-import { UsersService } from "src/entities/users/users.service";
+import { NotificationsService } from "../entities/notifications/notifications.service";
+import { UsersService } from "../entities/users/users.service";
 
 
 describe('PostsService', () => {

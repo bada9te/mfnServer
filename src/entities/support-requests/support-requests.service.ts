@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { SupportRequest } from './support-requests.schema';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
-import { RangeDto } from 'src/common/dto';
+import { RangeDto } from '../../common/dto';
 import { CreateSupportRequestDto } from './dto';
 
 @Injectable()

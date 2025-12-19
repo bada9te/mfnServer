@@ -2,7 +2,7 @@ import { Args, Mutation, Query, Resolver } from "@nestjs/graphql";
 import { NotificationsService } from "./notifications.service";
 import { CreateNotificationDto } from "./dto";
 import { ParseIntPipe, UseGuards } from '@nestjs/common';
-import { GqlAuthGuard } from "src/auth/strategy/graphql/gql.guard";
+import { GqlAuthGuard } from "../../auth/strategy/graphql/gql.guard";
 
 @Resolver('Notification') 
 export class NotificationsResolver {

@@ -3,9 +3,9 @@ import { BattlesService } from "../battles.service";
 import { Battle } from "../battles.schema";
 import { Test, TestingModule } from "@nestjs/testing";
 import { getModelToken } from "@nestjs/mongoose";
-import { TasksService } from "src/utils/tasks/tasks.service";
-import { NotificationsService } from "src/entities/notifications/notifications.service";
-import { PostsService } from "src/entities/posts/posts.service";
+import { TasksService } from "../utils/tasks/tasks.service";
+import { NotificationsService } from "../entities/notifications/notifications.service";
+import { PostsService } from "../entities/posts/posts.service";
 
 describe('BattlesService', () => {
     let battlesService: BattlesService;

@@ -1,6 +1,6 @@
 // @ts-nocheck
 import { IsNotEmpty, IsString } from "class-validator";
-import { CreateModerationActionInput } from "src/graphql/graphql.schema";
+import { CreateModerationActionInput } from "../../../graphql/graphql.schema";
 
 export class CreateModerationDto extends CreateModerationActionInput {
     @IsNotEmpty()

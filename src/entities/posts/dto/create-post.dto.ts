@@ -1,6 +1,6 @@
 // @ts-nocheck
 import { IsBoolean, IsNotEmpty, IsString } from "class-validator";
-import { AddPostInput } from "src/graphql/graphql.schema";
+import { AddPostInput } from "../../../graphql/graphql.schema";
 
 export class CreatePostDto extends AddPostInput {
     @IsNotEmpty()

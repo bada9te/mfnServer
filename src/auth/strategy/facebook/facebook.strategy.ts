@@ -4,8 +4,8 @@ import { Strategy, Profile } from "passport-facebook";
 import { ConfigService } from "@nestjs/config";
 import { JwtAuthService } from "../jwt/jwt.service";
 import { Request } from "express";
-import { UserDocument } from "src/entities/users/users.schema";
-import { UsersService } from "src/entities/users/users.service";
+import { UserDocument } from "../../../entities/users/users.schema";
+import { UsersService } from "../../../entities/users/users.service";
 
 
 @Injectable()

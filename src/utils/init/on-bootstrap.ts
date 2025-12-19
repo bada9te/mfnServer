@@ -1,6 +1,6 @@
 import { Injectable, OnApplicationBootstrap } from "@nestjs/common";
 import { TasksService } from "../tasks/tasks.service";
-import { AchievementsService } from "src/entities/achievements/achievements.service";
+import { AchievementsService } from "../../entities/achievements/achievements.service";
 import * as path from "path";
 import * as fs from "fs";
 

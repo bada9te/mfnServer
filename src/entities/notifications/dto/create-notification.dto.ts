@@ -1,6 +1,6 @@
 // @ts-nocheck
 import { IsNotEmpty, IsString } from "class-validator"
-import { CreateNotificationInput } from "src/graphql/graphql.schema";
+import { CreateNotificationInput } from "../../../graphql/graphql.schema";
 
 export class CreateNotificationDto extends CreateNotificationInput {
     @IsNotEmpty()

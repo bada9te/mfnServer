@@ -2,8 +2,8 @@ import { Args, Mutation, Query, Resolver } from "@nestjs/graphql";
 import { UsersService } from "./users.service";
 import { SwicthSubscriptionDto, UpdateUserDto, CreateUserDto, ConfirmAccountDto, RestoreAccountDto, PrepareToRestoreDto, LinkEmailDto } from "./dto";
 import { BadRequestException, UseGuards } from "@nestjs/common";
-import { GqlAuthGuard } from "src/auth/strategy/graphql/gql.guard";
-import { CurrentUser } from "src/auth/strategy/graphql/gql.decorator";
+import { GqlAuthGuard } from "../../auth/strategy/graphql/gql.guard";
+import { CurrentUser } from "../../auth/strategy/graphql/gql.decorator";
 import { UserDocument } from "./users.schema";
 import { SwicthLikeOrSaveDto } from "./dto/swicth-like-or-save.dto";
 

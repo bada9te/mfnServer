@@ -4,8 +4,8 @@ import { PassportStrategy } from "@nestjs/passport";
 import { OAuth2Strategy, Profile, VerifyFunction } from "passport-google-oauth";
 import { JwtAuthService } from "../jwt/jwt.service";
 import { Request } from "express";
-import { UserDocument } from "src/entities/users/users.schema";
-import { UsersService } from "src/entities/users/users.service";
+import { UserDocument } from "../../../entities/users/users.schema";
+import { UsersService } from "../../../entities/users/users.service";
 
 
 @Injectable()

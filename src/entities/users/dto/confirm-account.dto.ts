@@ -1,4 +1,4 @@
-import { AccountConfirmInput } from "src/graphql/graphql.schema";
+import { AccountConfirmInput } from "../../../graphql/graphql.schema";
 
 export class ConfirmAccountDto extends AccountConfirmInput {
     

@@ -5,7 +5,7 @@ import { Model } from 'mongoose';
 import { ConfirmAccountDto, CreateUserDto, PrepareToRestoreDto, RestoreAccountDto } from './dto';
 import { ModerationsService } from '../moderations/moderations.service';
 import * as bcrypt from 'bcrypt';
-import { EmailService } from 'src/utils/email/email.service';
+import { EmailService } from '../../utils/email/email.service';
 import { PostsService } from '../posts/posts.service';
 import { AchievementsService } from '../achievements/achievements.service';
 

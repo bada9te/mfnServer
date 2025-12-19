@@ -1,4 +1,4 @@
-import { ModerateActionInput } from "src/graphql/graphql.schema";
+import { ModerateActionInput } from "../../../graphql/graphql.schema";
 
 export class ModerationDto extends ModerateActionInput {
     
