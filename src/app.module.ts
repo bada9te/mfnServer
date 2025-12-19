@@ -33,10 +33,10 @@ import { OnApplicationBootstrapService } from './utils/init/on-bootstrap';
     // MONGODB
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
-      useFactory: async(configService: ConfigService) => ({
-        uri: configService.get('MONGODB_URI')
+      useFactory: async (configService: ConfigService) => ({
+        uri: configService.get('MONGODB_URI'),
       }),
-      inject: [ConfigService]
+      inject: [ConfigService],
     }),
     // SCHEDULE
     ScheduleModule.forRoot(),
@@ -53,10 +53,10 @@ import { OnApplicationBootstrapService } from './utils/init/on-bootstrap';
     // FILE UPLOAD
     MulterModule.registerAsync({
       imports: [ConfigModule],
-      useFactory: async(configService: ConfigService) => ({
+      useFactory: async (configService: ConfigService) => ({
         dest: configService.get('MULTER_DEST'),
       }),
-      inject: [ConfigService]
+      inject: [ConfigService],
     }),
     // EMAILS
     MailerModule.forRootAsync({
@@ -85,7 +85,7 @@ import { OnApplicationBootstrapService } from './utils/init/on-bootstrap';
           },
         },
       }),
-      inject: [ConfigService]
+      inject: [ConfigService],
     }),
     // ENTITIES
     UsersModule,
@@ -100,6 +100,6 @@ import { OnApplicationBootstrapService } from './utils/init/on-bootstrap';
     EmailModule,
     AchievementsModule,
   ],
-  providers: [OnApplicationBootstrapService]
+  providers: [OnApplicationBootstrapService],
 })
 export class AppModule {}
