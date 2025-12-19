@@ -51,16 +51,16 @@ export class User {
         signed: string,
     }
     
-    @Prop()
+    @Prop({ type: String })
     nick: string;
 
-    @Prop({ default: "Hello there, I am a newbie!" })
+    @Prop({ type: String, default: "Hello there, I am a newbie!" })
     description: string;
 
-    @Prop({ default: "" })
+    @Prop({ type: String, default: "" })
     avatar: string;
 
-    @Prop({ default: "" })
+    @Prop({ type: String, default: "" })
     background: string;
 
     @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }] })
@@ -75,13 +75,13 @@ export class User {
     @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Post' }] })
     savedPosts: PostDocument[];
 
-    @Prop({ default: false })
+    @Prop({ type: Boolean, default: false })
     verified: boolean;
 
-    @Prop({ default: 0 })
+    @Prop({ type: Number, default: 0 })
     level: number;
 
-    @Prop({ default: [] })
+    @Prop({ type: Number, default: [] })
     achievements: number[];
 
     @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Post', autopopulate: true }] })

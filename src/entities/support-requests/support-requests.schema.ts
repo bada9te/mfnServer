@@ -5,16 +5,16 @@ export type SupportRequestDocument = HydratedDocument<SupportRequest>;
 
 @Schema({ timestamps: true })
 export class SupportRequest {
-    @Prop({ required: true })
+    @Prop({ type: String, required: true })
     contactReason: string;
 
-    @Prop({ required: true })
+    @Prop({ type: String, required: true })
     email: string;
 
-    @Prop({ required: true })
+    @Prop({ type: String, required: true })
     message: string;
 
-    @Prop({ default: false })
+    @Prop({ type: Boolean, default: false })
     isClosed: boolean;
 }
 

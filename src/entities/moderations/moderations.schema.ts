@@ -9,10 +9,10 @@ export class Moderation {
     @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true })
     user: UserDocument;
 
-    @Prop({ required: true })
+    @Prop({ type: String, required: true })
     type: string;
 
-    @Prop({ required: true })
+    @Prop({ type: String, required: true })
     verifyToken: string;
 }
 

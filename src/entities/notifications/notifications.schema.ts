@@ -20,13 +20,13 @@ export class Notification {
     @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Battle', autopopulate: true })
     battle: BattleDocument;
 
-    @Prop({ required: true })
+    @Prop({ type: String, required: true })
     type: "SUBSCRIBED" | "BATTLE_CREATED" | "BATTLE_FINISHED" | "POST_REPORTED" | "POST_CREATED" | "SYSTEM";
 
-    @Prop({ required: false })
+    @Prop({ type: String, required: false })
     text: string;
 
-    @Prop({ default: false })
+    @Prop({ type: Boolean, default: false })
     checked: boolean;
 }
 

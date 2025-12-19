@@ -11,28 +11,28 @@ export class Post {
     @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true, autopopulate: { select: '_id nick avatar' } })
     owner: UserDocument;
 
-    @Prop({ required: true })
+    @Prop({ type: String, required: true })
     title: string;
 
-    @Prop({ required: true })
+    @Prop({ type: String, required: true })
     description: string;
 
-    @Prop({ required: true })
+    @Prop({ type: String, required: true })
     audio: string;
 
-    @Prop({ required: true })
+    @Prop({ type: String, required: true })
     image: string;
 
-    @Prop({default: 0})
+    @Prop({ type: Number, default: 0 })
     likes: number;
 
-    @Prop({default: 0})
+    @Prop({ type: Number, default: 0 })
     saves: number;
 
-    @Prop({ required: true })
+    @Prop({ type: String, required: true })
     category: string;
 
-    @Prop({ required: true })
+    @Prop({ type: Boolean, required: true })
     downloadsAllowed: boolean;
 }
 export const PostSchema = SchemaFactory.createForClass(Post);

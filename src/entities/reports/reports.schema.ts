@@ -7,13 +7,13 @@ export type ReportDocument = HydratedDocument<Report>;
 
 @Schema({ timestamps: true })
 export class Report {
-    @Prop({ required: true })
+    @Prop({ type: String, required: true })
     contactReason: string;
 
-    @Prop()
+    @Prop({ type: String, })
     email: string;
 
-    @Prop({ required: true })
+    @Prop({ type: String, required: true })
     message: string;
 
     @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User', autopopulate: true })
@@ -22,7 +22,7 @@ export class Report {
     @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Post', autopopulate: true })
     reportedPost: PostDocument;
 
-    @Prop({ default: false })
+    @Prop({ type: Boolean, default: false })
     isClosed: boolean;
 }
 

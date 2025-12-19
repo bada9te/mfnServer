@@ -7,13 +7,13 @@ export type BattleDocument = HydratedDocument<Battle>;
 
 @Schema({ timestamps: true })
 export class Battle {
-    @Prop({ required: true })
+    @Prop({ type: String, required: true })
     title: string;
 
-    @Prop({ required: false })
+    @Prop({ type: Number, required: false })
     chainId: number;
 
-    @Prop({ required: false })
+    @Prop({ type: String, required: false })
     contractAddress: string;
 
     @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
@@ -25,19 +25,19 @@ export class Battle {
     @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Post', autopopulate: true })
     post2: PostDocument;
 
-    @Prop({ default: 0 })
+    @Prop({ type: Number, default: 0 })
     post1Score: number;
 
-    @Prop({ default: 0 })
+    @Prop({ type: Number, default: 0 })
     post2Score: number;
 
     @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Post' })
     winner: PostDocument;
 
-    @Prop({ required: true })
+    @Prop({ type: Date, required: true })
     willFinishAt: Date;
 
-    @Prop({ default: false })
+    @Prop({ type: Boolean, default: false })
     finished: boolean;
 
     @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }] })

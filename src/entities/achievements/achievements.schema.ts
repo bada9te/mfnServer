@@ -5,27 +5,27 @@ export type AchievementDocument = HydratedDocument<Achievement>;
 
 @Schema({ timestamps: true })
 export class Achievement {
-    @Prop({ required: true }) 
+    @Prop({ type: String, required: true })
     title: string;
 
-    @Prop({ required: true })
+    @Prop({ type: String, required: true })
     achievement: string;
 
-    @Prop({ required: true })
+    @Prop({ type: String, required: true })
     description: string;
 
-    @Prop({ required: true })
+    @Prop({ type: String, required: true })
     type: "basic" | "likes-total" | 
         "saves-total" | "likes" | "saves" |
         "likes-and-saves" | "tracks" | "likes-and-saves-equals"
 
-    @Prop({ required: true })
+    @Prop({ type: String, required: true })
     rarity: "legendary" | "uncommon" | "rare" | "common";
 
-    @Prop({ required: true })
+    @Prop({ type: Number, required: true })
     posNumber: number;
 
-    @Prop({ required: true, default: 0 })
+    @Prop({ type: Number, required: true, default: 0 })
     rp: number;
 }
 

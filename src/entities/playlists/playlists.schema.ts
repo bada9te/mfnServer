@@ -12,13 +12,13 @@ export class Playlist {
     @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true, autopopulate: true })
     owner: UserDocument;
 
-    @Prop({ required: true })
+    @Prop({ type: String, required: true })
     title: string;
 
     @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Post', autopopulate: true }] })
     tracks: PostDocument[];
 
-    @Prop({ default: false })
+    @Prop({ type: Boolean, default: false })
     public: boolean;
 }
 
