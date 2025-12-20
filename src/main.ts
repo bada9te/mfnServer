@@ -9,7 +9,9 @@ import MongoStore from 'connect-mongo';
 import { MongoClient } from 'mongodb';
 import 'dotenv/config';
 
-NestFactory.create(AppModule).then(async app => {
+async function bootstrap() {
+  const app = await NestFactory.create(AppModule);
+
   app.use(compression());
   app.use(cookieParser());
 
@@ -50,5 +52,7 @@ NestFactory.create(AppModule).then(async app => {
 
   // Start the NestJS app normally
   const port = process.env.PORT || 3000;
-  return app.listen(port);
-});
+  await app.listen(port);
+}
+
+bootstrap();
