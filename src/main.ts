@@ -5,27 +5,9 @@ import * as compression from 'compression';
 import * as session from 'express-session';
 import * as express from 'express';
 import * as path from 'path';
-import { Callback, Context, Handler } from 'aws-lambda';
-import serverlessExpress from '@codegenie/serverless-express';
 import MongoStore from 'connect-mongo';
 import { MongoClient } from 'mongodb';
 import 'dotenv/config';
-
-let server: Handler;
-let mongoClient: MongoClient;
-
-/**
- * Reuse MongoDB connection across Lambda invocations
- */
-async function getMongoClient() {
-  if (!mongoClient) {
-    mongoClient = new MongoClient(process.env.MONGO_URI!, {
-      maxPoolSize: 5,
-    });
-    await mongoClient.connect();
-  }
-  return mongoClient;
-}
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -33,7 +15,11 @@ async function bootstrap() {
   app.use(compression());
   app.use(cookieParser());
 
-  const client = await getMongoClient();
+  // MongoDB client for session storage
+  const mongoClient = new MongoClient(process.env.MONGO_URI!, {
+    maxPoolSize: 5,
+  });
+  await mongoClient.connect();
 
   app.use(
     session({
@@ -42,7 +28,7 @@ async function bootstrap() {
       resave: false,
       saveUninitialized: false,
       store: MongoStore.create({
-        client,
+        client: mongoClient,
         dbName: 'sessions',
         collectionName: 'sessions',
         ttl: 60 * 60 * 24, // 1 day
@@ -50,7 +36,7 @@ async function bootstrap() {
       cookie: {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
-        sameSite: 'none', // REQUIRED for cross-domain cookies
+        sameSite: 'lax', // 'none' if cross-domain, 'lax' if same-site
         maxAge: 1000 * 60 * 60 * 24,
       },
     }),
@@ -61,20 +47,13 @@ async function bootstrap() {
     credentials: true,
   });
 
+  // Serve static files from "public"
   app.use(express.static(path.join(__dirname, 'public')));
 
-  await app.init();
-
-  const expressApp = app.getHttpAdapter().getInstance();
-  return serverlessExpress({ app: expressApp });
+  // Start the NestJS app normally
+  const port = process.env.PORT || 3000;
+  await app.listen(port);
+  // console.log(`Application is running on: http://localhost:${port}`);
 }
 
-export default async function handler (
-  event: any,
-  context: Context,
-  callback: Callback,
-): Promise<Handler>{
-  context.callbackWaitsForEmptyEventLoop = false;
-  server = server ?? (await bootstrap());
-  return server(event, context, callback);
-};
+bootstrap();
