@@ -7,7 +7,7 @@ import { ModerationsService } from "../../moderations/moderations.service";
 import { EmailService } from "src/utils/email/email.service";
 import { PostsService } from "../../posts/posts.service";
 import { AchievementsService } from "../../achievements/achievements.service";
-import * as bcrypt from 'bcrypt';
+import * as bcrypt from 'bcryptjs';
 import { BadRequestException } from "@nestjs/common";
 import { PrepareToRestoreDto, RestoreAccountDto } from "../dto";
 

@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Notification } from './notifications.schema';
 import { Model } from 'mongoose';
+import { DeleteResult } from 'mongodb'; // import DeleteResult from mongodb
 import { CreateManyNotificationsDto, CreateNotificationDto } from './dto';
 
 @Injectable()
@@ -17,7 +18,7 @@ export class NotificationsService {
         return this.notificationsModel.findByIdAndDelete(_id);
     }
 
-    async deleteNotificationsByIds(ids: string[]) {
+    async deleteNotificationsByIds(ids: string[]): Promise<DeleteResult> {
         return this.notificationsModel.deleteMany({ _id: ids });
     }
 
