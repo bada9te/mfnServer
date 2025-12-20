@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Controller, Get, Module } from '@nestjs/common';
 import { UsersModule } from './entities/users/users.module';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
@@ -23,6 +23,17 @@ import { EjsAdapter } from '@nestjs-modules/mailer/dist/adapters/ejs.adapter';
 import { MulterModule } from '@nestjs/platform-express';
 import { AchievementsModule } from './entities/achievements/achievements.module';
 import { OnApplicationBootstrapService } from './utils/init/on-bootstrap';
+
+@Controller()
+class RootController {
+  @Get()
+  getRoot() {
+    return {
+      status: 'ok',
+      message: 'Hello World!',
+    };
+  }
+}
 
 @Module({
   imports: [
