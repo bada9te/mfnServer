@@ -1,24 +1,26 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import * as cookieParser from 'cookie-parser';
-import * as compression from 'compression';
-import * as session from 'express-session';
-import * as express from 'express';
-import * as path from 'path';
+import express, { Request, Response } from 'express';
+import compression from 'compression';
+import cookieParser from 'cookie-parser';
+import session from 'express-session';
 import MongoStore from 'connect-mongo';
 import { MongoClient } from 'mongodb';
+import path from 'path';
 import 'dotenv/config';
 
-async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+const server = express();
 
+async function bootstrap() {
+  // Create NestJS app with Express adapter
+  const app = await NestFactory.create(AppModule, server, { bufferLogs: true });
+
+  // Middleware
   app.use(compression());
   app.use(cookieParser());
 
   // MongoDB client for session storage
-  const mongoClient = new MongoClient(process.env.MONGO_URI!, {
-    maxPoolSize: 5,
-  });
+  const mongoClient = new MongoClient(process.env.MONGO_URI!, { maxPoolSize: 5 });
   await mongoClient.connect();
 
   app.use(
@@ -36,24 +38,31 @@ async function bootstrap() {
       cookie: {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
-        sameSite: 'lax', // 'none' if cross-domain, 'lax' if same-site
-        maxAge: 1000 * 60 * 60 * 24,
+        sameSite: 'lax', // 'none' if cross-domain
+        maxAge: 1000 * 60 * 60 * 24, // 1 day
       },
     }),
   );
 
+  // Enable CORS for your frontend
   app.enableCors({
     origin: process.env.CLIENT_BASE,
     credentials: true,
   });
 
-  // Serve static files from "public"
+  // Serve static files from /public
   app.use(express.static(path.join(__dirname, 'public')));
 
-  // Start the NestJS app normally
-  const port = process.env.PORT || 3000;
-  await app.listen(port);
-  // console.log(`Application is running on: http://localhost:${port}`);
+  // Default root endpoint for health check
+  server.get('/', (_req: Request, res: Response) => {
+    res.json({ status: 'ok', service: 'api' });
+  });
+
+  await app.init();
 }
 
+// Initialize the app
 bootstrap();
+
+// Export default server for Vercel
+export default server;
