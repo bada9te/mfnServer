@@ -69,11 +69,11 @@ async function bootstrap() {
   return serverlessExpress({ app: expressApp });
 }
 
-export const handler: Handler = async (
+export default async function handler (
   event: any,
   context: Context,
   callback: Callback,
-) => {
+): Promise<Handler>{
   context.callbackWaitsForEmptyEventLoop = false;
   server = server ?? (await bootstrap());
   return server(event, context, callback);
