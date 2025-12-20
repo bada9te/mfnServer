@@ -111,6 +111,7 @@ class RootController {
     EmailModule,
     AchievementsModule,
   ],
+  controllers: [RootController],
   providers: [OnApplicationBootstrapService],
 })
 export class AppModule {}
