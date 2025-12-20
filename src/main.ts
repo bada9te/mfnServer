@@ -13,7 +13,7 @@ const server = express();
 
 async function bootstrap() {
   // Create NestJS app with Express adapter
-  const app = await NestFactory.create(AppModule, server, { bufferLogs: true });
+  const app = await NestFactory.create(AppModule, server as any, { bufferLogs: true });
 
   // Middleware
   app.use(compression());
