@@ -16,7 +16,7 @@ async function bootstrap() {
   app.use(cookieParser());
 
   // MongoDB client for session storage
-  const mongoClient = new MongoClient(process.env.MONGO_URI!, {
+  const mongoClient = new MongoClient(process.env.MONGODB_URI!, {
     maxPoolSize: 5,
   });
   await mongoClient.connect();
